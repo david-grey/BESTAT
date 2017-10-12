@@ -33,3 +33,8 @@ nosetests.xml
 
 # Mac OS file
 .DS_Store
+
+# IDEA dir
+.idea/
+
+
