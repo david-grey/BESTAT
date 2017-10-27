@@ -80,6 +80,8 @@ class Profile(models.Model):
 
 
 class Review(models.Model):
+    block = models.ForeignKey(Block, on_delete=models.CASCADE,
+                               related_name='reviews')
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='reviews')
     text = models.TextField()
