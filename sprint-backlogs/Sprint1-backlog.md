@@ -108,7 +108,7 @@ Show the map to the user and allow user place pin. Show the score to the user
 	- cost: 8h (estimated, coding + testing)
    - Estimated finished date: 10.31
   
-## Recommendation Service (In charge: Wai Dai)
+## Recommendation Service (In charge: Wei Dai)
 
 1. Recommendation page *Implemented by Dan*
 	- Have completed basic framework
@@ -116,7 +116,7 @@ Show the map to the user and allow user place pin. Show the score to the user
 	- cost: 4h 
 	- Estimated finished date: 11.4
 	
-## Testing (In charge: Wai Dai)
+## Testing (In charge: Wei Dai)
 ### detail
 
 Support the unit test and continupus integration
