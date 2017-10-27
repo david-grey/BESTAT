@@ -119,11 +119,11 @@ Show the map to the user and allow user place pin. Show the score to the user
 ## Testing (In charge: Wei Dai)
 ### detail
 
-Support the unit test and continupus integration
+Support the unit test and continuous integration
 
 1. Travis Integration *Implemented by David*
 
-	- Integrate github project with Travis-CI
+	- Integrate github project with Jenkins
 	- Milestone: Finish integration
 	- cost: 4h 
 	- Estimated finished date: 10.31
