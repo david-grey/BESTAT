@@ -1,5 +1,14 @@
 import requests
 
-page = requests.get(
-    "https://maps.googleapis.com/maps/api/place/nearbysearch/json?pagetoken=CsQDuAEAAOSjcthtQ0-mJQdxtZmFO_80VE3hjFAQpJJg_ukwG8DEYh4A1wkOsdah2tjiDKP3amvr4kylwnKRS6LSKiQhd7DJn1m7AJWg0YAaneppJTxpbaRTxklE2OQAVF3EyMV279orfk8wjiVtqnf4Bos3t_a5cXN3-CfAKHPixBe2WcIv_vH0XSx0WflmvQBT7EhOywbeGf9IgOiCiZP7ErayTEpqG2FRMcDdq4pVeKG0YZeILHPezICFh7b6CLOWXBCTCo_5D3td0ij_FPjVFq2QMPjq4BWnxedDAk6E9bwgaZY8EMN0CkQYc9-nZGFQaNAqEtBHNFhJ7yi5Z95xo3ZuTXQehZKYrCIaWWsquE01cUA_GDsaALwZtjv4TeRXPoJCjzECQqVbtPSWg0iZQ516bRJnqbAPqiNISc7IvXopwrvLUhlzmAPsXw-HqzLnGJvJmejDuB4EPsNDPAKNio9xgL3QqXCfGRl6PUG7j_-GEcQbFf83TSjHIyWOGKv9nMCkvkcXXdZyo0hsc2vbRseab66gIwWXi3kIJtZNvmsD0fYJ1ZnsQ4trjDuwQIK3DvTNFjCZAW6G3L5vw233bTwhiqoSEIOX8GV_y6V3xsjoRIvJeVkaFPhhkgZAkFrywpKFc_UYi_Q6iKJr&key=AIzaSyC394UgcUA4iyyfu-kcm4gOdkKDTM-aFaM&sensor=false")
-print(page.content.decode(encoding='UTF-8'))
+import math
+
+r = 6371393
+d = 400
+a = d / r * 180 / math.pi
+# a=math.radians(0.004)
+print(a)
+
+
+def distance2radian(d):
+    r = 6371393
+    return d / r * 180 / math.pi

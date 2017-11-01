@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'webapps.wsgi.application'
 DATABASES = {
     'default': {
          'ENGINE': 'django.contrib.gis.db.backends.postgis',
-         'NAME': 'gisdb',
+         'NAME': 'bestat',
          'USER': 'bestat',
          'PASSWORD': 'best',
          'HOST': '35.190.175.76',

@@ -26,7 +26,7 @@ from django.views.decorators.http import require_http_methods, require_GET, \
     require_POST
 
 from django.urls import reverse
-from bestat.models import Profile, Review, Comment, Block
+from bestat.models import Profile, Review, Comment, NeighborInfo
 from bestat.decorator import check_anonymous, login_required, anonymous_only
 from bestat.forms import UserCreationForm, LoginForm, ChangePasswordForm, \
     ProfileForm, UsernameForm, ResetPassword
@@ -260,7 +260,7 @@ def delete_review(request, review_id):
 @login_required()
 def likes(request, block_id):
 
-    blog = get_object_or_404(Block,id=block_id)
+    blog = get_object_or_404(NeighborInfo, id=block_id)
     flag = True
     if blog.liked(request.user):
         blog.likes.remove(request.user)

@@ -14,6 +14,9 @@
 import requests
 from googleplaces import GooglePlaces, types, GooglePlacesError
 import time
+from api.circle import get_circles, default_radius
+import pickle
+from tqdm import tqdm
 
 
 class GooglePlace:
@@ -68,8 +71,8 @@ class GooglePlace:
 
 
 class GooglePlaceWrap:
-    KEY = 'AIzaSyC394UgcUA4iyyfu-kcm4gOdkKDTM-aFaM'
-    TYPES = [types.TYPE_DOCTOR, types.TYPE_RESTAURANT, types.TYPE_STORE,
+    KEY = 'AIzaSyCuCW_ZKBu7U07oEcKz_7hcElbiI02k2VE'
+    TYPES = [types.TYPE_HOSPITAL, types.TYPE_RESTAURANT, types.TYPE_STORE,
              types.TYPE_BANK, types.TYPE_SCHOOL, types.TYPE_SUBWAY_STATION,
              types.TYPE_CHURCH, types.TYPE_CAFE, types.TYPE_GYM,
              types.TYPE_GROCERY_OR_SUPERMARKET]
@@ -77,23 +80,65 @@ class GooglePlaceWrap:
     def __init__(self):
         self.google = GooglePlaces(self.KEY)
 
-    def search_nearby(self, x, y, radius):
+    def search_nearby(self, lat, lng, radius):
         places = {}
         for tp in self.TYPES:
             places[tp] = 0
         for key in places:
             count = 0
             result_set = self.google.nearby_search(
-                lat_lng={'lat': x, 'lng': y},
+                lat_lng={'lat': lat, 'lng': lng},
                 radius=radius, type=key)
-            count += len(result_set)
+            count += len(result_set.places)
             while result_set.has_next_page_token:
                 try:
                     next_page = self.google.nearby_search(
                         pagetoken=result_set.next_page_token)
                     result_set = next_page
-                    count += len(result_set)
+                    count += len(result_set.places)
                 except GooglePlacesError:
                     time.sleep(1)
+            print(key, count)
+            places[key] = count
+        return ({'lat': lat, 'lng': lng, 'places': places})
+
+    def search_range(self, points, radius):
+        TP = self.TYPES
+        places = {}
+        for tp in TP:
+            places[tp] = {}
+        for lat, lng in tqdm(points):
+            for key in places:
+                sets = []
+                result_set = self.google.nearby_search(
+                    lat_lng={'lat': lat, 'lng': lng},
+                    radius=radius, type=key)
+                sets.extend(result_set.places)
+                while result_set.has_next_page_token:
+                    try:
+                        next_page = self.google.nearby_search(
+                            pagetoken=result_set.next_page_token)
+                        result_set = next_page
+                        sets.extend(result_set.places)
+                    except GooglePlacesError:
+                        time.sleep(1)
+                for place in sets:
+                    places[key][place.id] = place.geo_location
+        return places
 
 
+if __name__ == '__main__':
+    wrapper = GooglePlaceWrap()
+    up = 40.515897
+    down = 40.390015
+    left = -80.046810
+    right = -79.819695
+    points = get_circles(up, down, left, right)
+    print(len(points))
+    # for i, p in enumerate(points):
+    #     print('============' + str(i))
+    #     entry = wrapper.search_nearby(p[0], p[1], default_radius)
+    #     data.append(entry)
+    data = wrapper.search_range(points, default_radius)
+    with open('googleplace2.pkl', 'wb') as f:
+        pickle.dump(data, f)

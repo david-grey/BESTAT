@@ -17,9 +17,20 @@ import datetime
 from django.db.models.aggregates import Max
 
 
-class Block(models.Model):
-    id = models.CharField(max_length=64, verbose_name='block_id',
-                          primary_key=True)
+# ['doctor', 'restaurant', 'store', 'bank', 'school', 'subway_station', 'church', 'cafe', 'gym', 'grocery_or_supermarket']
+
+class Neighbor(models.Model):
+    state = models.CharField(max_length=80)
+    county = models.CharField(max_length=80)
+    city = models.CharField(max_length=80)
+    name = models.CharField(max_length=80)
+    regionid = models.CharField(max_length=80)
+    geom = models.MultiPolygonField(srid=4326)
+
+
+class NeighborInfo(models.Model):
+    neighbor = models.OneToOneField(Neighbor, on_delete=models.CASCADE,
+                                    related_name="info", primary_key=True)
 
     # attrs from factfinder, base on zipcode
     population = models.IntegerField(null=True, blank=True)
@@ -31,13 +42,25 @@ class Block(models.Model):
     # % Individuals below poverty level
     poverty = models.FloatField(null=True, blank=True)
 
+    # ['doctor', 'restaurant', 'store', 'bank', 'school', 'subway_station', 'church', 'cafe', 'gym', 'grocery_or_supermarket']
+    doctor = models.IntegerField()
+    restaurant = models.IntegerField()
+    store = models.IntegerField()
+    bank = models.IntegerField()
+    school = models.IntegerField()
+    subway_station = models.IntegerField()
+    church = models.IntegerField()
+    cafe = models.IntegerField()
+    gym = models.IntegerField()
+    grocery_or_supermarket = models.IntegerField()
+
     @property
     def likes_num(self):
         return self.liked_users.count()
 
 
 class CrimeRecord(models.Model):
-    block = models.OneToOneField(Block, related_name='crimes',
+    block = models.OneToOneField(NeighborInfo, related_name='crimes',
                                  on_delete=models.CASCADE,
                                  primary_key=True, )
     Theft = models.IntegerField(null=True, blank=True)
@@ -57,31 +80,18 @@ class CrimeRecord(models.Model):
                        'Assault': 4, 'Other': 1}
 
 
-class BlockPlaces(models.Model):
-    block = models.OneToOneField(Block, related_name='places',
-                                 on_delete=models.CASCADE,
-                                 primary_key=True, )
-
-    restaurant = models.IntegerField(null=True, blank=True)
-    shopping = models.IntegerField(null=True, blank=True)
-    store = models.IntegerField(null=True, blank=True)
-    education = models.IntegerField(null=True, blank=True)
-    medical = models.IntegerField(null=True, blank=True)
-    transportation = models.IntegerField(null=True, blank=True)
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, related_name='profile',
                                 on_delete=models.CASCADE,
                                 primary_key=True, )
     nick_name = models.CharField(max_length=64, verbose_name='nick name')
     img = models.ImageField(upload_to='', default='user_default.png')
-    favorites = models.ManyToManyField(Block, related_name='liked_users')
+    favorites = models.ManyToManyField(NeighborInfo, related_name='liked_users')
 
 
 class Review(models.Model):
-    block = models.ForeignKey(Block, on_delete=models.CASCADE,
-                               related_name='reviews')
+    block = models.ForeignKey(NeighborInfo, on_delete=models.CASCADE,
+                              related_name='reviews')
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='reviews')
     text = models.TextField()
@@ -126,6 +136,7 @@ class Review(models.Model):
         return int((Review.objects.all().aggregate(Max('create_time'))[
                         'create_time__max'] or datetime.datetime.now()).timestamp())
 
+
 # a review can have multiple comments
 class Comment(models.Model):
     review = models.ForeignKey(Review, on_delete=models.CASCADE,
@@ -137,21 +148,15 @@ class Comment(models.Model):
     text = models.CharField(max_length=140, verbose_name='text')
     create_time = models.DateTimeField(verbose_name='create time',
                                        auto_now_add=True)
+    test = models.IntegerField()
 
 
-class Neighbor(models.Model):
-    state = models.CharField(max_length=80)
-    county = models.CharField(max_length=80)
-    city = models.CharField(max_length=80)
-    name = models.CharField(max_length=80)
-    regionid = models.CharField(max_length=80)
-    geom = models.MultiPolygonField(srid=4326)
 # Auto-generated `LayerMapping` dictionary for Neighbor model
 neighbor_mapping = {
-    'state' : 'State',
-    'county' : 'County',
-    'city' : 'City',
-    'name' : 'Name',
-    'regionid' : 'RegionID',
-    'geom' : 'MULTIPOLYGON',
+    'state': 'State',
+    'county': 'County',
+    'city': 'City',
+    'name': 'Name',
+    'regionid': 'RegionID',
+    'geom': 'MULTIPOLYGON',
 }
