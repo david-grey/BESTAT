@@ -12,7 +12,7 @@
 @desc:
 '''
 from django.contrib.auth.models import User
-from django.db import models
+from django.contrib.gis.db import models
 import datetime
 from django.db.models.aggregates import Max
 
@@ -137,3 +137,21 @@ class Comment(models.Model):
     text = models.CharField(max_length=140, verbose_name='text')
     create_time = models.DateTimeField(verbose_name='create time',
                                        auto_now_add=True)
+
+
+class Neighbor(models.Model):
+    state = models.CharField(max_length=80)
+    county = models.CharField(max_length=80)
+    city = models.CharField(max_length=80)
+    name = models.CharField(max_length=80)
+    regionid = models.CharField(max_length=80)
+    geom = models.MultiPolygonField(srid=4326)
+# Auto-generated `LayerMapping` dictionary for Neighbor model
+neighbor_mapping = {
+    'state' : 'State',
+    'county' : 'County',
+    'city' : 'City',
+    'name' : 'Name',
+    'regionid' : 'RegionID',
+    'geom' : 'MULTIPOLYGON',
+}
