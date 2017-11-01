@@ -67,5 +67,33 @@ class GooglePlace:
         print(len(results))
 
 
-googleplace = GooglePlace()
-googleplace.search_place(40.4369862, -80.0027261, 'restaurant', 500)
+class GooglePlaceWrap:
+    KEY = 'AIzaSyC394UgcUA4iyyfu-kcm4gOdkKDTM-aFaM'
+    TYPES = [types.TYPE_DOCTOR, types.TYPE_RESTAURANT, types.TYPE_STORE,
+             types.TYPE_BANK, types.TYPE_SCHOOL, types.TYPE_SUBWAY_STATION,
+             types.TYPE_CHURCH, types.TYPE_CAFE, types.TYPE_GYM,
+             types.TYPE_GROCERY_OR_SUPERMARKET]
+
+    def __init__(self):
+        self.google = GooglePlaces(self.KEY)
+
+    def search_nearby(self, x, y, radius):
+        places = {}
+        for tp in self.TYPES:
+            places[tp] = 0
+        for key in places:
+            count = 0
+            result_set = self.google.nearby_search(
+                lat_lng={'lat': x, 'lng': y},
+                radius=radius, type=key)
+            count += len(result_set)
+            while result_set.has_next_page_token:
+                try:
+                    next_page = self.google.nearby_search(
+                        pagetoken=result_set.next_page_token)
+                    result_set = next_page
+                    count += len(result_set)
+                except GooglePlacesError:
+                    time.sleep(1)
+
+
