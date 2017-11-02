@@ -12,7 +12,7 @@
 @desc:
 '''
 import requests
-from .GooglePlaces import GooglePlaces, types, GooglePlacesError
+from api.GooglePlaces import GooglePlaces, types, GooglePlacesError
 import time
 from api.circle import get_circles, default_radius
 import pickle
