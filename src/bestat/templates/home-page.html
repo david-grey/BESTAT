@@ -68,11 +68,11 @@
 {% endblock %}
 
 {% block js %}
-    <script src="../static/js/jquery.backstretch.js"></script>
+    <script src="{% static "js/jquery.backstretch.js" %}"></script>
     <script>
         $(function () {
             $(".container").css({opacity: .8});
-            $.backstretch(["../static/img/portfolio/item2.jpg", "../static/img/portfolio/item3.jpg", "../static/img/portfolio/item4.jpg"], {
+            $.backstretch(["{% static "img/portfolio/item2.jpg" %}", "{% static "img/portfolio/item3.jpg" %}", "{% static "img/portfolio/item4.jpg" %}"], {
                 duration: 3000,
                 fade: 750
             });
