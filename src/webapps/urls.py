@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from bestat import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', views.home, name='home'),
+    url(r'^signup/?$', views.signup, name='signup'),
+    url(r'^signin/?$', views.signin, name='signin'),
+    url(r'^logout/?$', views.logout_user, name='logout'),
+    url(r'^confirm/username=(?P<username>[0-9a-zA-Z]+)&token=(?P<token>\S+)$',
+        views.confirm, name='confirm'),
 ]
