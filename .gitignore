@@ -38,3 +38,8 @@ nosetests.xml
 .idea/
 
 
+# PYTHON
+#.pkl
+#.pyc
+
+
