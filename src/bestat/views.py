@@ -34,6 +34,11 @@ from bestat.utils import is_anonymous
 from django.http import JsonResponse, Http404
 import datetime
 
+@check_anonymous
+@require_GET
+def home(request):
+    return render(request, 'home-page.html')
+
 
 @anonymous_only("You have already login!")
 @check_anonymous
@@ -41,7 +46,7 @@ def signup(request):
     context = {}
     if request.method == "GET":
         context['form'] = UserCreationForm()
-        return render(request, 'signup.html', context)
+        return render(request, 'sign-up.html', context)
     else:
         form = UserCreationForm(request.POST)
         context['form'] = form
@@ -49,7 +54,7 @@ def signup(request):
         if not form.is_valid():
             errors = [v.as_text() for k, v in form.errors.items()]
             context['errors'] = errors
-            return render(request, 'signup.html', context)
+            return render(request, 'sign-up.html', context)
 
         params = form.cleaned_data
         user = User.objects.create_user(params['username'], params['email'],
@@ -95,15 +100,16 @@ def signin(request):
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
+                print('flag2')
                 # login success
                 if user.is_active:
+                    print('login success')
                     login(request, user)
-
-                    return redirect('/profile')
+                    return redirect('/')
                 else:
                     context['errors'] = ['account banned!']
             else:
-
+                print('flag1')
                 errors = ['password incorrect']
                 try:
                     User.objects.get(username=username)
@@ -111,7 +117,7 @@ def signin(request):
                     errors = ['user not exist']
                 context["errors"] = errors
 
-    return render(request, 'signin.html', context=context)
+    return render(request, 'sign-in.html', context=context)
 
 
 @require_http_methods(['GET', 'POST'])
@@ -185,12 +191,18 @@ def logout_user(request):
     logout(request)
     return redirect('/')
 
-
 @require_GET
-def confirm(request, usernanme, token):
-    user = get_object_or_404(User, id=usernanme)
-    login(request, user)
-    return redirect('/profile')
+def confirm(request, username, token):
+    generator = PasswordResetTokenGenerator()
+    try:
+        user = User.objects.get(username=username)
+        if generator.check_token(user, token):
+            login(request, user)
+            return redirect('/')
+        else:
+            return render(request, 'blank.html', {'msg': 'token not valid'})
+    except User.DoesNotExist:
+        return render(request, 'blank.html', {'msg': 'user non exist!'})
 
 
 @require_GET
@@ -259,7 +271,6 @@ def delete_review(request, review_id):
 @require_GET
 @login_required()
 def likes(request, block_id):
-
     blog = get_object_or_404(NeighborInfo, id=block_id)
     flag = True
     if blog.liked(request.user):
@@ -268,7 +279,6 @@ def likes(request, block_id):
     else:
         blog.likes.add(request.user)
     return JsonResponse({'likes_num': blog.likes_num, 'liked': flag})
-
 
 
 @check_anonymous
@@ -335,7 +345,6 @@ def _profile(request, target_user):
             # access his own profile
 
     return render(request, 'personal.html', context)
-
 
 
 def get_comments(blog):
