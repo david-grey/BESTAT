@@ -10,7 +10,7 @@
                 <div class="col-md-4 wow animated fadeInRight" style="margin-top: 100px;">
                     <div class="recent-works">
                         <h3>Place Detail</h3>
-                        <img src="../static/img/portfolio/item3.jpg">
+                        <img src="{% static "img/portfolio/item3.jpg" %}">
                         <div class="message-body" style="margin-top: 50px">
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
                                 ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
@@ -43,5 +43,5 @@
 {% endblock %}
 
 {% block js %}
-    <script src="../static/js/bestat.comment.js"></script>
+    <script src="{% static "js/bestat.comment.js" %}"></script>
 {% endblock %}
