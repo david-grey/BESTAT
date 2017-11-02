@@ -12,7 +12,7 @@
 @desc:
 '''
 import requests
-from api.GooglePlaces import GooglePlaces, types, GooglePlacesError
+from .GooglePlaces import GooglePlaces, types, GooglePlacesError
 import time
 from api.circle import get_circles, default_radius
 import pickle
@@ -129,10 +129,16 @@ class GooglePlaceWrap:
 
 if __name__ == '__main__':
     wrapper = GooglePlaceWrap()
-    up = 40.515897
-    down = 40.390015
-    left = -80.046810
-    right = -79.819695
+    # pittsburgh
+    # up = 40.515897
+    # down = 40.390015
+    # left = -80.046810
+    # right = -79.819695
+    # chicago
+    up = 42.072
+    down = 41.578
+    left = -88.0
+    right = -87.510
     points = get_circles(up, down, left, right)
     print(len(points))
     # for i, p in enumerate(points):
