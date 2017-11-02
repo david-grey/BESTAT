@@ -75,8 +75,7 @@ def signup(request):
                   message=email_body,
                   from_email="ziqil1@andrew.cmu.edu",
                   recipient_list=[user.email])
-        context[
-            'msg'] = 'Your confirmation link has been send to your register email.'
+        context['msg'] = 'Your confirmation link has been send to your register email.'
         return render(request, 'blank.html', context)
 
 
