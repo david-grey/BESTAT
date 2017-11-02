@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Bestat - Detail{% endblock %}
+
+{% block body %}
+
+    <section id="about" style="height: 800px; margin-top: 90px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 wow animated fadeInRight" style="margin-top: 100px;">
+                    <div class="recent-works">
+                        <h3>Place Detail</h3>
+                        <img src="../static/img/portfolio/item3.jpg">
+                        <div class="message-body" style="margin-top: 50px">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                                ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7 col-md-offset-1 wow animated fadeInLeft" style="margin-top: 100px;">
+                    <div class="recent-works welcome-block">
+                        <h3>Comments</h3>
+                        <div id="works">
+                            <div id="reviews-div" class="work-item message-body">
+{#                                <div>#}
+{#                                    <img src="img/member-1.jpg" class="pull-left" alt="member">#}
+{#                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor#}
+{#                                        incididunt ut labore et dolore magna aliqua. There are many variations of#}
+{#                                        passages of Lorem Ipsum available, but the majority have suffered alteration in#}
+{#                                        some form, by injected humour, or randomised words which don't look even#}
+{#                                        slightly believable.</p>#}
+{#                                </div>#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block js %}
+    <script src="../static/js/bestat.comment.js"></script>
+{% endblock %}
