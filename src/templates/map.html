@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+   integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+   crossorigin=""/>
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+   <!-- Make sure you put this AFTER Leaflet's CSS -->
+ 	<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
+   integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
+   crossorigin=""></script>
+
+   	<script src="jquery.js"></script>
+	<script src="jquery.backstretch.js"></script>
+
+	<title>leaflet</title>
+</head>
+<body>
+	<div id="mapid" style="height: 1000px;"></div>
+
+	<script>
+			var geojsonFeature = "";
+
+			$.get('/city/Pittsburgh')
+		      .done(function(data) {
+		          geojsonFeature = data;
+		    });
+
+            var mymap = L.map('mapid').setView([40.43, -79.99], 13);
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+			    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+			    maxZoom: 18,
+			    id: 'mapbox.streets',
+			    accessToken: 'pk.eyJ1IjoiZG9yYWRob3UiLCJhIjoiY2o4a2ZzOTZpMGNwODJ3cGZkbXQzOTFtMCJ9.6e0L2AOL8scVc4XTNao8qw'
+			}).addTo(mymap);
+
+			var geojsonFeature = [{"type":"FeatureCollection","features":[]}];
+
+			L.geoJSON(geojsonFeature).addTo(mymap);
+
+			// var popup = L.popup()
+			//     .setLatLng([40.41190996388554,-79.99898231628832])
+			//     .setContent("<b>Good place to live</b><br>Education:<br>Salary:<br>Transportation:<br>Crime:")
+			//     .openOn(mymap);
+
+			var popup = L.popup();
+
+			mymap.on('click', onMapClick);
+			// mymap.on('mouseover', highlightFeature);
+			// mymap.on('mouseout', resetHighlight);
+
+			function onMapClick(e) {
+			    popup
+			        .setLatLng(e.latlng)
+			        .setContent("You clicked the map at " + e.latlng.toString())
+			        .openOn(mymap);
+			}
+
+			function highlightFeature(e) {
+			    var layer = e.target;
+
+			    layer.setStyle({
+			        weight: 5,
+			        color: '#666',
+			        dashArray: '',
+			        fillOpacity: 0.7
+			    });
+
+			    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+			        layer.bringToFront();
+			    }
+			}
+
+			function resetHighlight(e) {
+			    geojson.resetStyle(e.target);
+			}
+
+			function onEachFeature(feature, layer) {
+			    layer.on({
+			        mouseover: highlightFeature,
+			        mouseout: resetHighlight
+			    });
+			}
+
+			geojson = L.geoJson(geojsonFeature, {
+			    //style: style,
+			    onEachFeature: onEachFeature
+			}).addTo(mymap);
+
+    </script>
+    <!-- <script type="text/javascript" src="my.js"></script> -->
+</body>
+</html>
