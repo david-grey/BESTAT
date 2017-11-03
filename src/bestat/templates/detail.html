@@ -3,14 +3,39 @@
 {% block title %}Bestat - Detail{% endblock %}
 
 {% block body %}
+    <!-- Navigation -->
+    <header id="navigation" class="navbar-inverse navbar-fixed-top animated-header">
+        <div class="container">
+            <div class="navbar-header">
+                <!-- logo -->
+                <h1 class="navbar-brand">
+                    <a href="#">BESTAT</a>
+                </h1>
+                <!-- /logo -->
+            </div>
 
-    <section id="about" style="height: 800px; margin-top: 90px;">
+            <!-- main nav -->
+            <nav class="collapse navbar-collapse navbar-right" role="navigation">
+                <ul id="nav" class="nav navbar-nav">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Sign Up</a></li>
+                    <li><a href="#">Sign In</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+            <!-- /main nav -->
+
+        </div>
+    </header>
+
+
+    <section id="about" style="margin-top: 90px;">
         <div class="container">
             <div class="row">
-                <div class="col-md-4 wow animated fadeInRight" style="margin-top: 100px;">
+                <div class="col-md-4 wow animated fadeInRight" style="margin-top: 50px;">
                     <div class="recent-works">
                         <h3>Place Detail</h3>
-                        <img src="{% static "img/portfolio/item3.jpg" %}">
+                        <img src="../static/img/portfolio/item3.jpg"/>
                         <div class="message-body" style="margin-top: 50px">
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
                                 ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
@@ -19,19 +44,28 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-7 col-md-offset-1 wow animated fadeInLeft" style="margin-top: 100px;">
+                <div class="col-md-7 col-md-offset-1 wow animated fadeInLeft" style="margin-top: 50px;">
                     <div class="recent-works welcome-block">
                         <h3>Comments</h3>
+                        <div id="new-review-div">
+                            <textarea name="text" id="newReviewTxt" class="review" rows="3"></textarea>
+                            <button type="submit" id="submit" class="btn btn-effect">Comment</button>
+                        </div>
+
                         <div id="works">
                             <div id="reviews-div" class="work-item message-body">
-{#                                <div>#}
-{#                                    <img src="img/member-1.jpg" class="pull-left" alt="member">#}
-{#                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor#}
-{#                                        incididunt ut labore et dolore magna aliqua. There are many variations of#}
-{#                                        passages of Lorem Ipsum available, but the majority have suffered alteration in#}
-{#                                        some form, by injected humour, or randomised words which don't look even#}
-{#                                        slightly believable.</p>#}
-{#                                </div>#}
+                                <!--<div class="review-item">
+                                    <img src="../static/img/member-1.jpg" class="pull-left" alt="member">
+                                    <p>username 10/30/2017</p>
+                                    <p>
+                                        Lorem idunt ut labore et dolore magna aliqua. There are many variations of
+                                        passjectie.
+                                    </p>
+                                    <p>
+                                        <a href="#" class="like fa fa-thumbs-down">0</a>
+                                        <a href="#" class="like fa fa-thumbs-up">0</a>
+                                    </p>
+                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -43,5 +77,5 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{% static "js/bestat.comment.js" %}"></script>
+{#    <script src="{% static "js/bestat.comment.js" %}"></script>#}
 {% endblock %}

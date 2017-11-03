@@ -26,13 +26,14 @@ from django.views.decorators.http import require_http_methods, require_GET, \
     require_POST
 
 from django.urls import reverse
-from bestat.models import Profile, Review, Comment, NeighborInfo
+from bestat.models import Profile, Review, Comment, NeighborInfo, Neighbor
 from bestat.decorator import check_anonymous, login_required, anonymous_only
 from bestat.forms import UserCreationForm, LoginForm, ChangePasswordForm, \
     ProfileForm, UsernameForm, ResetPassword
 from bestat.utils import is_anonymous
 from django.http import JsonResponse, Http404
 import datetime
+import json
 
 @check_anonymous
 @require_GET
@@ -420,3 +421,22 @@ def reset_password(request):
         request.user.set_password(password)
         request.user.save()
         return redirect('/')
+
+
+def map(request):
+    return render(request, 'map.html')
+
+
+def load_city(request, city):
+    context = {}
+    features = []
+    neighbors = Neighbor.objects.filter(city=city)
+    for neighbor in neighbors:
+        features.append(neighbor.geom.json)
+
+    features = features[0: -1]
+    context['type'] = 'FeatureCollection'
+    context['features'] = features
+
+    return JsonResponse(context)
+
