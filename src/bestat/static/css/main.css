@@ -1233,7 +1233,7 @@ textarea.form-control {
 
 /*navigation*/
     .navbar-inverse .navbar-toggle {
-        border-color: #fff;
+        /*border-color: #fff;*/
     }
 
     .navbar-inverse .navbar-toggle:hover,
