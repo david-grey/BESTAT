@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}Bestat - Home{% endblock %}
 
 {% block body %}
@@ -88,9 +88,9 @@
 
                 <div class="col-md-offset-2 col-md-8 text-center wow animated fadeInUp"
                      style="margin-top: 50px">
-                    <form action="city" method="get">
+                    <form action="{% url 'bestat:city' %}"  method="get">
                         <div class="input-field">
-                            <input type="select" name="name"
+                            <input type="text" name="name"
                                    class="form-control"
                                    placeholder="Start your new life...">
                         </div>

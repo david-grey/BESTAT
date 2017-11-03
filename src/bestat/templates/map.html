@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +17,6 @@
 <body>
 <div id="mapid" style="height: 1000px;"></div>
 
-<script src="../static/js/bestat.map.js"></script>
+<script src="{% static 'js/bestat.map.js' %}"></script>
 </body>
 </html>
