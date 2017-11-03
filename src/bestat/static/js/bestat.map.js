@@ -25,7 +25,7 @@ function onMapClick(e) {
 }
 
 function loadNeighborLayer() {
-    $.get('/load_city/city=Pittsburgh')
+    $.get('/load_city/Pittsburgh')
     .done(function (data) {
        geojsonFeature = JSON.parse(data);
         alert('get geojson');
