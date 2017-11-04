@@ -1,0 +1,112 @@
+{% load custom_tag %}
+<div class="post-box" id="reviewid_{{ review.id }}">
+    <div class="post-top">
+        <span><img
+                class="img img-circle img-user-icon"
+                src="{% url 'photo' review.author.id %}"
+                alt="Generic placeholder image"
+                width="50"
+                height="50"></span>
+        <p class="post-meta">Posted by
+            <a href="#">{{ review.author.profile.nick_name }}</a>
+            on {{ review.create_time }}</p>
+        {% if review.author == user %}
+            <a href="{% url 'delete_review' review.id %}"
+               class="pull-right"><span
+                    class="glyphicon glyphicon-remove"
+                    aria-hidden="true"></span></a>
+        {% endif %}
+
+
+    </div>
+    <div class="post-body">
+
+        <p>{{ blog.text }}</p>
+
+
+    </div>
+    <div class="post-footer">
+
+        <div class="button-group">
+            <ul class="nav nav-pills pull-right">
+                <li class="">
+                    <a class="btn btn-info"
+                       onclick="comments_display()"
+                       role="button"><span
+                            class="glyphicon glyphicon-pencil"
+                            aria-hidden="true"></span>
+                        Comments<span
+                                class="badge pull-right comments-badge">{{ blog.comments_num }}</span></a>
+                </li>
+                <li class="">
+                    <a class="btn {% check_liked blog user as liked %}
+                                                    {% if liked %}
+                                                        btn-danger
+                                                    {% else %}
+                                                        btn-success
+                                                    {% endif %}"
+                       onclick="likes(this)"
+                       role="button"><span
+                            class="glyphicon glyphicon-star"
+                            aria-hidden="true"></span>Likes
+
+                        <span
+                                class="badge pull-right likes-badge">{{ blog.likes_num }}</span></a>
+                </li>
+            </ul>
+        </div>
+        <div class="comment-box">
+            <div class="well">
+                <div class="input-group">
+                    <input type="text"
+                           id="userComment"
+                           class="form-control input-sm"
+                           placeholder="Write your comment here..."/>
+                    <span class="input-group-btn"
+                          onclick="addComment()"
+                    >            <button
+                            class="btn btn-primary btn-sm">
+                                                    <span class="glyphicon glyphicon-comment"></span> Add Comment</button></span>
+                </div>
+
+                <ul class="list-unstyled">
+                    {% for comment in blog.comments.all %}
+                        <li id= {{ comment.id }}>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <a
+                                            href="{% url 'view_profile' comment.author.id %}"><img
+                                            class="img img-circle img-user-icon"
+                                            src="{% url 'photo' comment.author.id %}"
+                                            alt="Generic placeholder image"
+                                            width="50"
+                                            height="50"></a>
+                                </div>
+                                <div class="col-md-10">
+                                    {% if comment.author == user or blog.author == user %}
+                                        <a
+                                                onclick="deleteComment()"
+                                                class="pull-right"><span
+                                                class="glyphicon glyphicon-remove"
+                                                aria-hidden="true"></span></a>
+                                    {% endif %}
+
+                                    <p class="comment">
+                                        {{ comment.text }}
+                                    </p>
+                                    <p class="comment-meta pull-left">
+                                        Commented
+                                        by
+                                        <a href="{% url 'view_profile' comment.author.id %}">{{ comment.author.profile.nick_name }}</a>
+                                        on {{ comment.create_time }}
+                                    </p></div>
+                            </div>
+                        </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

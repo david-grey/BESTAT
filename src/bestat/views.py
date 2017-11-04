@@ -35,6 +35,7 @@ from django.http import JsonResponse, Http404
 import datetime
 import json
 
+
 @check_anonymous
 @require_GET
 def home(request):
@@ -78,7 +79,8 @@ def signup(request):
                   message=email_body,
                   from_email="ziqil1@andrew.cmu.edu",
                   recipient_list=[user.email])
-        context['msg'] = 'Your confirmation link has been send to your register email.'
+        context[
+            'msg'] = 'Your confirmation link has been send to your register email.'
         return render(request, 'blank.html', context)
 
 
@@ -193,6 +195,7 @@ def logout_user(request):
     logout(request)
     return redirect('/')
 
+
 @require_GET
 def confirm(request, username, token):
     generator = PasswordResetTokenGenerator()
@@ -265,9 +268,9 @@ def delete_review(request, review_id):
     review = get_object_or_404(Review, id=review_id)
     if review.author == user:
         review.delete()
+        return JsonResponse({'msg': 'ok'})
     else:
         return HttpResponse("Hey bro, don't try to delete others' blogs!")
-    return redirect('/profile')
 
 
 @require_GET
@@ -441,12 +444,14 @@ def load_city(request, city):
 
     return JsonResponse(context)
 
+
 @require_http_methods(['GET'])
 def get_city(request):
     city = request.GET.get('name', '')
     coordinate = [40.43, -79.99]
     print(city)
     return render(request, 'map.html', {"city": city, "coordinate": coordinate})
+
 
 def get_all_city(request):
     if request.is_ajax():
@@ -458,3 +463,6 @@ def get_all_city(request):
         data = "No"
     return HttpResponse(data, "application/json")
 
+
+def detail(request):
+    return render(request, 'detail.html')

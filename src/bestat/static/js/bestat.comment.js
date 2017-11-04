@@ -18,8 +18,8 @@ function loadReview() {
 function loadRecentReview() {
     var url = '/review/';
 
-    var div = $("#reviews-div")
-    var max_time = div.data("max-time")
+    var div = $("#reviews-div");
+    var max_time = div.data("max-time");
     $.get(url + max_time)
         .done(function (data) {
             div.data('max-time', data['max-time']);
@@ -33,20 +33,30 @@ function loadRecentReview() {
 }
 
 function postReview(e) {
-    if ($(e.target).attr('class') != 'comment_button') {
+    if ($(e.target).className !== 'comment_button') {
+        alert('fuck');
         return;
     }
 
-    $.post('/comment', {'text': $(e.target).prev().val(), 'post_id': $(e.target).parent().parent().data('post-id')})
+    $.post('/post_review', {'text': $('#newReviewTxt').val()})
         .done(function (data) {
             var new_item = $(data.html);
             $(e.target).parent().parent().append(new_item);
-            new_item.show();
-            $(e.target).prev().val('').focus();
+            $('#newReviewTxt').val('').focus();
         });
 }
 
 $(document).ready(function () {
+    // new review word count
+    var max_char = 140;
+    var msg_count = $('#count_message');
+
+    msg_count.html(max_char + ' remaining');
+    $('#newReviewTxt').keyup(function () {
+        msg_count.val(msg_count.val().substring(0, max_char));
+        msg_count.html(max_char - $('#newReviewTxt').val().length + ' remaining');
+    });
+
     // Add event-handlers
     // $("#add-btn").click(addItem);
     // $("#item-field").keypress(function (e) { if (e.which == 13) addItem(); } );
@@ -65,12 +75,12 @@ $(document).ready(function () {
     // CSRF set-up copied from Django docs
     function getCookie(name) {
         var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
+        if (document.cookie && document.cookie !== '') {
             var cookies = document.cookie.split(';');
             for (var i = 0; i < cookies.length; i++) {
                 var cookie = jQuery.trim(cookies[i]);
                 // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                     break;
                 }
@@ -86,3 +96,4 @@ $(document).ready(function () {
         }
     });
 });
+
