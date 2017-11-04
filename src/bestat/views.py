@@ -1,16 +1,3 @@
-# encoding: utf-8
-
-'''
-
-@author: ZiqiLiu
-
-
-@file: views.py
-
-@time: 2017/10/25 下午2:54
-
-@desc:
-'''
 
 from mimetypes import guess_type
 
@@ -26,7 +13,7 @@ from django.views.decorators.http import require_http_methods, require_GET, \
     require_POST
 
 from django.urls import reverse
-from bestat.models import Profile, Review, Comment, NeighborInfo, Neighbor
+from bestat.models import Profile, Review, Comment, NeighborInfo, Neighbor, City, CrimeRecord
 from bestat.decorator import check_anonymous, login_required, anonymous_only
 from bestat.forms import UserCreationForm, LoginForm, ChangePasswordForm, \
     ProfileForm, UsernameForm, ResetPassword
@@ -448,7 +435,7 @@ def load_city(request, city):
 @require_http_methods(['GET'])
 def get_city(request):
     city = request.GET.get('name', '')
-    coordinate = [40.43, -79.99]
+    coordinate = json.loads(City.objects.get(name=city).point.geojson)['coordinates'][::-1]
     print(city)
     return render(request, 'map.html', {"city": city, "coordinate": coordinate})
 
@@ -457,7 +444,8 @@ def get_all_city(request):
     if request.is_ajax():
         q = request.GET.get('term', '')
         print(q)
-        results = ["Chicago", "Pittsburgh", "New York City"]
+        results = [c.name for c in City.objects.filter(name__icontains=q)]
+
         data = json.dumps(results)
     else:
         data = "No"
