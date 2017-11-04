@@ -30,7 +30,7 @@ class Neighbor(models.Model):
 
 class NeighborInfo(models.Model):
     neighbor = models.OneToOneField(Neighbor, on_delete=models.CASCADE,
-                                    related_name="info", primary_key=True)
+                                    related_name="nbinfo", primary_key=True)
 
     # attrs from factfinder, base on zipcode
     population = models.IntegerField(null=True, blank=True)
@@ -43,16 +43,16 @@ class NeighborInfo(models.Model):
     poverty = models.FloatField(null=True, blank=True)
 
     # ['doctor', 'restaurant', 'store', 'bank', 'school', 'subway_station', 'church', 'cafe', 'gym', 'grocery_or_supermarket']
-    doctor = models.IntegerField()
-    restaurant = models.IntegerField()
-    store = models.IntegerField()
-    bank = models.IntegerField()
-    school = models.IntegerField()
-    subway_station = models.IntegerField()
-    church = models.IntegerField()
-    cafe = models.IntegerField()
-    gym = models.IntegerField()
-    grocery_or_supermarket = models.IntegerField()
+    doctor = models.IntegerField(default=0)
+    restaurant = models.IntegerField(default=0)
+    store = models.IntegerField(default=0)
+    bank = models.IntegerField(default=0)
+    school = models.IntegerField(default=0)
+    subway_station = models.IntegerField(default=0)
+    church = models.IntegerField(default=0)
+    cafe = models.IntegerField(default=0)
+    gym = models.IntegerField(default=0)
+    grocery_or_supermarket = models.IntegerField(default=0)
 
     @property
     def likes_num(self):
