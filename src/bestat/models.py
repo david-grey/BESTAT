@@ -30,7 +30,7 @@ class Neighbor(models.Model):
 
 class NeighborInfo(models.Model):
     neighbor = models.OneToOneField(Neighbor, on_delete=models.CASCADE,
-                                    related_name="nbinfo", primary_key=True)
+                                    related_name="info", primary_key=True)
 
     # attrs from factfinder, base on zipcode
     population = models.IntegerField(null=True, blank=True)

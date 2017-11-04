@@ -20,16 +20,10 @@ with open('./api/googleplace_pitts.pkl', 'rb') as f:
 
 for key in data:
     records = data[key]
-    for key_record in records:
-        r = records[key_record]
+    for id in records:
+        r = records[id]
         lat = r['lat']
         lng = r['lng']
         nb = get_neighbor(lat, lng)
-        nb.info.objects.update_or_create(population=111)
+        nb.info.objects.update()
 
-from bestat.models import Neighbor,NeighborInfo
-from tqdm import tqdm
-allnbs = Neighbor.objects.all()
-for nb in tqdm(allnbs):
-    inf = NeighborInfo(neighbor=nb)
-    inf.save()
