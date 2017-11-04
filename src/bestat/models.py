@@ -164,5 +164,5 @@ neighbor_mapping = {
 
 class City(models.Model):
     name = models.CharField(max_length=255)
-    geometry = models.PointField()
+    point = models.PointField(srid=4326)
 
