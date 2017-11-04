@@ -135,16 +135,19 @@ if __name__ == '__main__':
     # left = -80.046810
     # right = -79.819695
     # chicago
-    up = 42.072
-    down = 41.578
-    left = -88.0
-    right = -87.510
+    # up = 42.072
+    # down = 41.578
+    # left = -88.0
+    # right = -87.510
+
+    # new york
+    up = 40.9463
+    down = 40.4774
+    left = -74.2694
+    right = -73.6861
     points = get_circles(up, down, left, right)
     print(len(points))
-    # for i, p in enumerate(points):
-    #     print('============' + str(i))
-    #     entry = wrapper.search_nearby(p[0], p[1], default_radius)
-    #     data.append(entry)
-    data = wrapper.search_range(points, default_radius)
-    with open('googleplace2.pkl', 'wb') as f:
-        pickle.dump(data, f)
+
+    # data = wrapper.search_range(points, default_radius)
+    # with open('googleplace2.pkl', 'wb') as f:
+    #     pickle.dump(data, f)

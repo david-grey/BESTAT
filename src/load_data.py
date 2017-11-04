@@ -14,16 +14,20 @@
 
 from bestat.utils import get_neighbor
 import pickle
+from tqdm import tqdm
 
 with open('./api/googleplace_pitts.pkl', 'rb') as f:
     data = pickle.load(f)
 
 for key in data:
     records = data[key]
-    for id in records:
+    for id in tqdm(records):
         r = records[id]
         lat = r['lat']
         lng = r['lng']
         nb = get_neighbor(lat, lng)
-        nb.info.objects.update()
+        if nb:
+            setattr(nb.info, key, getattr(nb.info, key) + 1)
+            nb.info.save()
+
 
