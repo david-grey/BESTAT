@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^confirm/username=(?P<username>[0-9a-zA-Z]+)&token=(?P<token>\S+)$',
         bestat.views.confirm, name='confirm'),
     url(r'^map/$', bestat.views.get_city, name='map'),
+    url(r'^load_city/(?P<city>[a-zA-Z]+)$', bestat.views.load_city, name='load_city'),
 ]
 
