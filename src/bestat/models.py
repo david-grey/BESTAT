@@ -43,7 +43,7 @@ class NeighborInfo(models.Model):
     poverty = models.FloatField(null=True, blank=True)
 
     # ['doctor', 'restaurant', 'store', 'bank', 'school', 'subway_station', 'church', 'cafe', 'gym', 'grocery_or_supermarket']
-    doctor = models.IntegerField(default=0)
+    hospital = models.IntegerField(default=0)
     restaurant = models.IntegerField(default=0)
     store = models.IntegerField(default=0)
     bank = models.IntegerField(default=0)
@@ -171,4 +171,8 @@ neighbor_mapping = {
 class City(models.Model):
     name = models.CharField(max_length=255)
     point = models.PointField(srid=4326)
+    activate = models.IntegerField(default=0)
+    population = models.IntegerField()
+
+
 
