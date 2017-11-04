@@ -424,7 +424,12 @@ def load_city(request, city):
     features = []
     neighbors = Neighbor.objects.filter(city=city)
     for neighbor in neighbors:
-        features.append(json.loads(neighbor.geom.json))
+        properties = {}
+        block = json.loads(neighbor.geom.json)
+        properties['id'] = neighbor.regionid
+        properties['name'] = neighbor.name
+        block['properties'] = properties
+        features.append(block)
 
     context['type'] = 'FeatureCollection'
     context['features'] = features
