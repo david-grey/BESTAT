@@ -1,44 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}Bestat - Home{% endblock %}
-
+{% block css %}
+    <link rel="stylesheet" href="{% static "css/jquery-ui.min.css" %}">
+{% endblock %}
 {% block body %}
-    <!--
-        Fixed Navigation
-        ==================================== -->
-        <header id="navigation" class="navbar-inverse navbar-fixed-top animated-header">
-            <div class="container">
-                <div class="navbar-header">
-					<!-- logo -->
-					<h1 class="navbar-brand">
-						<a href="#">BESTAT</a>
-					</h1>
-					<!-- /logo -->
-                </div>
-
-				<!-- main nav -->
-                <nav class="collapse navbar-collapse navbar-right" role="navigation">
-                    <ul id="nav" class="nav navbar-nav">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Sign Up</a></li>
-                        <li><a href="#">Sign In</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </nav>
-				<!-- /main nav -->
-
-            </div>
-        </header>
-        <!--
-        End Fixed Navigation
-        ==================================== -->
-
     <section id="contact">
         <div class="container">
             <div class="row">
 
-                <div class="sec-title text-center wow animated fadeInDown"
-                     style="padding-top: 200px;">
+                <div class="sec-title text-center wow animated fadeInDown">
                     <h2>Choose City</h2>
                 </div>
 
@@ -88,9 +59,9 @@
 
                 <div class="col-md-offset-2 col-md-8 text-center wow animated fadeInUp"
                      style="margin-top: 50px">
-                    <form action="{% url 'bestat:city' %}"  method="get">
+                    <form action="{% url 'bestat:city' %}" method="get">
                         <div class="input-field">
-                            <input type="text" name="name"
+                            <input id="city" type="text" name="name"
                                    class="form-control"
                                    placeholder="Start your new life...">
                         </div>
@@ -107,15 +78,9 @@
 {% endblock %}
 
 {% block js %}
-    {% load static %}
+
     <script src="{% static "js/jquery.backstretch.js" %}"></script>
-    <script>
-        $(function () {
-            $(".container").css({opacity: .8});
-            $.backstretch(["{% static "img/portfolio/item2.jpg" %}", "{% static "img/portfolio/item3.jpg" %}", "{% static "img/portfolio/item4.jpg" %}"], {
-                duration: 3000,
-                fade: 750
-            });
-        });
-    </script>
+    <script src="{% static "js/bestat.home.js" %}"></script>
+    <script src="{% static "js/jquery-ui.min.js" %}"></script>
+
 {% endblock %}

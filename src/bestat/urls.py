@@ -16,12 +16,13 @@ from django.conf.urls import url, include
 import bestat.views
 
 urlpatterns = [
-    url(r'^$', bestat.views.home),
+    url(r'^$', bestat.views.home, name='home'),
     url(r'^signup/?$', bestat.views.signup, name='signup'),
     url(r'^signin/?$', bestat.views.signin, name='signin'),
     url(r'^logout/?$', bestat.views.logout_user, name='logout'),
     url(r'^confirm/username=(?P<username>[0-9a-zA-Z]+)&token=(?P<token>\S+)$',
         bestat.views.confirm, name='confirm'),
-    url(r'^map/$', bestat.views.get_city, name='map'),
+    url(r'^map/$', bestat.views.get_city, name='city'),
+    url(r'^get_all_city/$', bestat.views.get_all_city, name='get_all_city'),
 ]
 

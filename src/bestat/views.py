@@ -446,3 +446,13 @@ def get_city(request):
     cordinate = "40.43, -79.99"
     print(city)
     return render(request, 'map.html', {"city": city, "cordinate": cordinate})
+
+def get_all_city(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '')
+        print(q)
+        results = ["Chicago", "Pittsburgh", "New York City"]
+        data = json.dumps(results)
+    else:
+        data = "No"
+    return HttpResponse(data, "application/json")

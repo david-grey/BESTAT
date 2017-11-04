@@ -4,13 +4,18 @@
 /* =================================== */
 
 body {
-    background-color: #fff;
+    background-color: rgba(0, 0, 0, 0.15);
     font-family: 'Open Sans', sans-serif;
     line-height: 24px;
     font-size: 16px;
-    color: #818181;
+    color: #f7f7f7;
 }
-
+.container {
+    margin-top: 200px;
+    background-color: rgba(0, 0, 0, 0.31);
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
 figure, p, address {
     margin: 0;
 }
@@ -39,7 +44,7 @@ a, a:hover, a:focus, .btn:focus {
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
     font-family: 'Open Sans', sans-serif;
-    color: #252525;
+    color: #f7f7f7;
 }
 
 main > section {
@@ -1220,7 +1225,7 @@ textarea.form-control {
     }
 
     .parallax {
-        background-position: centet tip !important;
+        background-position: center;
     }
 
     .sec-title h2 {
@@ -1229,16 +1234,6 @@ textarea.form-control {
 
     .sec-title h2:after {
         left: 30%;
-    }
-
-/*navigation*/
-    .navbar-inverse .navbar-toggle {
-        /*border-color: #fff;*/
-    }
-
-    .navbar-inverse .navbar-toggle:hover,
-    .navbar-inverse .navbar-toggle:focus {
-        background-color: transparent;
     }
 
 /* slider */
