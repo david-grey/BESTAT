@@ -3,7 +3,7 @@ from django.contrib.gis.utils import LayerMapping
 from .models import Neighbor
 
 ls = []
-for a, b, c in os.walk("bestat"):
+for a, b, c in os.walk("bestat/data/region"):
     ls.extend([os.path.join(a,i) for i in c if i.endswith("shp")])
 
 neighbor_mapping = {

@@ -161,6 +161,8 @@ neighbor_mapping = {
     'geom': 'MULTIPOLYGON',
 }
 
+
 class City(models.Model):
     name = models.CharField(max_length=255)
-    geometry = models.MultiPolygonField()
+    geometry = models.PointField()
+
