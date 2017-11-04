@@ -441,10 +441,10 @@ def load_city(request, city):
 
 @require_http_methods(['GET'])
 def get_city(request):
-    city = request.GET.get('city', '')
+    city = request.GET.get('name', '')
     coordinate = [40.43, -79.99]
     print(city)
-    return render(request, 'map.html', {"city": city, "cordinate": coordinate})
+    return render(request, 'map.html', {"city": city, "coordinate": coordinate})
 
 def get_all_city(request):
     if request.is_ajax():
