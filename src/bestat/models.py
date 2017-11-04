@@ -97,6 +97,12 @@ class Review(models.Model):
     text = models.TextField()
     create_time = models.DateTimeField(verbose_name='create time',
                                        auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name='likes',
+                                   related_query_name='like')
+
+    @property
+    def likes_num(self):
+        return self.likes.all().count()
 
     @property
     def create_at(self):

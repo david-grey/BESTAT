@@ -38,12 +38,37 @@ function postReview(e) {
         return;
     }
 
-    $.post('/post_review', {'text': $('#newReviewTxt').val()})
+    $.post('/bestat/create_review', {'text': $('#newReviewTxt').val()})
         .done(function (data) {
             var new_item = $(data.html);
             $(e.target).parent().parent().append(new_item);
             $('#newReviewTxt').val('').focus();
         });
+}
+
+function deleteReview(e) {
+    var post_box = $(e.target).parents(".post-box");
+    var id = post_box.attr('id').split('_');
+    id = id[id.length - 1];
+    $.get('/bestat/delete_review/'+id).done(function (data)  {
+        var res = $(data.msg);
+        if (res === 'ok') {
+            post_box.remove();
+        }
+    })
+}
+
+function likes(target) {
+    var btn = $(target);
+    console.log(btn[0]);
+    $.get("/blog/likes/" + getBlogId(btn.parents('.post-box'))).done(function (data) {
+        btn.find('span.badge').text(data['likes_num']);
+        if (data['liked']) {
+            btn.removeClass('btn-success').addClass('btn-danger');
+        } else {
+            btn.removeClass('btn-danger').addClass('btn-success');
+        }
+    });
 }
 
 $(document).ready(function () {
