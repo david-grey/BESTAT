@@ -434,12 +434,18 @@ def load_city(request, city):
     features = []
     neighbors = Neighbor.objects.filter(city=city)
     for neighbor in neighbors:
-        features.append(json.loads(neighbor.geom.json))
+        properties = {}
+        block = json.loads(neighbor.geom.json)
+        properties['id'] = neighbor.regionid
+        properties['name'] = neighbor.name
+        block['properties'] = properties
+        features.append(block)
 
     context['type'] = 'FeatureCollection'
     context['features'] = features
 
     return JsonResponse(context)
+
 
 @require_http_methods(['GET'])
 def get_city(request):
@@ -447,6 +453,7 @@ def get_city(request):
     coordinate = [40.43, -79.99]
     print(city)
     return render(request, 'map.html', {"city": city, "coordinate": coordinate})
+
 
 def get_all_city(request):
     if request.is_ajax():
