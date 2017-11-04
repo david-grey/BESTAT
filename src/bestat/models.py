@@ -30,7 +30,7 @@ class Neighbor(models.Model):
 
 class NeighborInfo(models.Model):
     neighbor = models.OneToOneField(Neighbor, on_delete=models.CASCADE,
-                                    related_name="nbinfo", primary_key=True)
+                                    related_name="info", primary_key=True)
 
     # attrs from factfinder, base on zipcode
     population = models.IntegerField(null=True, blank=True)
@@ -97,6 +97,12 @@ class Review(models.Model):
     text = models.TextField()
     create_time = models.DateTimeField(verbose_name='create time',
                                        auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name='likes',
+                                   related_query_name='like')
+
+    @property
+    def likes_num(self):
+        return self.likes.all().count()
 
     @property
     def create_at(self):

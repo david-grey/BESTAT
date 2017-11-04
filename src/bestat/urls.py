@@ -25,7 +25,17 @@ urlpatterns = [
     url(r'^detail/$', bestat.views.detail, name='detail'),
     url(r'^map/$', bestat.views.get_city, name='city'),
     url(r'^get_all_city/$', bestat.views.get_all_city, name='get_all_city'),
-    url(r'^load_city/(?P<city>[a-zA-Z]+)$', bestat.views.load_city,
+    url(r'^load_city/(?P<city>[a-zA-z\s]+)$', bestat.views.load_city,
         name='load_city'),
+
+]
+
+
+review_group = [
+    url(r'^create_review$', bestat.views.create_review, name='create_review'),
+    url(r'^delete/(?P<review_id>[0-9]+)$', bestat.views.delete_review,
+        name='delete_review'),
+    # url(r'^get_update/$', bestat.views.update_blogs),
+    url(r'^likes/(?P<blog_id>[0-9]+)$', bestat.views.likes),
 
 ]
