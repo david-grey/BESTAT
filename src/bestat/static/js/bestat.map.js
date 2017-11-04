@@ -14,10 +14,30 @@ $(document).ready(function () {
     }).addTo(mymap);
 
     popup = L.popup();
-    mymap.on('click', onMapClick);
+    // mymap.on('click', onMapClick);
 
     var city = $("input[name='city']").val();
     loadNeighborLayer(city);
+
+    var legend = L.control({position: 'bottomright'});
+
+    legend.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'info legend'),
+            grades = [0, 200000, 220000, 240000, 260000, 280000, 300000, 320000],
+            labels = [];
+
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML +=
+                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
+        console.log(div);
+        return div;
+    };
+
+    legend.addTo(mymap);
 });
 
 function onMapClick(e) {
@@ -60,7 +80,7 @@ function highlightFeature(e) {
 
     var props = layer.feature.geometry.properties;
     var html = '<h4>' + props.name + ' Index</h4>'
-             + props.id + ' people / mi<sup>2</sup>';
+        + props.id + ' people / mi<sup>2</sup>';
 
     popup
         .setLatLng(e.latlng)
@@ -78,13 +98,13 @@ function resetHighlight(e) {
 
 function getColor(d) {
     return d > 320000 ? '#800026' :
-           d > 300000  ? '#BD0026' :
-           d > 280000  ? '#E31A1C' :
-           d > 260000  ? '#FC4E2A' :
-           d > 240000   ? '#FD8D3C' :
-           d > 220000   ? '#FEB24C' :
-           d > 200000   ? '#FED976' :
-                      '#FFEDA0';
+           d > 300000 ? '#BD0026' :
+           d > 280000 ? '#E31A1C' :
+           d > 260000 ? '#FC4E2A' :
+           d > 240000 ? '#FD8D3C' :
+           d > 220000 ? '#FEB24C' :
+           d > 200000 ? '#FED976' :
+                        '#FFEDA0';
 }
 
 function style(feature) {
