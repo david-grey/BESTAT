@@ -166,3 +166,4 @@ class City(models.Model):
     name = models.CharField(max_length=255)
     point = models.PointField(srid=4326)
 
+

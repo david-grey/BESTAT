@@ -449,7 +449,7 @@ def get_all_city(request):
     if request.is_ajax():
         q = request.GET.get('term', '')
         print(q)
-        results = [c.name for c in City.objects.filter(name__icontains=q)]
+        results = [c.name for c in City.objects.filter(name__icontains=q)[:5]]
 
         data = json.dumps(results)
     else:
