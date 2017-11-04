@@ -38,7 +38,7 @@ import json
 @check_anonymous
 @require_GET
 def home(request):
-    return render(request, 'home-page.html')
+    return render(request, 'homepage.html')
 
 
 @anonymous_only("You have already login!")
@@ -47,7 +47,7 @@ def signup(request):
     context = {}
     if request.method == "GET":
         context['form'] = UserCreationForm()
-        return render(request, 'sign-up.html', context)
+        return render(request, 'signup.html', context)
     else:
         form = UserCreationForm(request.POST)
         context['form'] = form
@@ -55,7 +55,7 @@ def signup(request):
         if not form.is_valid():
             errors = [v.as_text() for k, v in form.errors.items()]
             context['errors'] = errors
-            return render(request, 'sign-up.html', context)
+            return render(request, 'signup.html', context)
 
         params = form.cleaned_data
         user = User.objects.create_user(params['username'], params['email'],
@@ -67,6 +67,8 @@ def signup(request):
                                          nick_name=params['nick_name'])
         profile.save()
         token = default_token_generator.make_token(user)
+
+        login(request, user)
 
         email_body = '''
            Welcome to bestat. Please click the link below to verify your email address and complete the registration proceess. http://%s%s
@@ -117,7 +119,7 @@ def signin(request):
                     errors = ['user not exist']
                 context["errors"] = errors
 
-    return render(request, 'sign-in.html', context=context)
+    return render(request, 'signin.html', context=context)
 
 
 @require_http_methods(['GET', 'POST'])
