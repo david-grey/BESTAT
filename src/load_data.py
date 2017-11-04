@@ -28,5 +28,6 @@ for key in data:
         nb = get_neighbor(lat, lng)
         if nb:
             setattr(nb.info, key, getattr(nb.info, key) + 1)
+            nb.info.save()
 
 
