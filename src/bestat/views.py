@@ -21,6 +21,7 @@ from bestat.utils import is_anonymous
 from django.http import JsonResponse, Http404
 import datetime
 import json
+import random
 
 
 @check_anonymous
@@ -398,6 +399,7 @@ def load_city(request, city):
         block = json.loads(neighbor.geom.json)
         properties['id'] = neighbor.regionid
         properties['name'] = neighbor.name
+        properties['random'] = random.randint(180000,330000);
         block['properties'] = properties
         features.append(block)
 
