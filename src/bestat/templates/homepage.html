@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Bestat - Home{% endblock %}
+{% block title %}Bestat{% endblock %}
 {% block css %}
     <link rel="stylesheet" href="{% static "css/jquery-ui.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/bestat.navbar.css" %}">
 {% endblock %}
 {% block body %}
     <section id="contact">
@@ -57,17 +58,15 @@
                     </div>
                 </div>
 
-                <div class="col-md-offset-2 col-md-8 text-center wow animated fadeInUp"
-                     style="margin-top: 50px">
-                    <form action="{% url 'bestat:city' %}" method="get">
+                <div class="col-md-offset-2 col-md-8 text-center wow animated fadeInUp">
+                    <form class="select" action="{% url 'bestat:city' %}" method="get">
                         <div class="input-field">
                             <input id="city" type="text" name="name"
                                    class="form-control"
                                    placeholder="Start your new life...">
                         </div>
                         <button type="submit" id="submit"
-                                class="btn btn-blue btn-effect"
-                                style="margin-top: 50px;">
+                                class="btn btn-blue btn-effect">
                             Choose
                         </button>
                     </form>
