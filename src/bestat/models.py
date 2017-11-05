@@ -174,6 +174,21 @@ class City(models.Model):
     activate = models.IntegerField(default=0)
     population = models.IntegerField()
 
+class Zipcode(models.Model):
+    zcta5ce10 = models.CharField(max_length=5)
+    geoid10 = models.CharField(max_length=5)
+    classfp10 = models.CharField(max_length=2)
+    mtfcc10 = models.CharField(max_length=5)
+    funcstat10 = models.CharField(max_length=1)
+    aland10 = models.BigIntegerField()
+    awater10 = models.BigIntegerField()
+    intptlat10 = models.CharField(max_length=11)
+    intptlon10 = models.CharField(max_length=12)
+    geom = models.MultiPolygonField(srid=4326)
+
+# Auto-generated `LayerMapping` dictionary for Zipcode model
+
+
 
 
 
