@@ -42,6 +42,8 @@ class NeighborInfo(models.Model):
     # % Individuals below poverty level
     poverty = models.FloatField(null=True, blank=True)
 
+    # liked = models.ManyToManyField(Profile, related_name='favorite_nb')
+
     # ['doctor', 'restaurant', 'store', 'bank', 'school', 'subway_station', 'church', 'cafe', 'gym', 'grocery_or_supermarket']
     hospital = models.IntegerField(default=0)
     restaurant = models.IntegerField(default=0)
@@ -53,6 +55,17 @@ class NeighborInfo(models.Model):
     cafe = models.IntegerField(default=0)
     gym = models.IntegerField(default=0)
     grocery_or_supermarket = models.IntegerField(default=0)
+
+    nb_hospital = models.IntegerField(default=0)
+    nb_restaurant = models.IntegerField(default=0)
+    nb_store = models.IntegerField(default=0)
+    nb_bank = models.IntegerField(default=0)
+    nb_school = models.IntegerField(default=0)
+    nb_subway_station = models.IntegerField(default=0)
+    nb_church = models.IntegerField(default=0)
+    nb_cafe = models.IntegerField(default=0)
+    nb_gym = models.IntegerField(default=0)
+    nb_grocery_or_supermarket = models.IntegerField(default=0)
 
     @property
     def likes_num(self):

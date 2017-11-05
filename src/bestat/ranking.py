@@ -64,7 +64,7 @@ def get_neighbor_score(nb):
 
     # adjust for overall score
     overall += 1
-    overall = max(10., overall)
+    overall = min(10., overall)
 
     # adjust for public service
     public_service = public_service / 3 * 10
