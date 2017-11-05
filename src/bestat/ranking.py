@@ -73,6 +73,6 @@ def get_neighbor_score(nb):
     live_convenience = live_convenience / 6 * 10
 
     # adjust for crime
-    crime_score = (1 - scaled_crime_index) * 10
+    security_score = (1 - scaled_crime_index) * 10
 
-    return overall, public_service, live_convenience, crime_score
+    return overall, public_service, live_convenience, security_score
