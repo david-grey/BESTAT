@@ -75,7 +75,7 @@ if __name__ == '__main__':
     right = -87.510
 
     data = crime.fetch_range(get_circles(up, down, left, right, RADIUS))
-    with open('crime_pitts.pkl', 'wb') as f:
+    with open('crime_chicago.pkl', 'wb') as f:
         pickle.dump(data, f)
 
 
