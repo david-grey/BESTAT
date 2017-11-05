@@ -9,3 +9,36 @@
     margin-right: 8px;
     opacity: 0.7;
 }
+
+select {
+    color: #333;
+    border: 2px #333;
+    font-size: medium;
+    width: 150px;
+    opacity: 0.85;
+}
+
+i{
+    color:#333;
+    padding: 2px 4px 2px 4px;
+    margin-left: 4px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+
+div .category {
+    font: 16px "Helvetica Neue", Arial, Helvetica, sans-serif;
+    background-color: white;
+    height: 50px;
+    padding: 6px;
+    opacity: 0.85;
+}
+
+div .category span {
+    margin-right: 10px;
+}
+
+div .leaflet-popup-content span{
+    font-size: 14px;
+}
