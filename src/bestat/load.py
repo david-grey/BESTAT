@@ -21,7 +21,7 @@ def run(verbose=True):
         lm = LayerMapping(Neighbor, worldshp, neighbor_mapping, transform=False )
         lm.save(strict=True, verbose=verbose)
 
-zipshp = "bestat/data/zip/tl_2015_us_zcta510.shp"
+zipshp = "/home/liuziqicmu/testpis/zip/tl_2015_us_zcta510.shp"
 
 zipcode_mapping = {
     'zcta5ce10' : 'ZCTA5CE10',
