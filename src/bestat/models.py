@@ -59,25 +59,24 @@ class NeighborInfo(models.Model):
         return self.liked_users.count()
 
 
-class CrimeRecord(models.Model):
-    block = models.OneToOneField(NeighborInfo, related_name='crimes',
-                                 on_delete=models.CASCADE,
-                                 primary_key=True, )
-    Theft = models.IntegerField(null=True, blank=True)
-    Robbery = models.IntegerField(null=True, blank=True)
-    Burglary = models.IntegerField(null=True, blank=True)
-    Vandalism = models.IntegerField(null=True, blank=True)
-    Shooting = models.IntegerField(null=True, blank=True)
-    Arson = models.IntegerField(null=True, blank=True)
-    Arrest = models.IntegerField(null=True, blank=True)
-    Assault = models.IntegerField(null=True, blank=True)
-    Other = models.IntegerField(null=True, blank=True)
+CRIME_SCORES = {'Theft': 2, 'Robbery': 3, 'Burglary': 3,
+                'Vandalism': 2, 'Shooting': 5, 'Arson': 4, 'Arrest': 4,
+                'Assault': 4, 'Other': 1}
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.scores = {'Theft': 2, 'Robbery': 3, 'Burglary': 3,
-                       'Vandalism': 2, 'Shooting': 5, 'Arson': 4, 'Arrest': 4,
-                       'Assault': 4, 'Other': 1}
+
+class CrimeRecord(models.Model):
+    neighbor = models.OneToOneField(Neighbor, related_name='crimes',
+                                    on_delete=models.CASCADE,
+                                    primary_key=True, )
+    Theft = models.IntegerField(default=0)
+    Robbery = models.IntegerField(default=0)
+    Burglary = models.IntegerField(default=0)
+    Vandalism = models.IntegerField(default=0)
+    Shooting = models.IntegerField(default=0)
+    Arson = models.IntegerField(default=0)
+    Arrest = models.IntegerField(default=0)
+    Assault = models.IntegerField(default=0)
+    Other = models.IntegerField(default=0)
 
 
 class Profile(models.Model):
@@ -174,6 +173,7 @@ class City(models.Model):
     activate = models.IntegerField(default=0)
     population = models.IntegerField()
 
+
 class Zipcode(models.Model):
     zcta5ce10 = models.CharField(max_length=5)
     geoid10 = models.CharField(max_length=5)
@@ -187,8 +187,3 @@ class Zipcode(models.Model):
     geom = models.MultiPolygonField(srid=4326)
 
 # Auto-generated `LayerMapping` dictionary for Zipcode model
-
-
-
-
-

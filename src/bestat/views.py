@@ -1,4 +1,3 @@
-
 from mimetypes import guess_type
 
 from django.contrib.auth import authenticate, login, logout
@@ -13,7 +12,8 @@ from django.views.decorators.http import require_http_methods, require_GET, \
     require_POST
 
 from django.urls import reverse
-from bestat.models import Profile, Review, Comment, NeighborInfo, Neighbor, City, CrimeRecord
+from bestat.models import Profile, Review, Comment, NeighborInfo, Neighbor, \
+    City, CrimeRecord
 from bestat.decorator import check_anonymous, login_required, anonymous_only
 from bestat.forms import UserCreationForm, LoginForm, ChangePasswordForm, \
     ProfileForm, UsernameForm, ResetPassword
@@ -218,7 +218,6 @@ def create_review(request):
     return redirect('/profile')
 
 
-
 @require_GET
 @login_required('to delete review, you must login first')
 def delete_review(request, review_id):
@@ -394,12 +393,15 @@ def load_city(request, city):
     context = {}
     features = []
     neighbors = Neighbor.objects.filter(city=city)
+    city_obj = City.objects.filter(city=city)
+    population = city_obj.population
+
     for neighbor in neighbors:
         properties = {}
         block = json.loads(neighbor.geom.json)
         properties['id'] = neighbor.regionid
         properties['name'] = neighbor.name
-        properties['random'] = random.randint(180000,330000);
+        properties['random'] = random.randint(180000, 330000)
         block['properties'] = properties
         features.append(block)
 
@@ -412,7 +414,8 @@ def load_city(request, city):
 @require_http_methods(['GET'])
 def get_city(request):
     city = request.GET.get('name', '')
-    coordinate = json.loads(City.objects.get(name=city).point.geojson)['coordinates'][::-1]
+    coordinate = json.loads(City.objects.get(name=city).point.geojson)[
+                     'coordinates'][::-1]
     print(city)
     return render(request, 'map.html', {"city": city, "coordinate": coordinate})
 

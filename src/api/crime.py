@@ -17,90 +17,21 @@
 # https://spotcrime.com/pa/pittsburgh/allegheny+center
 
 import requests
-from bs4 import BeautifulSoup
-import re
-from dateutil.parser import parser
-from datetime import datetime
-import time
+import pickle
+from api.circle import get_circles
+from tqdm import tqdm
 
 BASE_URL = 'https://spotcrime.com'
-
-DATA_DICT = {'Theft': None, 'Robbery': None, 'Burglary': None,
-             'Vandalism': None, 'Shooting': None, 'Arson': None, 'Arrest': None,
-             'Assault': None, 'Other': None}
 
 CRIME_SCORE = {'Theft': 2, 'Robbery': 3, 'Burglary': 3,
                'Vandalism': 2, 'Shooting': 5, 'Arson': 4, 'Arrest': 4,
                'Assault': 4, 'Other': 1}
 
+RADIUS = 0.005
+
 
 # incidents type: Theft, Robbery, Burglary, Vandalism, Shooting,
 #                  Arson, Arrest, Assault, Other
-
-
-class Neighborhood:
-    BASE_URL = 'https://spotcrime.com'
-
-    def __init__(self, name='Garfield',
-                 url='/pa/pittsburgh/garfield'):
-        self.name = name
-        self._url = url
-        page = requests.get(self.url).content
-        soup = BeautifulSoup(page, 'html5lib')
-        trs = soup.find('div', class_='text-left').find_all('div',
-                                                            class_='panel panel-default')[
-            -1].find('tbody').find_all('tr')
-
-        self.data = dict(DATA_DICT)
-
-        for tr in trs:
-            # incidents,  last week,  last 30days,  previous 30days, last six month
-
-            self.data[tr.th.text] = int(tr.find_all('td')[-1].text)
-
-        print(self.name, self.data)
-
-    @property
-    def url(self):
-        return self.BASE_URL + self._url
-
-    def __str__(self):
-        return self.data
-
-
-class City:
-    BASE_URL = 'https://spotcrime.com'
-
-    def __init__(self, state='pa', city='pittsburgh'):
-        self.state = state.lower()
-        self.city = city.lower()
-        page = requests.get(
-            'https://spotcrime.com/%s/%s/neighborhoods' % (
-                self.state, self.city)).content
-        soup = BeautifulSoup(page, 'html5lib')
-
-        table = soup.find(name='table',
-                          class_='table table-condensed table-striped table-hover text-left').tbody
-        print('fuck')
-        neighbors = table.find_all(name='td')
-        self.neighbors = []
-        for neighbor in neighbors:
-            time.sleep(2)
-            name = \
-                neighbor.find('googlePlaceType.txt').text.split(' Crime Map')[0]
-            url = neighbor.find('googlePlaceType.txt')['href']
-            self.neighbors.append(Neighborhood(name, url))
-
-    def print(self):
-        for nei in self.neighbors:
-            print(nei.name)
-            print(nei)
-
-
-def test(lat, lon, radius=0.01):
-    url = 'https://api.spotcrime.com/crimes.json?lat={}&lon={}&radius={}&key=privatekeyforspotcrimepublicusers-commercialuse-877.410.1607&_=1507525220192'.format(
-        lat, lon, radius)
-    print(requests.get(url))
 
 
 class Crime:
@@ -112,30 +43,30 @@ class Crime:
     _url = 'https://api.spotcrime.com/crimes.json?lat={}&lon={}&radius={}&key={}'
     _key = 'privatekeyforspotcrimepublicusers-commercialuse-877.410.1607'
 
-    def fetch(self, lat, lon, radius=0.006):
+    def _fetch(self, lat, lng, radius):
         res = requests.get(
-            self._url.format(lat, lon, radius, self._key),
+            self._url.format(lat, lng, radius, self._key),
             headers=self.header).json()
-        return res['crimes'] if 'crimes' in res else None
+        return res['crimes'] if 'crimes' in res else []
 
-    def crime_index(self, lat, lon, radius=0.06):
-        records = self.fetch(lat, lon, radius)
-        if len(records) == 0:
-            return 0
-        t1 = datetime.strptime(li[0]['date'], '%m/%d/%y %I:%M %p')
-        t2 = datetime.strptime(li[-1]['date'], '%m/%d/%y %I:%M %p')
-        scores = sum([CRIME_SCORE[record['type']] for record in records])
-
-        return scores / (t1 - t2).days
+    def fetch_range(self, points):
+        data = {}
+        for tp in CRIME_SCORE:
+            data[tp] = {}
+        for lat, lng in tqdm(points):
+            res = self._fetch(lat, lng, RADIUS)
+            for r in res:
+                data[r['type']][r['cdid']] = r
+        return data
 
 
 if __name__ == '__main__':
-    # test(40.4523945, -79.92007064)
     crime = Crime()
-    li = crime.fetch(40.4463508, -79.9804448)
-    score = crime.crime_index(40.4463508, -79.9804448)
-    print(score)
-
-# city = City()
-# city.print()
-# nb = Neighborhood()
+    # pittsburgh
+    up = 40.515897
+    down = 40.390015
+    left = -80.046810
+    right = -79.819695
+    data = crime.fetch_range(get_circles(up, down, left, right, RADIUS))
+    with open('crime_pitts.pkl', 'wb') as f:
+        pickle.dump(data, f)
