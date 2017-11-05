@@ -28,6 +28,9 @@ CRIME_SCORES = {'Theft': 2, 'Robbery': 3, 'Burglary': 3,
                 'Vandalism': 2, 'Shooting': 5, 'Arson': 4, 'Arrest': 4,
                 'Assault': 4, 'Other': 1}
 
+CRIME_NTILE80 = 200
+CRIME_NTILE20 = 20
+
 
 def my_sigmoid(x, tiles):
     # scale that ntile_80 map to 2 in origin sigmoid, ntile20 to -2
@@ -49,6 +52,6 @@ def get_neighbor_score(nb):
     crime_index = 0
     for key in CRIME_SCORES:
         crime_index += getattr(nb.crimes, key) * CRIME_SCORES[key]
-    scaled_crime_index = my_sigmoid(crime_index, (100, 20))
+    scaled_crime_index = my_sigmoid(crime_index, (CRIME_NTILE80, CRIME_NTILE20))
 
     return score - scaled_crime_index * CRIME_WEIGHT

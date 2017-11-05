@@ -24,16 +24,8 @@ for key in data:
     for id in tqdm(records):
         r = records[id]
         lat = r['lat']
-        lng = r['lng']
+        lng = r['lon']
         nb = get_neighbor(lat, lng)
         if nb:
             setattr(nb.crimes, key, getattr(nb.crimes, key) + 1)
-            nb.info.save()
-
-from bestat.models import Neighbor, CrimeRecord
-from tqdm import tqdm
-
-nbs = Neighbor.objects.all()
-for nb in tqdm(nbs):
-    crime = CrimeRecord(neighbor=nb)
-    crime.save()
+            nb.crimes.save()

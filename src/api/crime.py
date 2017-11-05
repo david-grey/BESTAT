@@ -71,9 +71,12 @@ if __name__ == '__main__':
     # chicago
     up = 42.072
     down = 41.578
-    left = -88.0
+    left = -88.0    # print(crime._fetch(41.788,-87.765,0.006))
     right = -87.510
 
     data = crime.fetch_range(get_circles(up, down, left, right, RADIUS))
     with open('crime_pitts.pkl', 'wb') as f:
         pickle.dump(data, f)
+
+
+    # print(crime._fetch(41.788,-87.765,0.006))
