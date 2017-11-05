@@ -31,8 +31,9 @@ for key in data:
             nb.info.save()
 
 from bestat.models import Neighbor, CrimeRecord
+from tqdm import tqdm
 
 nbs = Neighbor.objects.all()
-for nb in nbs:
+for nb in tqdm(nbs):
     crime = CrimeRecord(neighbor=nb)
     crime.save()
