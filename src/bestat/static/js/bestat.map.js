@@ -1,6 +1,8 @@
 var mymap;
 var popup;
 var geojson;
+var color_start = 987654;
+var color_end = 000000;
 
 $(window).resize(function () {//resize window
     $('#mapid').height($(window).height()-15);
@@ -43,17 +45,23 @@ $(document).ready(function () {
     $('.fa').click(changeCategory);
 
     /* add legend */
-    var legend = L.control({position: 'bottomright'});
+    var legend = L.control({position: 'bottomleft'});
     legend.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'info legend'),
-            grades = [0, 2, 4, 6, 8, 10],
+            grades = [0, 2, 3, 4, 5, 6, 7, 8 ,9],
             labels = [];
 
         // loop through our density intervals and generate a label with a colored square for each interval
-        for (var i = 0; i < grades.length; i++) {
+        for (var i = grades.length - 1; i >= 0; i--) {
+            var s = '';
+            if (i === grades.length - 1) {
+                s = 'better';
+            } else if (i === 0) {
+                s = 'worse';
+            }
+
             div.innerHTML +=
-                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '');
+                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + s + '<br>';
         }
         return div;
     };
@@ -82,7 +90,6 @@ function changeCategory(e) {
         $(this).css('background-color', '#ddd');
 
         var category = $(this).attr('title');
-        console.log(category);
         switch (category) {
             case 'Security':
             case 'Public Services':
@@ -128,7 +135,7 @@ function highlightFeature(e) {
         weight: 5,
         color: '#666',
         dashArray: '',
-        fillOpacity: 0.7
+        fillOpacity: 0.85
     });
 
     var props = layer.feature.geometry.properties;
@@ -153,18 +160,21 @@ function resetHighlight(e) {
         weight: 2,
         color: 'white',
         dashArray: '5',
-        fillOpacity: 0.7
+        fillOpacity: 0.85
     })
 }
 
 
 function getColor(d) {
-    return d >= 10 ? '#BD0026' :
-           d > 8 ? '#E31A1C' :
-           d > 6 ? '#FC4E2A' :
-           d > 4 ? '#FD8D3C' :
-           d > 2 ? '#FED976' :
-                        '#FFEDA0';
+    return d > 9 ? '#8DD098' :
+           d > 8 ? '#A8CE90' :
+           d > 7 ? '#CCCC85' :
+           d > 6 ? '#F5C678' :
+           d > 5 ? '#F4BE78' :
+           d > 4 ? '#F0A476' :
+           d > 3 ? '#EB8873' :
+           d > 2 ? '#E27871' :
+                   '#DB6C6E';
 }
 
 
@@ -175,10 +185,9 @@ function style(feature) {
         opacity: 1,
         color: '#FFF',
         dashArray: '5',
-        fillOpacity: 0.7
+        fillOpacity: 0.85
     };
 }
-
 
 function securityStyle(feature) {
     return {
@@ -187,7 +196,7 @@ function securityStyle(feature) {
         opacity: 1,
         color: '#FFF',
         dashArray: '5',
-        fillOpacity: 0.7
+        fillOpacity: 0.85
     };
 }
 
@@ -198,6 +207,6 @@ function randomStyle(feature) {
         opacity: 1,
         color: '#FFF',
         dashArray: '5',
-        fillOpacity: 0.7
+        fillOpacity: 0.85
     };
 }
