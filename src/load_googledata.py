@@ -5,7 +5,7 @@
 @author: ZiqiLiu
 
 
-@file: load_data.py
+@file: load_googledata.py
 
 @time: 2017/11/4 下午2:40
 
@@ -15,8 +15,9 @@
 from bestat.utils import get_neighbor
 import pickle
 from tqdm import tqdm
+import sys
 
-with open('./api/googleplace_pitts.pkl', 'rb') as f:
+with open('./api/googleplace_chicago.pkl', 'rb') as f:
     data = pickle.load(f)
 
 for key in data:

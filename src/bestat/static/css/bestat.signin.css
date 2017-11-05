@@ -1,0 +1,116 @@
+/*html {*/
+/*background: #cccccc url("/static/img/backgrounds/b.jpg");*/
+/*}*/
+.login-font {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    color: #888;
+    line-height: 30px;
+    text-align: center;
+
+}
+
+h1, h2 {
+    margin-top: 10px;
+    font-size: 38px;
+    font-weight: 100;
+    color: #555;
+    line-height: 50px;
+}
+
+h3 {
+    font-size: 22px;
+    font-weight: lighter;
+    color: #555;
+    line-height: 30px;
+}
+
+.btn-link {
+    display: inline-block;
+    height: 50px;
+    margin: 5px;
+    padding: 15px 20px 0 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #fff;
+    font-size: 16px;
+    font-weight: lighter;
+    line-height: 16px;
+    color: #fff;
+}
+
+.btn-link:hover, .btn-link:focus,
+.btn-link:active, .btn-link:active:focus {
+    outline: 0;
+    opacity: 0.6;
+    background: rgba(0, 244, 140, 0.6);
+    color: #fff;
+}
+
+.inner-bg {
+    padding: 100px 0 0 0;
+}
+
+.main-content .text {
+    color: #fff;
+}
+
+.main-content .text h1 {
+    color: #fff;
+}
+
+.main-content .description p {
+    opacity: 0.7;
+}
+
+.form-box {
+    margin-top: 35px;
+}
+
+.form-top {
+    padding: 1px 25px 10px 25px;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.form-bottom {
+    padding: 35px 25px 30px 25px;
+    background: rgba(255, 255, 255, 0.8);
+    text-align: center;
+}
+
+.form-bottom form button.btn {
+    width: 100%;
+}
+
+form p.error_msg {
+    color: indianred;
+}
+
+form button {
+    color: #fff;
+    display: inline-block;
+}
+
+form a {
+    color: #de995e;
+}
+
+form .row {
+    margin-top: 10px;
+}
+
+.social-login {
+    margin-top: 35px;
+}
+
+.social-login h3 {
+    color: #fff;
+}
+
+.social-login-buttons {
+    margin-top: 25px;
+}
+
+.btn {
+    border-radius: 0 0 0 0;
+}
