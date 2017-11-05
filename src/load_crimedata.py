@@ -16,7 +16,7 @@ from bestat.utils import get_neighbor
 import pickle
 from tqdm import tqdm
 
-with open('./api/crime_pitts.pkl', 'rb') as f:
+with open('./bestat/data/crime/crime_newyork.pkl', 'rb') as f:
     data = pickle.load(f)
 
 for key in data:
