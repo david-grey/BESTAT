@@ -33,6 +33,9 @@ LIVE_CONVENIENCE_ITEM = {'store', 'cafe', 'bank', 'restaurant',
 CRIME_NTILE80 = 200
 CRIME_NTILE20 = 20
 
+ADJ_PREFIX = 'nb_'
+ADJ_WEIGHT = .3
+
 
 def my_sigmoid(x, tiles):
     # scale that ntile_80 map to 2 in origin sigmoid, ntile20 to -2
@@ -52,7 +55,13 @@ def get_neighbor_score(nb):
     public_service = 0  # hospital, school, church
     live_convenience = 0  # store, cafe, gym, bank, restaurant, grocery_or_supermarket
     for key in NTILE:
-        item_score = get_item_score(key, getattr(nb.info, key))
+
+        # weighted avg with adjacent neighbor
+        item_score = (1 - ADJ_WEIGHT) * get_item_score(key,
+                                                       getattr(nb.info, key))
+        item_score += ADJ_WEIGHT * get_item_score(key, getattr(nb.info,
+                                                               ADJ_PREFIX + key))
+
         score += item_score
         public_service += item_score if key in PUBLIC_SERVICE_ITEM else 0
         live_convenience += item_score if key in LIVE_CONVENIENCE_ITEM else 0
