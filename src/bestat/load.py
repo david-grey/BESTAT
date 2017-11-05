@@ -1,6 +1,7 @@
 import os
 from django.contrib.gis.utils import LayerMapping
-from .models import Neighbor,Zipcode
+from .models import Neighbor,Zipcode,City
+import json
 
 ls = []
 for a, b, c in os.walk("bestat/data/region"):
@@ -37,3 +38,13 @@ zipcode_mapping = {
 def runzip(verbose=True):
     lm = LayerMapping(Zipcode, zipshp, zipcode_mapping, transform=False )
     lm.save(strict=True, verbose=verbose)
+
+def getcity():
+    jsonf = open("bestat/data/city/cities.json", "r")
+    jsonr = jsonf.read()
+    cityjson = json.dumps(jsonr)
+    for i, items in enumerate(cityjson):
+        c = City(name=cityjson[i]['city'],
+                 point='POINT(' + str(cityjson[i]['longitude']) + ' ' + str(cityjson[i]['latitude']) + ')',
+                 population=int(cityjson[i]['population']), activate=0)
+        c.save()
