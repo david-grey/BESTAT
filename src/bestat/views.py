@@ -402,9 +402,12 @@ def load_city(request, city):
         properties['id'] = neighbor.regionid
         properties['name'] = neighbor.name
         properties['random'] = random.randint(0, 10)
-        overview_score, crime_score = get_neighbor_score(neighbor)
-        properties['overview_score'] = round(overview_score, 2)
-        properties['security_score'] = round((1 - crime_score) * 10, 2)
+        overall, public_service, live_convenience, crime_score = get_neighbor_score(
+            neighbor)
+        properties['overview_score'] = round(overall, 2)
+        properties['security_score'] = round(crime_score, 2)
+        properties['public_service'] = round(public_service, 2)
+        properties['live_convenience'] = round(live_convenience, 2)
         block['properties'] = properties
         features.append(block)
 

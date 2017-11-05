@@ -14,8 +14,6 @@
 import numpy as np
 from bestat.models import Neighbor, NeighborInfo
 
-PUBLIC_SERVICES_WEIGHT = 1.
-LIVE_CONVENIENCE_WEIGHT = 1.
 CRIME_WEIGHT = 4.
 
 # 80 tile and 20 tile
@@ -27,6 +25,10 @@ NTILE = {'hospital': (2, 0), 'store': (47, 10), 'cafe': (3, 0),
 CRIME_SCORES = {'Theft': 2, 'Robbery': 3, 'Burglary': 3,
                 'Vandalism': 2, 'Shooting': 5, 'Arson': 4, 'Arrest': 4,
                 'Assault': 4, 'Other': 1}
+
+PUBLIC_SERVICE_ITEM = {'hospital', 'church', 'school'}
+LIVE_CONVENIENCE_ITEM = {'store', 'cafe', 'bank', 'restaurant',
+                         'grocery_or_supermarket', 'gym'}
 
 CRIME_NTILE80 = 200
 CRIME_NTILE20 = 20
@@ -47,11 +49,30 @@ def get_item_score(name, val):
 
 def get_neighbor_score(nb):
     score = 0
+    public_service = 0  # hospital, school, church
+    live_convenience = 0  # store, cafe, gym, bank, restaurant, grocery_or_supermarket
     for key in NTILE:
-        score += get_item_score(key, getattr(nb.info, key))
+        item_score = get_item_score(key, getattr(nb.info, key))
+        score += item_score
+        public_service += item_score if key in PUBLIC_SERVICE_ITEM else 0
+        live_convenience += item_score if key in LIVE_CONVENIENCE_ITEM else 0
     crime_index = 0
     for key in CRIME_SCORES:
         crime_index += getattr(nb.crimes, key) * CRIME_SCORES[key]
     scaled_crime_index = my_sigmoid(crime_index, (CRIME_NTILE80, CRIME_NTILE20))
+    overall = score - scaled_crime_index * CRIME_WEIGHT
 
-    return score - scaled_crime_index * CRIME_WEIGHT,scaled_crime_index
+    # adjust for overall score
+    overall += 1
+    overall = max(10., overall)
+
+    # adjust for public service
+    public_service = public_service / 3 * 10
+
+    # adjust for live convenience
+    live_convenience = live_convenience / 6 * 10
+
+    # adjust for crime
+    crime_score = (1 - scaled_crime_index) * 10
+
+    return overall, public_service, live_convenience, crime_score
