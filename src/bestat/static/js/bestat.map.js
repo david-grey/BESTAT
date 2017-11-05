@@ -2,10 +2,21 @@ var mymap;
 var popup;
 var geojson;
 
-$(document).ready(function () {
-    var centre_coordinate = JSON.parse($("input[name='coordinate']").val());
+$(window).resize(function () {//resize window
+    $('#mapid').height($(window).height()-15);
+    $('#mapid').width($(window).width()-15);
+});
 
-    mymap = L.map('mapid').setView(centre_coordinate, 13);
+$(document).ready(function () {
+    /* set map div size */
+    $('#mapid').height($(window).height()-15);
+    $('#mapid').width($(window).width()-15);
+
+    /* set city centre coordinate */
+    var centre_coordinate = JSON.parse($("input[name='coordinate']").val());
+    mymap = L.map('mapid').setView(centre_coordinate, 12);
+
+    /* map tile */
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
         maxZoom: 18,
@@ -13,14 +24,16 @@ $(document).ready(function () {
         accessToken: 'pk.eyJ1IjoiZG9yYWRob3UiLCJhIjoiY2o4a2ZzOTZpMGNwODJ3cGZkbXQzOTFtMCJ9.6e0L2AOL8scVc4XTNao8qw'
     }).addTo(mymap);
 
+    /* popup */
     popup = L.popup();
     // mymap.on('click', onMapClick);
 
+    /* load neighbor layer */
     var city = $("input[name='city']").val();
     loadNeighborLayer(city);
 
+    /* add legend */
     var legend = L.control({position: 'bottomright'});
-
     legend.onAdd = function (map) {
 
         var div = L.DomUtil.create('div', 'info legend'),
@@ -33,21 +46,23 @@ $(document).ready(function () {
                 '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
                 grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
         }
-        console.log(div);
         return div;
     };
-
     legend.addTo(mymap);
 });
 
+/**
+ * onclick event
+ */
 function onMapClick(e) {
     popup
         .setLatLng(e.latlng)
         .setContent("You clicked the map at " + e.latlng.toString())
         .openOn(mymap);
 
-    //L.geoJSON(geojsonFeature, {style: defaultStyle}).addTo(mymap);
+    geojson.setStyle(changeStyle);
 }
+
 
 function loadNeighborLayer(city) {
     $.get('/bestat/load_city/' + city)
@@ -61,12 +76,14 @@ function loadNeighborLayer(city) {
         });
 }
 
+
 function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight
     });
 }
+
 
 function highlightFeature(e) {
     var layer = e.target;
@@ -80,7 +97,8 @@ function highlightFeature(e) {
 
     var props = layer.feature.geometry.properties;
     var html = '<h4>' + props.name + ' Index</h4>'
-        + props.id + ' people / mi<sup>2</sup>';
+        + 'Block id: ' + props.id + '<br/>'
+        + 'Random: ' + props.random;
 
     popup
         .setLatLng(e.latlng)
@@ -92,9 +110,17 @@ function highlightFeature(e) {
     }
 }
 
+
 function resetHighlight(e) {
-    geojson.resetStyle(e.target);
+    //geojson.resetStyle(e.target);
+    geojson.setStyle({
+        weight: 2,
+        color: 'white',
+        dashArray: '5',
+        fillOpacity: 0.7
+    })
 }
+
 
 function getColor(d) {
     return d > 320000 ? '#800026' :
@@ -107,7 +133,20 @@ function getColor(d) {
                         '#FFEDA0';
 }
 
+
 function style(feature) {
+    return {
+        fillColor: getColor(feature.geometry.properties.random),
+        weight: 2,
+        opacity: 1,
+        color: '#FFF',
+        dashArray: '5',
+        fillOpacity: 0.7
+    };
+}
+
+
+function changeStyle(feature) {
     return {
         fillColor: getColor(feature.geometry.properties.id),
         weight: 2,
@@ -117,15 +156,3 @@ function style(feature) {
         fillOpacity: 0.7
     };
 }
-
-function defaultStyle(feature) {
-    return {
-        fillColor: 'blue',
-        weight: 2,
-        opacity: 1,
-        color: '#FFF',
-        dashArray: '5',
-        fillOpacity: 0.7
-    };
-}
-
