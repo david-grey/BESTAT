@@ -47,7 +47,7 @@ def octagon(center, r=default_radius):
             (x - r / sqrt2, y + r / sqrt2))
 
 
-def get_circles(up, down, left, right):
+def get_circles(up, down, left, right,radius=DISTANCE_BETWEEN_CENTER):
     '''
     
     :param up: 
@@ -56,8 +56,8 @@ def get_circles(up, down, left, right):
     :param right: 
     :return: list of points of (lat, lng)
     '''
-    lat_range = np.arange(down, up, DISTANCE_BETWEEN_CENTER)
-    lng_range = np.arange(left, right, DISTANCE_BETWEEN_CENTER)
+    lat_range = np.arange(down, up, radius)
+    lng_range = np.arange(left, right, radius)
     points = []
     for lat in lat_range:
         for lng in lng_range:

@@ -2,6 +2,7 @@
 {% load static %}
 {% block title %}Map{% endblock %}
 <!DOCTYPE html>
+
 {% block css %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
           integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
@@ -15,6 +16,7 @@
     <link rel="stylesheet" href="{% static "css/bestat.map.css" %}">
 {% endblock %}
 {% block body %}
+
 <div id="mapid"></div>
 
 <input type="hidden" name="city" value="{{ city }}">

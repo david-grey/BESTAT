@@ -25,30 +25,41 @@ $(document).ready(function () {
     }).addTo(mymap);
 
     /* popup */
-    popup = L.popup();
+    popup = L.popup({closeButton: false});
     // mymap.on('click', onMapClick);
 
     /* load neighbor layer */
     var city = $("input[name='city']").val();
     loadNeighborLayer(city);
 
+    /* add select */
+    var sel = L.control({position: 'topright'});
+    sel.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'category');
+        div.innerHTML = '<span>EXPLORE THIS AREA: </span><i data-toggle="tooltip" title="Security" class="fa fa-bomb fa-2x"></i><i data-toggle="tooltip" title="Public Services" class="fa fa-institution fa-2x"></i><i data-toggle="tooltip" title="Live Convenient" class="fa fa-shopping-cart fa-2x"></i>';
+        return div;
+    }
+    sel.addTo(mymap);
+    $('.fa').click(changeCategory);
+
     /* add legend */
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function (map) {
-
         var div = L.DomUtil.create('div', 'info legend'),
-            grades = [0, 200000, 220000, 240000, 260000, 280000, 300000, 320000],
+            grades = [0, 2, 4, 6, 8, 10],
             labels = [];
 
         // loop through our density intervals and generate a label with a colored square for each interval
         for (var i = 0; i < grades.length; i++) {
             div.innerHTML +=
                 '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '');
         }
         return div;
     };
     legend.addTo(mymap);
+
+    $('#categorySlt').bind('change',changeCategory);
 });
 
 /**
@@ -61,6 +72,31 @@ function onMapClick(e) {
         .openOn(mymap);
 
     geojson.setStyle(changeStyle);
+}
+
+
+function changeCategory(e) {
+    var bg_color = $(this).css('background-color');
+    if (bg_color === $('.category').css('background-color')) {
+        $('.category').children().css('background-color', '#fff');
+        $(this).css('background-color', '#ddd');
+
+        var category = $(this).attr('title');
+        console.log(category);
+        switch (category) {
+            case 'Security':
+            case 'Public Services':
+                geojson.setStyle(securityStyle);
+                break;
+            case 'Live Convenient':
+                geojson.setStyle(randomStyle);
+                break;
+        }
+    } else {
+        $(this).css('background-color', '#fff');
+        geojson.setStyle(style);
+    }
+
 }
 
 
@@ -96,9 +132,9 @@ function highlightFeature(e) {
     });
 
     var props = layer.feature.geometry.properties;
-    var html = '<h4>' + props.name + ' Index</h4>'
-        + 'Block id: ' + props.id + '<br/>'
-        + 'Random: ' + props.random;
+    var html = '<h4>' + props.name + '</h4>'
+        + '<span>Overall: ' + props.overview_score + '</span><br/>'
+        + '<span>Security: ' + props.security_score + '</span>';
 
     popup
         .setLatLng(e.latlng)
@@ -123,20 +159,18 @@ function resetHighlight(e) {
 
 
 function getColor(d) {
-    return d > 320000 ? '#800026' :
-           d > 300000 ? '#BD0026' :
-           d > 280000 ? '#E31A1C' :
-           d > 260000 ? '#FC4E2A' :
-           d > 240000 ? '#FD8D3C' :
-           d > 220000 ? '#FEB24C' :
-           d > 200000 ? '#FED976' :
+    return d >= 10 ? '#BD0026' :
+           d > 8 ? '#E31A1C' :
+           d > 6 ? '#FC4E2A' :
+           d > 4 ? '#FD8D3C' :
+           d > 2 ? '#FED976' :
                         '#FFEDA0';
 }
 
 
 function style(feature) {
     return {
-        fillColor: getColor(feature.geometry.properties.random),
+        fillColor: getColor(feature.geometry.properties.overview_score),
         weight: 2,
         opacity: 1,
         color: '#FFF',
@@ -146,9 +180,20 @@ function style(feature) {
 }
 
 
-function changeStyle(feature) {
+function securityStyle(feature) {
     return {
-        fillColor: getColor(feature.geometry.properties.id),
+        fillColor: getColor(feature.geometry.properties.security_score),
+        weight: 2,
+        opacity: 1,
+        color: '#FFF',
+        dashArray: '5',
+        fillOpacity: 0.7
+    };
+}
+
+function randomStyle(feature) {
+    return {
+        fillColor: getColor(feature.geometry.properties.random),
         weight: 2,
         opacity: 1,
         color: '#FFF',

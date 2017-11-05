@@ -15,9 +15,8 @@
 from bestat.utils import get_neighbor
 import pickle
 from tqdm import tqdm
-import sys
 
-with open('./api/googleplace_chicago.pkl', 'rb') as f:
+with open('./api/crime_pitts.pkl', 'rb') as f:
     data = pickle.load(f)
 
 for key in data:
@@ -25,9 +24,8 @@ for key in data:
     for id in tqdm(records):
         r = records[id]
         lat = r['lat']
-        lng = r['lng']
+        lng = r['lon']
         nb = get_neighbor(lat, lng)
         if nb:
-            setattr(nb.info, key, getattr(nb.info, key) + 1)
-            nb.info.save()
-
+            setattr(nb.crimes, key, getattr(nb.crimes, key) + 1)
+            nb.crimes.save()
