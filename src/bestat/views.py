@@ -394,17 +394,17 @@ def load_city(request, city):
     context = {}
     features = []
     neighbors = Neighbor.objects.filter(city=city)
-    city_obj = City.objects.filter(city=city)
+    city_obj = City.objects.filter(name=city)
 
     for neighbor in neighbors:
         properties = {}
         block = json.loads(neighbor.geom.json)
         properties['id'] = neighbor.regionid
         properties['name'] = neighbor.name
-        properties['random'] = random.randint(180000, 330000)
+        properties['random'] = random.randint(0, 10)
         overview_score, crime_score = get_neighbor_score(neighbor)
-        properties['overview_score'] = overview_score
-        properties['crime_score'] = crime_score
+        properties['overview_score'] = round(overview_score, 2)
+        properties['security_score'] = round((1 - crime_score) * 10, 2)
         block['properties'] = properties
         features.append(block)
 
