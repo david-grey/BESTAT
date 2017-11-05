@@ -3,6 +3,7 @@ var popup;
 var geojson;
 var color_start = 987654;
 var color_end = 000000;
+var opacity = 0.8;
 
 $(window).resize(function () {//resize window
     $('#mapid').height($(window).height()-15);
@@ -38,7 +39,7 @@ $(document).ready(function () {
     var sel = L.control({position: 'topright'});
     sel.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'category');
-        div.innerHTML = '<span>EXPLORE THIS AREA: </span><i data-toggle="tooltip" title="Security" class="fa fa-bomb fa-2x"></i><i data-toggle="tooltip" title="Public Services" class="fa fa-institution fa-2x"></i><i data-toggle="tooltip" title="Live Convenient" class="fa fa-shopping-cart fa-2x"></i>';
+        div.innerHTML = '<span>EXPLORE THIS AREA: </span><i data-toggle="tooltip" title="Security" class="fa fa-bomb fa-2x"></i><i data-toggle="tooltip" title="Public Services" class="fa fa-institution fa-2x"></i><i data-toggle="tooltip" title="Live Convenience" class="fa fa-shopping-cart fa-2x"></i>';
         return div;
     }
     sel.addTo(mymap);
@@ -48,7 +49,7 @@ $(document).ready(function () {
     var legend = L.control({position: 'bottomleft'});
     legend.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'info legend'),
-            grades = [0, 2, 3, 4, 5, 6, 7, 8 ,9],
+            grades = [0, 1, 2, 3, 4, 5, 6, 7, 8],
             labels = [];
 
         // loop through our density intervals and generate a label with a colored square for each interval
@@ -92,16 +93,18 @@ function changeCategory(e) {
         var category = $(this).attr('title');
         switch (category) {
             case 'Security':
-            case 'Public Services':
                 geojson.setStyle(securityStyle);
                 break;
-            case 'Live Convenient':
-                geojson.setStyle(randomStyle);
+            case 'Public Services':
+                geojson.setStyle(publicStyle);
+                break;
+            case 'Live Convenience':
+                geojson.setStyle(liveStyle);
                 break;
         }
     } else {
         $(this).css('background-color', '#fff');
-        geojson.setStyle(style);
+        geojson.setStyle(allStyle);
     }
 
 }
@@ -113,7 +116,7 @@ function loadNeighborLayer(city) {
             // geojsonFeature = [{"type": "FeatureCollection", "features": []}];
 
             geojson = L.geoJson(data, {
-                style: style,
+                style: allStyle,
                 onEachFeature: onEachFeature
             }).addTo(mymap);
         });
@@ -135,13 +138,15 @@ function highlightFeature(e) {
         weight: 5,
         color: '#666',
         dashArray: '',
-        fillOpacity: 0.85
+        fillOpacity: opacity
     });
 
     var props = layer.feature.geometry.properties;
     var html = '<h4>' + props.name + '</h4>'
         + '<span>Overall: ' + props.overview_score + '</span><br/>'
-        + '<span>Security: ' + props.security_score + '</span>';
+        + '<span>Security: ' + props.security_score + '</span><br/>'
+        + '<span>Public Services: ' + props.public_service + '</span><br/>'
+        + '<span>Live Convenience: ' + props.live_convenience + '</span>';
 
     popup
         .setLatLng(e.latlng)
@@ -160,53 +165,60 @@ function resetHighlight(e) {
         weight: 2,
         color: 'white',
         dashArray: '5',
-        fillOpacity: 0.85
+        fillOpacity: opacity
     })
 }
 
-
 function getColor(d) {
-    return d > 9 ? '#8DD098' :
-           d > 8 ? '#A8CE90' :
-           d > 7 ? '#CCCC85' :
-           d > 6 ? '#F5C678' :
-           d > 5 ? '#F4BE78' :
-           d > 4 ? '#F0A476' :
-           d > 3 ? '#EB8873' :
-           d > 2 ? '#E27871' :
-                   '#DB6C6E';
+    return d > 8 ? '#83d08c' :
+           d > 7 ? '#9bce7e' :
+           d > 6 ? '#b9cc90' :
+           d > 5 ? '#d3d986' :
+           d > 4 ? '#f5e488' :
+           d > 3 ? '#f5cf73' :
+           d > 2 ? '#F4BE78' :
+           d > 1 ? '#f1a971' :
+                   '#e99f74';
 }
+// function getColor(d) {
+//     return d > 8 ? '#83d08c' :
+//            d > 7 ? '#9bce7e' :
+//            d > 6 ? '#b9cc90' :
+//            d > 5 ? '#d3d986' :
+//            d > 4 ? '#f5e488' :
+//            d > 3 ? '#f5cf73' :
+//            d > 2 ? '#F4BE78' :
+//            d > 1 ? '#f1a971' :
+//                    '#e99f74';
+// }
+
+var default_style = {
+    fillColor: 'blue',
+    weight: 2,
+    opacity: 1,
+    color: '#FFF',
+    dashArray: '5',
+    fillOpacity: opacity
+};
 
 
-function style(feature) {
-    return {
-        fillColor: getColor(feature.geometry.properties.overview_score),
-        weight: 2,
-        opacity: 1,
-        color: '#FFF',
-        dashArray: '5',
-        fillOpacity: 0.85
-    };
+function allStyle(feature) {
+    default_style['fillColor'] = getColor(feature.geometry.properties.overview_score);
+    return default_style;
 }
 
 function securityStyle(feature) {
-    return {
-        fillColor: getColor(feature.geometry.properties.security_score),
-        weight: 2,
-        opacity: 1,
-        color: '#FFF',
-        dashArray: '5',
-        fillOpacity: 0.85
-    };
+    default_style['fillColor'] = getColor(feature.geometry.properties.security_score);
+    return default_style;
 }
 
-function randomStyle(feature) {
-    return {
-        fillColor: getColor(feature.geometry.properties.random),
-        weight: 2,
-        opacity: 1,
-        color: '#FFF',
-        dashArray: '5',
-        fillOpacity: 0.85
-    };
+function publicStyle(feature) {
+    default_style['fillColor'] = getColor(feature.geometry.properties.public_service);
+    return default_style;
 }
+
+function liveStyle(feature) {
+    default_style['fillColor'] = getColor(feature.geometry.properties.live_convenience);
+    return default_style;
+}
+
