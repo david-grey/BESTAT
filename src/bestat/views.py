@@ -22,6 +22,7 @@ from django.http import JsonResponse, Http404
 import datetime
 import json
 import random
+from bestat.ranking import get_neighbor_score
 
 
 @check_anonymous
@@ -394,7 +395,6 @@ def load_city(request, city):
     features = []
     neighbors = Neighbor.objects.filter(city=city)
     city_obj = City.objects.filter(city=city)
-    population = city_obj.population
 
     for neighbor in neighbors:
         properties = {}
@@ -402,6 +402,9 @@ def load_city(request, city):
         properties['id'] = neighbor.regionid
         properties['name'] = neighbor.name
         properties['random'] = random.randint(180000, 330000)
+        overview_score, crime_score = get_neighbor_score(neighbor)
+        properties['overview_score'] = overview_score
+        properties['crime_score'] = crime_score
         block['properties'] = properties
         features.append(block)
 

@@ -54,4 +54,4 @@ def get_neighbor_score(nb):
         crime_index += getattr(nb.crimes, key) * CRIME_SCORES[key]
     scaled_crime_index = my_sigmoid(crime_index, (CRIME_NTILE80, CRIME_NTILE20))
 
-    return score - scaled_crime_index * CRIME_WEIGHT
+    return score - scaled_crime_index * CRIME_WEIGHT,scaled_crime_index
