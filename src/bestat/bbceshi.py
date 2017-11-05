@@ -23,4 +23,4 @@ print(
     bounding_box.corner_points)  # {(5, 4), (-1, -3), (-2.32, -1.87), (3.68, 5.13)}
 
 
-python manage.py ogrinspect bestat/data/zip/tl_2015_us_zcta510.shp  Zipcode --srid=4326 --mapping --multi
+
