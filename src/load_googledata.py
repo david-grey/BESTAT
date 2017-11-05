@@ -15,9 +15,9 @@
 from bestat.utils import get_neighbor
 import pickle
 from tqdm import tqdm
-import sys
 
-with open('./api/googleplace_chicago.pkl', 'rb') as f:
+
+with open('./bestat/data/googleplace/googleplace_newyork.pkl', 'rb') as f:
     data = pickle.load(f)
 
 for key in data:
