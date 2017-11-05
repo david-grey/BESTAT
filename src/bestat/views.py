@@ -1,4 +1,3 @@
-
 from mimetypes import guess_type
 
 from django.contrib.auth import authenticate, login, logout
@@ -13,7 +12,8 @@ from django.views.decorators.http import require_http_methods, require_GET, \
     require_POST
 
 from django.urls import reverse
-from bestat.models import Profile, Review, Comment, NeighborInfo, Neighbor, City, CrimeRecord
+from bestat.models import Profile, Review, Comment, NeighborInfo, Neighbor, \
+    City, CrimeRecord
 from bestat.decorator import check_anonymous, login_required, anonymous_only
 from bestat.forms import UserCreationForm, LoginForm, ChangePasswordForm, \
     ProfileForm, UsernameForm, ResetPassword
@@ -21,6 +21,8 @@ from bestat.utils import is_anonymous
 from django.http import JsonResponse, Http404
 import datetime
 import json
+import random
+from bestat.ranking import get_neighbor_score
 
 
 @check_anonymous
@@ -61,7 +63,7 @@ def signup(request):
         email_body = '''
            Welcome to bestat. Please click the link below to verify your email address and complete the registration proceess. http://%s%s
            ''' % (request.get_host(),
-                  reverse('confirm', args=(user.username, token)))
+                  reverse('bestat:confirm', args=(user.username, token)))
         send_mail(subject="Verify your email address",
                   message=email_body,
                   from_email="ziqil1@andrew.cmu.edu",
@@ -213,39 +215,8 @@ def contact(request):
 def create_review(request):
     user = request.user
     review = Review.objects.create(author=user, text=request.POST['text'])
+    review.save()
     return redirect('/profile')
-
-
-@check_anonymous
-@require_POST
-@login_required('to add comment, you must login first')
-def add_comment(request):
-    user = request.user
-
-    review = get_object_or_404(Review, id=request.POST['review_id'])
-    ts = datetime.datetime.now()
-    new_comment = Comment.objects.create(review=review, author=user,
-                                         text=request.POST['text'],
-                                         create_time=ts)
-    return JsonResponse({'comment': render_to_string('ajax_comment.html', {
-        'comment': new_comment, }, request)})
-
-
-@check_anonymous
-@require_POST
-@login_required('to delete comment, you must login first')
-def delete_comment(request):
-    comment_id = request.POST.get('comment_id', None)
-    if comment_id:
-        comment = get_object_or_404(Comment, id=comment_id)
-        review = comment.review
-        if review.author != request.user:
-            return render(request, 'blank.html', {
-                "msg": "you can not delete comments from others' blog"})
-        comment.delete()
-        return JsonResponse({'comments_num': review.comments_num})
-
-    return Http404
 
 
 @require_GET
@@ -423,11 +394,21 @@ def load_city(request, city):
     context = {}
     features = []
     neighbors = Neighbor.objects.filter(city=city)
+    city_obj = City.objects.filter(name=city)
+
     for neighbor in neighbors:
         properties = {}
         block = json.loads(neighbor.geom.json)
         properties['id'] = neighbor.regionid
         properties['name'] = neighbor.name
+        properties['random'] = random.randint(0, 10)
+        overall, public_service, live_convenience, security_score = get_neighbor_score(
+            neighbor)
+        # larger, better, [0,10]
+        properties['overview_score'] = round(overall, 2)
+        properties['security_score'] = round(security_score, 2)
+        properties['public_service'] = round(public_service, 2)
+        properties['live_convenience'] = round(live_convenience, 2)
         block['properties'] = properties
         features.append(block)
 
@@ -440,7 +421,8 @@ def load_city(request, city):
 @require_http_methods(['GET'])
 def get_city(request):
     city = request.GET.get('name', '')
-    coordinate = json.loads(City.objects.get(name=city).point.geojson)['coordinates'][::-1]
+    coordinate = json.loads(City.objects.get(name=city).point.geojson)[
+                     'coordinates'][::-1]
     print(city)
     return render(request, 'map.html', {"city": city, "coordinate": coordinate})
 

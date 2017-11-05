@@ -1,31 +1,88 @@
-{% extends "base.html" %}
+{% extends 'base_sign.html' %}
 
-{% block title %}Bestat - Sign In{% endblock %}
+{% block content %}
+    <!-- main body -->
+    <div class="main-content">
 
-{% block body %}
-    <section id="contact">
-        <div class="container">
-            <div class="row">
-
-                <div class="sec-title text-center wow animated fadeInDown" style="padding-top: 150px;">
-                    <h2>Sign In</h2>
+        <div class="inner-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 text login-font">
+                        <h1><strong>BESTAT</strong></h1>
+                        <div class="description">
+                            <p>
+                                Welcome to the BESTAT!
+                            </p>
+                        </div>
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3 form-box">
+                        <div class="form-top">
+                            <h3 class="text-center">Login</h3>
+                        </div>
+                        <div class="form-bottom">
+                            <form role="form" action="{% url 'bestat:signin' %}" method="post"
+                                  class="login-form">
 
-                <div class="col-md-offset-2 col-md-8 text-center wow animated fadeInUp">
-                    <form method="post" action="{% url 'bestat:signin' %}">
-                        {% for field in form.visible_fields %}
-                            <div class="input-field">
-                                {{ field }}
-                            </div>
-                        {% endfor %}
+                                {% if errors %}
+                                    {% for msg in errors %}
+                                        <p class="error_msg">{{ msg }}</p>
+                                    {% endfor %}
+                                {% endif %}
 
-                        <button type="submit" id="submit" class="btn btn-blue btn-effect" style="margin-top: 50px;">
-                            Sign In
-                        </button>
-                        {% csrf_token %}
-                    </form>
+                                {% csrf_token %}
+                                {% for field in form.visible_fields %}
+
+                                    <div class="form-group">
+                                        {{ field }}
+                                        {% if field.help_text %}
+                                            <div class="description">
+                                                <p>{{ field.help_text }}</p>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                                <div class="row">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox"> remember me
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button type="submit"
+                                        class="btn btn-lg btn-warning"
+                                >
+                                    Login!
+                                </button>
+                                <div class="row"><a
+                                        href="#">forget
+                                    your
+                                    password?</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3 social-login  login-font">
+                        <h3>...or login with:</h3>
+                        <div class="social-login-buttons">
+                            <a class="btn btn-link" href="#">
+                                <i class="fa fa-facebook"></i> Facebook
+                            </a>
+                            <a class="btn btn-link" href="#">
+                                <i class="fa fa-twitter"></i> Twitter
+                            </a>
+                            <a class="btn btn-link" href="#">
+                                <i class="fa fa-google-plus"></i> Google Plus
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+
+    </div>
 {% endblock %}

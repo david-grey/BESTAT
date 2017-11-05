@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Bestat - Sign Up{% endblock %}
+
+{% block body %}
+    <section id="contact" >
+        <div class="container">
+            <div class="row">
+
+                <div class="sec-title text-center wow animated fadeInDown" style="padding-top: 150px;">
+                    <h2>Sign Up</h2>
+                </div>
+
+                <div class="col-md-offset-2 col-md-8 text-center wow animated fadeInUp">
+                    <form method="post" action="{% url 'bestat:signup' %}">
+                        {% for field in form.visible_fields %}
+                        <div class="input-field">
+                            {{ field }}{{ field.errors }}
+                            {# <input type="text" name="name" class="form-control" placeholder="Username">#}
+                        </div>
+                        {% endfor %}
+
+                        <button type="submit" id="submit" class="btn btn-blue btn-effect" style="margin-top: 50px;">Sign Up</button>
+                        {% csrf_token %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

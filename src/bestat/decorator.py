@@ -34,7 +34,7 @@ def login_required(text="you haven't login!"):
         @functools.wraps(func)
         def wrapper(*args, **kw):
             if args[0].user.is_anonymous:
-                return render(args[0], 'signin.html',
+                return render(args[0], 'signin_1.html',
                               {'errors': [text if text else None]})
             return func(*args, **kw)
 

@@ -5,7 +5,7 @@
 @author: ZiqiLiu
 
 
-@file: load_data.py
+@file: load_googledata.py
 
 @time: 2017/11/4 下午2:40
 
@@ -16,7 +16,8 @@ from bestat.utils import get_neighbor
 import pickle
 from tqdm import tqdm
 
-with open('./api/googleplace_pitts.pkl', 'rb') as f:
+
+with open('./bestat/data/googleplace/googleplace_newyork.pkl', 'rb') as f:
     data = pickle.load(f)
 
 for key in data:
@@ -29,5 +30,4 @@ for key in data:
         if nb:
             setattr(nb.info, key, getattr(nb.info, key) + 1)
             nb.info.save()
-
 
