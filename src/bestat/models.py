@@ -16,6 +16,10 @@ from django.contrib.gis.db import models
 import datetime
 from django.db.models.aggregates import Max
 
+PLACES_TYPE = {'hospital', 'restaurant', 'store', 'bank', 'school',
+               'subway_station', 'church', 'cafe', 'gym',
+               'grocery_or_supermarket'}
+
 
 # ['doctor', 'restaurant', 'store', 'bank', 'school', 'subway_station', 'church', 'cafe', 'gym', 'grocery_or_supermarket']
 
