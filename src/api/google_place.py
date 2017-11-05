@@ -5,7 +5,7 @@
 @author: ZiqiLiu
 
 
-@file: google place.py
+@file: google_place.py
 
 @time: 2017/10/8 下午8:45
 
@@ -148,6 +148,6 @@ if __name__ == '__main__':
     points = get_circles(up, down, left, right)
     print(len(points))
 
-    # data = wrapper.search_range(points, default_radius)
-    # with open('googleplace2.pkl', 'wb') as f:
-    #     pickle.dump(data, f)
+    data = wrapper.search_range(points, default_radius)
+    with open('googleplace2.pkl', 'wb') as f:
+        pickle.dump(data, f)
