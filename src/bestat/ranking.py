@@ -72,7 +72,7 @@ def get_neighbor_score(nb):
     overall = score - scaled_crime_index * CRIME_WEIGHT
 
     # adjust for overall score
-    overall += 1
+    overall += 2
     overall = min(10., overall)
 
     # adjust for public service
