@@ -365,7 +365,7 @@ def reset_password_check(request, user_id, token):
                           {'form': ResetPassword()})
 
     except User.DoesNotExist:
-        return render(request, 'blank.html', {'msg': 'user non exist!'})
+        return render(request, 'blank.html', {'msg': 'user not exist!'})
 
 
 @require_POST
@@ -417,9 +417,12 @@ def load_city(request, city):
 @require_http_methods(['GET'])
 def get_city(request):
     city = request.GET.get('name', '')
-    coordinate = json.loads(City.objects.get(name=city).point.geojson)[
+    try:
+        cityob = City.objects.get(name=city)
+    except:
+        return render(request, 'blank.html', {'msg': 'City not exist!'})
+    coordinate = json.loads(cityob.point.geojson)[
                      'coordinates'][::-1]
-    print(city)
     return render(request, 'map.html', {"city": city, "coordinate": coordinate})
 
 
