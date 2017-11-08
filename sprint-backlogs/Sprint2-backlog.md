@@ -31,16 +31,19 @@ Also, we need to design an algorithm to calculate the scores for recommendation 
 
 	- timeline: completed
 	- cost: 2h for coding. running on GCP about 1 day
+	- Estimated finished date: 11.15
 
 2. pre-fetch crime statistic data from spotcrime *Implemented by Ziqi*
 
 	- timeline: still under processing
 	- cost: 3h for coding. running time depends on API call constrain
+	- Estimated finished date: 11.15
 
 3. pre-fetch google places data *Implemented by Ziqi*
 
 	- timeline: haven't started yet, will begin next week
 	- cost: 2h for coding. running time depends on API call constrain
+	- Estimated finished date: 11.15
 
 as mentioned above, crime and google place data are huge, and depend on the city. We're building the automated process. The estimated finish date is still unknown. But we coulud expect that we might collect data of most big city next phase.
 
@@ -87,12 +90,14 @@ Show the map to the user and allow user place pin. Show the score to the user
 	-  timeline: completed
 	-  cost: 2h
 	-  additional info: might be adjusted afterwards
+	- Estimated finished date: 11.15
 
 2. algorithm mapping radius-based api data into block area in map *Implemented by Ziqi, David*
 
 	- timeline: finished
 	- cost: estimated 10h
 	- additional info: work together with David
+	- Estimated finished date: 11.15
 
 3. user customized preference ranking  *Implemented by Ziqi, David*
 	- timeline: under prcessing
