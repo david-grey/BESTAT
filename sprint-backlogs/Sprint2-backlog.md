@@ -81,8 +81,6 @@ Show the map to the user and allow user place pin. Show the score to the user
   
 ## Recommendation Service (In charge: Wei Dai)
 
-## Ranking algorithm (In charge: ziqi liu)
-calculating the ranking according to different weights
 ### Task
 1. ranking scores algorithm design *Implemented by Ziqi*
 
