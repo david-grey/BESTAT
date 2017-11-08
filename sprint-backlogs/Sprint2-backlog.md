@@ -1,35 +1,21 @@
 ## User service (In charge: Dan Hou)
 
-1. Sign up page *Implemented by Dan*
+1. Email server *Implemented by David*
 
 	- Have completed static content
-	- Milestone: complete all sign up function with css, js
+	- Milestone: callow user to receive email from our website
 	- cost: 2h 
-	- Estimated finished date: 10.31
+	- Estimated finished date: 11.10
 
-2. Login page *Implemented by Dan*
-
-	- Have completed static content
-	- Milestone: complete all login function with css, js
+2. Third party login *Implemented by David*
+        - Allow user to login with Google
+	- Milestone: finish the integrateion
 	- cost: 2h 
-	- Estimated finished date: 10.31
-
-3. Home page *Implemented by Dan*
-
-	- Have completed static content
-	- Milestone: complete all search city function with css, js
-	- cost: 2h 
-	- Estimated finished date: 10.31
-
-4. views functions about user interactions (login, comment, like, favorite list, etc.) *Implemented by Ziqi, Dan*
-
-	- timeline: under processing, 
-	- cost: 5h (coding + testing)
-	- Estimated finished date: 11.5
-	
-## Data service (In charge: ziqi liu)
+	- Estimated finished date: 11.10
+# Data service (In charge: ziqi liu)
 ### detail
-due to performance reason and some api calling constrain, we decide to cache some data in database (i.e, pre-fetch the data using scrapy).
+in this phase, we've collect the data for 3 cities, Newyork, Chicago and Pittsburgh. Every thing works fines. So in next phase we will automate this process, i.e, building a data pipeline. 
+
 
 Basically, our data consist of three categories: 
 
@@ -49,32 +35,15 @@ Also, we need to design an algorithm to calculate the scores for recommendation 
 2. pre-fetch crime statistic data from spotcrime *Implemented by Ziqi*
 
 	- timeline: still under processing
-	- cost: 2h for coding. running time depends on API call constrain
-	- additional info: due to the api calling constrain, the scrapy runs slowly, and we need to double check the data isn't corrupted.
-	- Estimated finished date: 11.2
+	- cost: 3h for coding. running time depends on API call constrain
 
 3. pre-fetch google places data *Implemented by Ziqi*
 
 	- timeline: haven't started yet, will begin next week
-	- cost: 1h for coding. running time depends on API call constrain
-	- additional info: we need to discuss how to feed api data according to map area split
-	- Estimated finished date: 11.2
+	- cost: 2h for coding. running time depends on API call constrain
 
-4. ranking scores algorithm design *Implemented by Ziqi*
+as mentioned above, crime and google place data are huge, and depend on the city. We're building the automated process. The estimated finish date is still unknown. But we coulud expect that we might collect data of most big city next phase.
 
-	-  timeline: completed
-	-  cost: 2h
-	-  additional info: might be adjusted afterwards
-
-5. algorithm mapping radius-based api data into block area in map *Implemented by Ziqi, David*
-
-	- timeline: still under processing
-	- cost: estimated 10h
-	- additional info: work together with David
-	- Estimated finished date 11.6
-
-### issue
-the main challenge we're facing now is that how to map radius-based api data into block area in the map. Can only make a approximation, but we want to do it as reasonble as possible.
 
 ## Dashboard Service (In charge: ziqi liu)
 
@@ -87,45 +56,66 @@ provide basic backend views to enable user interaction. and dashboard data strea
 
 	- timeline: under processing
 	- cost: 8h (estimated, coding + testing)
-	- additional info: need further discussion about map area split
-	- Estimated finished date: 11.10
+	- Estimated finished date: 11.15
+2. Miscellaneous frontend enhancement such as picture and some score visulization  *Implemented by David, Dan*
 
+	- timeline: under processing
+	- cost: 4h 
+	- Estimated finished date: 11.15
+3. User input and validations  *Implemented by David, Dan*
+
+	- timeline: under processing
+	- cost: 4h 
+	- Estimated finished date: 11.15
 ## Map Service (In charge: Dan Hou)
 ### detail
 
 Show the map to the user and allow user place pin. Show the score to the user
 
-1. Map page *Implemented by Dan, David*
-	- Have completed basic wireframe
-	- Milestone: complete showing block function with css, js
+1. Add the link to the dashboard page for the region *Implemented by Dan, David*
+	- user can link to the dashboard
+	- Milestone: complete the js and views 
 	- cost: 4h 
-	- Estimated finished date: 11.4
+	- Estimated finished date: 11.15
 
-2. views functions to identifuy the region user click *Implemented by David*
-
-	- timeline: under processing, 
-	- Milestone: receive the user click and translate the cordinate to the region
-	- cost: 8h (estimated, coding + testing)
-   - Estimated finished date: 10.31
   
 ## Recommendation Service (In charge: Wei Dai)
 
-1. Recommendation page *Implemented by Dan*
-	- Have completed basic framework
-	- Milestone: complete prototype with css, js. Users can set their preference
-	- cost: 4h 
-	- Estimated finished date: 11.4
+## Ranking algorithm (In charge: ziqi liu)
+calculating the ranking according to different weights
+### Task
+1. ranking scores algorithm design *Implemented by Ziqi*
+
+	-  timeline: completed
+	-  cost: 2h
+	-  additional info: might be adjusted afterwards
+
+2. algorithm mapping radius-based api data into block area in map *Implemented by Ziqi, David*
+
+	- timeline: finished
+	- cost: estimated 10h
+	- additional info: work together with David
+
+3. user customized preference ranking  *Implemented by Ziqi, David*
+	- timeline: under prcessing
+	- cost: estimated 3h
+	- estimated finished data: 11.11
+	
+4. user input and frontend  *Implemented by Dan, David*
+	- timeline: under prcessing
+	- cost: estimated 3h
+	- estimated finished data: 11.20
 	
 ## Testing (In charge: Wei Dai)
 ### detail
 
 Support the unit test and continuous integration
 
-1. Travis Integration *Implemented by David*
+1. Deployment Integration *Implemented by David*
 
-	- Integrate github project with Jenkins
+	- Built auto deployment with Jenkins
 	- Milestone: Finish integration
 	- cost: 4h 
-	- Estimated finished date: 10.31
+	- Estimated finished date: 11.15
 
 
