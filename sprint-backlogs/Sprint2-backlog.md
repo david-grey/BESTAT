@@ -12,7 +12,7 @@
 	- Milestone: finish the integrateion
 	- cost: 2h 
 	- Estimated finished date: 11.10
-# Data service (In charge: ziqi liu)
+## Data service (In charge: ziqi liu)
 ### detail
 in this phase, we've collect the data for 3 cities, Newyork, Chicago and Pittsburgh. Every thing works fines. So in next phase we will automate this process, i.e, building a data pipeline. 
 
