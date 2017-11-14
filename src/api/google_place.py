@@ -159,10 +159,13 @@ if __name__ == '__main__':
         print('city %s, %d points' % (k, len(points)))
         if len(points) * 13 < Quota:
             print('today finished')
+            with open('remain_city.pkl', 'wb') as f:
+                pickle.dump(cities)
             break
         else:
             data = wrapper.search_range(points, default_radius)
             with open('googleplace_%s.pkl' % ('+'.join(k.split()).strip()),
                       'wb') as f:
                 pickle.dump(data, f)
+            cities.remove(k)
             print('city %sfinished, remaining quota %d' % (k, Quota))
