@@ -17,6 +17,9 @@ import time
 from api.circle import get_circles, default_radius
 import pickle
 from tqdm import tqdm
+from api.get_city_bound import get_city_bound
+
+Quota = 150000
 
 
 class GooglePlace:
@@ -141,13 +144,25 @@ if __name__ == '__main__':
     # right = -87.510
 
     # new york
-    up = 40.9463
-    down = 40.4774
-    left = -74.2694
-    right = -73.6861
-    points = get_circles(up, down, left, right)
-    print(len(points))
+    # up = 40.9463
+    # down = 40.4774
+    # left = -74.2694
+    # right = -73.6861
+    # points = get_circles(up, down, left, right)
 
-    data = wrapper.search_range(points, default_radius)
-    with open('googleplace2.pkl', 'wb') as f:
-        pickle.dump(data, f)
+    with open('remain_city.pkl', 'rb') as f:
+        cities = pickle.load(f)
+    keys = list(cities)
+    for k in keys:
+        bound = get_city_bound(k)
+        points = get_circles(bound[0], bound[1], bound[2], bound[3])
+        print('city %s, %d points' % (k, len(points)))
+        if len(points) * 13 < Quota:
+            print('today finished')
+            break
+        else:
+            data = wrapper.search_range(points, default_radius)
+            with open('googleplace_%s.pkl' % ('+'.join(k.split()).strip()),
+                      'wb') as f:
+                pickle.dump(data, f)
+            print('city %sfinished, remaining quota %d' % (k, Quota))
