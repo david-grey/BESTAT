@@ -220,18 +220,6 @@ def create_review(request):
 
 
 @require_GET
-@login_required('to delete review, you must login first')
-def delete_review(request, review_id):
-    user = request.user
-    review = get_object_or_404(Review, id=review_id)
-    if review.author == user:
-        review.delete()
-        return JsonResponse({'msg': 'ok'})
-    else:
-        return HttpResponse("Hey bro, don't try to delete others' blogs!")
-
-
-@require_GET
 @login_required()
 def likes(request, block_id):
     blog = get_object_or_404(NeighborInfo, id=block_id)
@@ -266,61 +254,6 @@ def update_reviews(request):
         return JsonResponse(data=context)
     return Http404
 
-
-@check_anonymous
-@require_GET
-@login_required("to access profile, you must login first")
-def profile(request, user_id=None):
-    if user_id is None:
-        user_id = request.user.id
-    try:
-        user = User.objects.get(id=user_id)
-    except (User.DoesNotExist, ValueError) as e:
-        return render(request, 'blank.html', {'msg': 'User non exist!'})
-    return _profile(request, user)
-
-
-def _profile(request, target_user):
-    user = request.user
-    context = {'user': user, 'target_user': target_user,
-               'max_time': Review.get_max_time()}
-
-    blogs = target_user.blogs.order_by('-create_time')
-    context['personal_blogs'] = blogs
-
-    if user == target_user:
-        # get personal streaming blogs
-        followees = user.profile.followees.all()
-        stream_blogs = []
-        for f in followees:
-            stream_blogs.extend(f.user.blogs.all())
-        stream_blogs = sorted(stream_blogs, key=lambda blog: blog.id,
-                              reverse=True)
-        context['stream_blogs'] = stream_blogs
-        context['own'] = True
-    else:
-        context['followed'] = True
-        try:
-            request.user.profile.followees.get(user=target_user)
-        except Profile.DoesNotExist:
-            context['followed'] = False
-
-            # access his own profile
-
-    return render(request, 'personal.html', context)
-
-
-def get_comments(blog):
-    '''
-
-    :param blog: 
-    :return: list of comments
-    '''
-    _comments = blog.comments
-    comments = []
-    for com in _comments:
-        comments.append({'author_id': com.author.id, 'text': com.text,
-                         'create_time': com.create_time})
 
 
 @require_http_methods(['GET', 'POST'])
@@ -444,3 +377,19 @@ def get_all_city(request):
 
 def detail(request):
     return render(request, 'detail.html')
+
+
+def get_neighbor_detail(request, neighbor_id):
+    if request.is_ajax():
+        neighbor = Neighbor.objects.get(regionid=neighbor_id)
+        overall, public_service, live_convenience, security_score = get_neighbor_score(
+            neighbor)
+
+        context = {}
+        context['neighbor_name'] = neighbor.name
+        context['overview_score'] = round(overall, 2)
+        context['security_score'] = round(security_score, 2)
+        context['public_service'] = round(public_service, 2)
+        context['live_convenience'] = round(live_convenience, 2)
+
+        return JsonResponse(context)
