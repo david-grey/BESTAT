@@ -111,6 +111,9 @@ class Review(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='reviews')
     text = models.TextField()
+    safety = models.IntegerField()
+    convenience = models.IntegerField()
+    public_service = models.IntegerField()
     create_time = models.DateTimeField(verbose_name='create time',
                                        auto_now_add=True)
     likes = models.ManyToManyField(User, related_name='likes',
@@ -159,18 +162,6 @@ class Review(models.Model):
                         'create_time__max'] or datetime.datetime.now()).timestamp())
 
 
-# a review can have multiple comments
-class Comment(models.Model):
-    review = models.ForeignKey(Review, on_delete=models.CASCADE,
-                               related_name='comments',
-                               related_query_name='comment')
-    author = models.ForeignKey(User, on_delete=models.CASCADE,
-                               related_name='comments',
-                               related_query_name='comment')
-    text = models.CharField(max_length=140, verbose_name='text')
-    create_time = models.DateTimeField(verbose_name='create time',
-                                       auto_now_add=True)
-    test = models.IntegerField()
 
 
 # Auto-generated `LayerMapping` dictionary for Neighbor model

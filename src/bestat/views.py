@@ -12,8 +12,7 @@ from django.views.decorators.http import require_http_methods, require_GET, \
     require_POST
 
 from django.urls import reverse
-from bestat.models import Profile, Review, Comment, NeighborInfo, Neighbor, \
-    City, CrimeRecord
+from bestat.models import Profile, Review, NeighborInfo, Neighbor, City, CrimeRecord
 from bestat.decorator import check_anonymous, login_required, anonymous_only
 from bestat.forms import UserCreationForm, LoginForm, ChangePasswordForm, \
     ProfileForm, UsernameForm, ResetPassword
@@ -393,3 +392,10 @@ def get_neighbor_detail(request, neighbor_id):
         context['live_convenience'] = round(live_convenience, 2)
 
         return JsonResponse(context)
+def get_reviews(request, neighbor_id):
+    if request.is_ajax():
+        neighbor = Neighbor.objects.get(regionid=neighbor_id)
+        reviews = Review.objects.filter(neighbor=neighbor).order_by("-time")
+
+        return JsonResponse(context)
+

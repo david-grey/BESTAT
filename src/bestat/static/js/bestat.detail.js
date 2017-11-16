@@ -33,13 +33,77 @@ function loadScoreGraph(neighbor_id) {
         });
 }
 
-$(document).ready(function () {
-    // Load the Visualization API and the corechart package.
-    google.charts.load('current', {'packages': ['corechart']});
+$(function () {
+    $('#safety').barrating({
+        theme: 'fontawesome-stars',
+        initialRating: 3,
+        hoverState: true
+    });
+    $('#convenience').barrating({
+        theme: 'fontawesome-stars',
+        initialRating: 3,
+        hoverState: true
+    });
+    $('#public').barrating({
+        theme: 'fontawesome-stars',
+        initialRating: 3,
+        hoverState: true
+    });
+});
 
+function postReview() {
+
+}
+
+function populateList(neighbor_id) {
+    $.get("/bestat/get_reviews/" + neighbor_id)
+        .done(function (data) {
+            console.log("start");
+            var list = $("#reviews");
+            list.html('');
+            //getUpdates();
+            for (var i = 0; i < data.posts.length; i++) {
+                post = data.posts[i];
+                var new_post = $(post.html);
+                new_post.data("post-id", post.id);
+                list.prepend(new_post);
+            }
+
+        });
+}
+
+
+$(document).ready(function () {
     var neighbor_id = $("input[name='neighbor_id']").val();
     loadScoreGraph(neighbor_id);
+    // Set up to-do list with initial DB items and DOM data
+    populateList(neighbor_id);
+
+    // CSRF set-up copied from Django docs
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    });
 });
+
 
 
 
