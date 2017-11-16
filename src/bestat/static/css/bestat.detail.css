@@ -1,0 +1,11 @@
+
+
+.side {
+    position: fixed;
+    width: 300px;
+    padding-top: 70px;
+}
+.content {
+    padding-left: 400px;
+    padding-top: 70px;
+}
