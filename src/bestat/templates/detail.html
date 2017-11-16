@@ -1,79 +1,269 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}Bestat - Detail{% endblock %}
-
+{% block css %}
+    <link rel="stylesheet" href="{% static "css/jquery-ui.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/bestat.detail.css" %}">
+{% endblock %}
 {% block body %}
 
     {% load static %}
-    <section id="about" style="margin-top: 90px;">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 wow animated fadeInRight"
-                     style="margin-top: 50px;">
-                    <div class="recent-works">
-                        <h3>Place Detail</h3>
-                        <img src="{% static "img/portfolio/item3.jpg" %}"/>
-                        <div class="message-body" style="margin-top: 50px">
-                            <p>Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor
-                                incididunt
-                                ut labore et dolore magna aliqua. Ut enim ad
-                                minim veniam, quis nostrud exercitation
-                                ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat. Duis aute irure dolor in
-                                reprehenderit in voluptate velit esse cillum
-                                dolore eu fugiat nulla pariatur. </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-7 col-md-offset-1 wow animated fadeInLeft"
-                     style="margin-top: 50px;">
-                    <div class="recent-works welcome-block">
-                        <h3>Review</h3>
-                        <div id="new-review-div">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-3 wow animated fadeInRight side">
+
+            </div>
+
+            <div class="col-md-12 wow animated fadeInLeft content">
+
+                <div class="recent-works welcome-block">
+                    <h3>Review</h3>
+                    <div id="new-review-div">
                             <textarea class="review form-control"
                                       id="newReviewTxt" name="text"
                                       placeholder="Type in your review"
                                       rows="5"></textarea>
-                            <h5 class="pull-right" id="count_message"></h5>
-                            <button type="submit" id="submit"
-                                    class="btn btn-effect"
-                                    onclick="postReview()">Post
-                            </button>
+                        <h5 class="pull-right" id="count_message"></h5>
+                        <button type="submit" id="submit"
+                                class="btn btn-effect"
+                                onclick="postReview()">Post
+                        </button>
 
 
-                        </div>
+                    </div>
 
-                        <div id="works">
-                            <div id="reviews-div"
-                                 class="work-item message-body">
-                                <div class="review-item">
-                                    <img src="../static/img/member-1.jpg"
-                                         class="pull-left" alt="member">
-                                    <p>username 10/30/2017</p>
-                                    <p>
-                                        Lorem idunt ut labore et dolore magna
-                                        aliqua. There are many variations of
-                                        passjectie.
-                                    </p>
-                                    <p>
-                                        <a class="btn pull-right btn-success"
-                                           onclick="likes(this)"
-                                           role="button"><span
-                                                class="glyphicon glyphicon-star"
-                                                aria-hidden="true"></span>Agree
+                    <div id="works">
+                        <div id="reviews-div"
+                             class="work-item message-body">
+                            <div class="review-item">
+                                <img src="../static/img/member-1.jpg"
+                                     class="pull-left" alt="member">
+                                <p>username 10/30/2017</p>
+                                <p>
+                                    Lorem idunt ut labore et dolore magna
+                                    aliqua. There are many variations of
+                                    passjectie.
+                                </p>
+                                <p>
+                                    <a class="btn pull-right btn-success"
+                                       onclick="likes(this)"
+                                       role="button"><span
+                                            class="glyphicon glyphicon-star"
+                                            aria-hidden="true"></span>Agree
 
-                                            <span
-                                                    class="badge pull-right likes-badge">3</span></a>
-                                    </p>
-                                </div>
+                                        <span
+                                                class="badge pull-right likes-badge">3</span></a>
+                                </p>
                             </div>
+                            <div class="review-item">
+                                <img src="../static/img/member-1.jpg"
+                                     class="pull-left" alt="member">
+                                <p>username 10/30/2017</p>
+                                <p>
+                                    Lorem idunt ut labore et dolore magna
+                                    aliqua. There are many variations of
+                                    passjectie.
+                                </p>
+                                <p>
+                                    <a class="btn pull-right btn-success"
+                                       onclick="likes(this)"
+                                       role="button"><span
+                                            class="glyphicon glyphicon-star"
+                                            aria-hidden="true"></span>Agree
+
+                                        <span
+                                                class="badge pull-right likes-badge">3</span></a>
+                                </p>
+                            </div>
+                            <div class="review-item">
+                                <img src="../static/img/member-1.jpg"
+                                     class="pull-left" alt="member">
+                                <p>username 10/30/2017</p>
+                                <p>
+                                    Lorem idunt ut labore et dolore magna
+                                    aliqua. There are many variations of
+                                    passjectie.
+                                </p>
+                                <p>
+                                    <a class="btn pull-right btn-success"
+                                       onclick="likes(this)"
+                                       role="button"><span
+                                            class="glyphicon glyphicon-star"
+                                            aria-hidden="true"></span>Agree
+
+                                        <span
+                                                class="badge pull-right likes-badge">3</span></a>
+                                </p>
+                            </div>
+                            <div class="review-item">
+                                <img src="../static/img/member-1.jpg"
+                                     class="pull-left" alt="member">
+                                <p>username 10/30/2017</p>
+                                <p>
+                                    Lorem idunt ut labore et dolore magna
+                                    aliqua. There are many variations of
+                                    passjectie.
+                                </p>
+                                <p>
+                                    <a class="btn pull-right btn-success"
+                                       onclick="likes(this)"
+                                       role="button"><span
+                                            class="glyphicon glyphicon-star"
+                                            aria-hidden="true"></span>Agree
+
+                                        <span
+                                                class="badge pull-right likes-badge">3</span></a>
+                                </p>
+                            </div>
+                            <div class="review-item">
+                                <img src="../static/img/member-1.jpg"
+                                     class="pull-left" alt="member">
+                                <p>username 10/30/2017</p>
+                                <p>
+                                    Lorem idunt ut labore et dolore magna
+                                    aliqua. There are many variations of
+                                    passjectie.
+                                </p>
+                                <p>
+                                    <a class="btn pull-right btn-success"
+                                       onclick="likes(this)"
+                                       role="button"><span
+                                            class="glyphicon glyphicon-star"
+                                            aria-hidden="true"></span>Agree
+
+                                        <span
+                                                class="badge pull-right likes-badge">3</span></a>
+                                </p>
+                            </div>
+                            <div class="review-item">
+                                <img src="../static/img/member-1.jpg"
+                                     class="pull-left" alt="member">
+                                <p>username 10/30/2017</p>
+                                <p>
+                                    Lorem idunt ut labore et dolore magna
+                                    aliqua. There are many variations of
+                                    passjectie.
+                                </p>
+                                <p>
+                                    <a class="btn pull-right btn-success"
+                                       onclick="likes(this)"
+                                       role="button"><span
+                                            class="glyphicon glyphicon-star"
+                                            aria-hidden="true"></span>Agree
+
+                                        <span
+                                                class="badge pull-right likes-badge">3</span></a>
+                                </p>
+                            </div>
+                            <div class="review-item">
+                                <img src="../static/img/member-1.jpg"
+                                     class="pull-left" alt="member">
+                                <p>username 10/30/2017</p>
+                                <p>
+                                    Lorem idunt ut labore et dolore magna
+                                    aliqua. There are many variations of
+                                    passjectie.
+                                </p>
+                                <p>
+                                    <a class="btn pull-right btn-success"
+                                       onclick="likes(this)"
+                                       role="button"><span
+                                            class="glyphicon glyphicon-star"
+                                            aria-hidden="true"></span>Agree
+
+                                        <span
+                                                class="badge pull-right likes-badge">3</span></a>
+                                </p>
+                            </div>
+                            <div class="review-item">
+                                <img src="../static/img/member-1.jpg"
+                                     class="pull-left" alt="member">
+                                <p>username 10/30/2017</p>
+                                <p>
+                                    Lorem idunt ut labore et dolore magna
+                                    aliqua. There are many variations of
+                                    passjectie.
+                                </p>
+                                <p>
+                                    <a class="btn pull-right btn-success"
+                                       onclick="likes(this)"
+                                       role="button"><span
+                                            class="glyphicon glyphicon-star"
+                                            aria-hidden="true"></span>Agree
+
+                                        <span
+                                                class="badge pull-right likes-badge">3</span></a>
+                                </p>
+                            </div>
+                            <div class="review-item">
+                                <img src="../static/img/member-1.jpg"
+                                     class="pull-left" alt="member">
+                                <p>username 10/30/2017</p>
+                                <p>
+                                    Lorem idunt ut labore et dolore magna
+                                    aliqua. There are many variations of
+                                    passjectie.
+                                </p>
+                                <p>
+                                    <a class="btn pull-right btn-success"
+                                       onclick="likes(this)"
+                                       role="button"><span
+                                            class="glyphicon glyphicon-star"
+                                            aria-hidden="true"></span>Agree
+
+                                        <span
+                                                class="badge pull-right likes-badge">3</span></a>
+                                </p>
+                            </div>
+                            <div class="review-item">
+                                <img src="../static/img/member-1.jpg"
+                                     class="pull-left" alt="member">
+                                <p>username 10/30/2017</p>
+                                <p>
+                                    Lorem idunt ut labore et dolore magna
+                                    aliqua. There are many variations of
+                                    passjectie.
+                                </p>
+                                <p>
+                                    <a class="btn pull-right btn-success"
+                                       onclick="likes(this)"
+                                       role="button"><span
+                                            class="glyphicon glyphicon-star"
+                                            aria-hidden="true"></span>Agree
+
+                                        <span
+                                                class="badge pull-right likes-badge">3</span></a>
+                                </p>
+                            </div>
+                            <div class="review-item">
+                                <img src="../static/img/member-1.jpg"
+                                     class="pull-left" alt="member">
+                                <p>username 10/30/2017</p>
+                                <p>
+                                    Lorem idunt ut labore et dolore magna
+                                    aliqua. There are many variations of
+                                    passjectie.
+                                </p>
+                                <p>
+                                    <a class="btn pull-right btn-success"
+                                       onclick="likes(this)"
+                                       role="button"><span
+                                            class="glyphicon glyphicon-star"
+                                            aria-hidden="true"></span>Agree
+
+                                        <span
+                                                class="badge pull-right likes-badge">3</span></a>
+                                </p>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+
 
 {% endblock %}
 
