@@ -308,7 +308,10 @@ function search_place(type, latlng) {
     }, function (results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             results.map(function (place) {
-                var temp_marker = L.marker([place.geometry.location.lat(), place.geometry.location.lng()]);
+                var temp_marker = L.marker([place.geometry.location.lat(), place.geometry.location.lng()], {
+                    opacity: 0.8,
+                    bounceOnAdd: true
+                });
                 temp_marker.addTo(mymap).bindPopup(place.name).openPopup();
                 place_list.push(temp_marker);
             });
