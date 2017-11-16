@@ -8,6 +8,12 @@ var service;
 var map;
 var place_list = [];
 var default_radius = 1000;
+var myIcon = L.icon({
+    iconUrl: '/static/icon/gym.png',
+    iconSize: [38, 38],
+    iconAnchor: [22, 22],
+    popupAnchor: [-3, -76]
+});
 
 $(window).resize(function () {//resize window
     $('#mapid').height($(window).height() - 15);
@@ -310,7 +316,8 @@ function search_place(type, latlng) {
             results.map(function (place) {
                 var temp_marker = L.marker([place.geometry.location.lat(), place.geometry.location.lng()], {
                     opacity: 0.8,
-                    bounceOnAdd: true
+                    bounceOnAdd: true,
+                    // icon:myIcon
                 });
                 temp_marker.addTo(mymap).bindPopup(place.name).openPopup();
                 place_list.push(temp_marker);
