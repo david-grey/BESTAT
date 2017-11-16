@@ -4,20 +4,81 @@ var geojson;
 var color_start = 987654;
 var color_end = 000000;
 var opacity = 0.8;
+var service;
+var map;
+var place_list = [];
+var default_radius = 1000;
 
 $(window).resize(function () {//resize window
-    $('#mapid').height($(window).height()-15);
-    $('#mapid').width($(window).width()-15);
+    $('#mapid').height($(window).height() - 15);
+    $('#mapid').width($(window).width() - 15);
 });
 
 $(document).ready(function () {
+
     /* set map div size */
-    $('#mapid').height($(window).height()-15);
-    $('#mapid').width($(window).width()-15);
+    $('#mapid').height($(window).height() - 15);
+    $('#mapid').width($(window).width() - 15);
 
     /* set city centre coordinate */
     var centre_coordinate = JSON.parse($("input[name='coordinate']").val());
-    mymap = L.map('mapid').setView(centre_coordinate, 12);
+
+    map = new google.maps.Map(document.getElementById('google'), {
+        center: {lat: centre_coordinate[0], lng: centre_coordinate[1]},
+        zoom: 15
+    });
+    service = new google.maps.places.PlacesService(map);
+
+    mymap = L.map('mapid', {
+        contextmenu: true,
+        contextmenuWidth: 140,
+        contextmenuItems: [{
+            text: 'Education',
+            callback: function (e) {
+                search_place('school', e.latlng)
+            }
+        }, {
+            text: 'Restaurant',
+            callback: function (e) {
+                search_place('restaurant', e.latlng)
+            }
+        }, {
+            text: 'Cafe',
+            callback: function (e) {
+                search_place('cafe', e.latlng)
+            }
+        }, {
+            text: 'Hospital',
+            callback: function (e) {
+                search_place('hospital', e.latlng)
+            }
+        }, {
+            text: 'Bank',
+            callback: function (e) {
+                search_place('bank', e.latlng)
+            }
+        }, {
+            text: 'Church',
+            callback: function (e) {
+                search_place('church', e.latlng)
+            }
+        }, {
+            text: 'Store',
+            callback: function (e) {
+                search_place('store', e.latlng)
+            }
+        }, {
+            text: 'Gym',
+            callback: function (e) {
+                search_place('gym', e.latlng)
+            }
+        }, '-', {
+            text: 'Clear',
+            // icon: 'images/zoom-in.png',
+            callback: clear_markers
+        }]
+    }).setView(centre_coordinate, 12);
+
 
     /* map tile */
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -42,6 +103,7 @@ $(document).ready(function () {
         div.innerHTML = '<span>EXPLORE THIS AREA: </span><i data-toggle="tooltip" title="Security" class="fa fa-bomb fa-2x"></i><i data-toggle="tooltip" title="Public Services" class="fa fa-institution fa-2x"></i><i data-toggle="tooltip" title="Live Convenience" class="fa fa-shopping-cart fa-2x"></i>';
         return div;
     }
+
     sel.addTo(mymap);
     $('.fa').click(changeCategory);
 
@@ -68,7 +130,16 @@ $(document).ready(function () {
     };
     legend.addTo(mymap);
 
-    $('#categorySlt').bind('change',changeCategory);
+    // var popup_menu = L.popup({closeButton: false, className: 'custom-popup'});
+    // mymap.on("contextmenu", function (e) {
+    //     console.log(e.latlng);
+    //     popup_menu
+    //         .setLatLng(e.latlng)
+    //         .setContent(menu[0])
+    //         .openOn(mymap);
+    // });
+
+    $('#categorySlt').bind('change', changeCategory);
 });
 
 /**
@@ -171,14 +242,14 @@ function resetHighlight(e) {
 
 function getColor(d) {
     return d > 8 ? '#83d08c' :
-           d > 7 ? '#9bce7e' :
-           d > 6 ? '#b9cc90' :
-           d > 5 ? '#d3d986' :
-           d > 4 ? '#f5e488' :
-           d > 3 ? '#f5cf73' :
-           d > 2 ? '#F4BE78' :
-           d > 1 ? '#f1a971' :
-                   '#e99f74';
+        d > 7 ? '#9bce7e' :
+            d > 6 ? '#b9cc90' :
+                d > 5 ? '#d3d986' :
+                    d > 4 ? '#f5e488' :
+                        d > 3 ? '#f5cf73' :
+                            d > 2 ? '#F4BE78' :
+                                d > 1 ? '#f1a971' :
+                                    '#e99f74';
 }
 // function getColor(d) {
 //     return d > 8 ? '#83d08c' :
@@ -222,3 +293,35 @@ function liveStyle(feature) {
     return default_style;
 }
 
+function test() {
+    alert('fuckyou');
+}
+
+
+function search_place(type, latlng) {
+    clear_markers();
+
+    service.nearbySearch({
+        location: latlng,
+        radius: default_radius,
+        type: [type]
+    }, function (results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            results.map(function (place) {
+                var temp_marker = L.marker([place.geometry.location.lat(), place.geometry.location.lng()]);
+                temp_marker.addTo(mymap).bindPopup(place.name).openPopup();
+                place_list.push(temp_marker);
+            });
+            console.log(place_list.length);
+        }
+    });
+}
+
+function clear_markers() {
+
+
+    place_list.map(function (marker) {
+        marker.remove();
+    });
+    place_list = [];
+}

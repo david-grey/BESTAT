@@ -15,6 +15,8 @@
 import pickle
 from api.google_place import GooglePlaceWrap
 from api.circle import get_circles, default_radius
+from api.GooglePlaces import GooglePlacesError
+import sys
 
 Quota = 150000
 
@@ -42,19 +44,29 @@ if __name__ == '__main__':
         cities = pickle.load(f)
     keys = list(cities.keys())
     for k in keys:
-        bound = cities[k]
-        points = get_circles(bound[0], bound[1], bound[2], bound[3])
-        print('city %s, %d points' % (k, len(points)))
-        if len(points) * 13 >= Quota:
-            print('today finished. %d cities remaining' % len(cities))
+        try:
+            bound = cities[k]
+            points = get_circles(bound[0], bound[1], bound[2], bound[3])
+            print('city %s, %d points' % (k, len(points)))
+            if len(points) >= 30000:
+                continue
+            if len(points) * 13 >= Quota:
+                print('today finished. %d cities remaining' % len(cities))
+                with open('./bestat/data/remain_city.pkl', 'wb') as f:
+                    pickle.dump(cities, f)
+                break
+            else:
+                data, quota = wrapper.search_range(points, default_radius)
+                Quota -= quota
+                with open('./bestat/data/googleplace_%s.pkl' % (
+                        '+'.join(k.split()).strip()),
+                          'wb') as f:
+                    pickle.dump(data, f)
+                del cities[k]
+                print('city %s finished, remaining quota %d' % (k, Quota))
+        except GooglePlacesError as e:
+            print(e)
             with open('./bestat/data/remain_city.pkl', 'wb') as f:
+                print('today finished. %d cities remaining' % len(cities))
                 pickle.dump(cities, f)
-            break
-        else:
-            data = wrapper.search_range(points, default_radius)
-            with open('./bestat/data/googleplace_%s.pkl' % (
-                    '+'.join(k.split()).strip()),
-                      'wb') as f:
-                pickle.dump(data, f)
-            del cities[k]
-            print('city %sfinished, remaining quota %d' % (k, Quota))
+            sys.exit(1)
