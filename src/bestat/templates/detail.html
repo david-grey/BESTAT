@@ -14,7 +14,9 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-3 wow animated fadeInRight side">
-
+                <h3 id="neighbor"></h3>
+                <input name="neighbor_id" type="hidden" value="54374">
+                <div id="chart_div"></div>
             </div>
 
             <div class="col-md-12 wow animated fadeInLeft content">
@@ -163,5 +165,8 @@
             });
         });
     </script>
+
+    <script src="{% static "js/bestat.detail.js" %}"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 {% endblock %}

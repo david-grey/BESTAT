@@ -4,7 +4,10 @@
 <!DOCTYPE html>
 
 {% block css %}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+    <link rel="stylesheet"
+          href="{% static 'css/leaflet.contextmenu.css' %}"/>
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
           integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
           crossorigin=""/>
     <script src="{% static "js/jquery-3.2.1.min.js" %}"></script>
@@ -17,11 +20,15 @@
 {% endblock %}
 {% block body %}
 
-<div id="mapid"></div>
+    <div id="mapid"></div>
 
-<input type="hidden" name="city" value="{{ city }}">
-<input type="hidden" name="coordinate" value="{{ coordinate }}">
+    <input type="hidden" name="city" value="{{ city }}">
+    <input type="hidden" name="coordinate" value="{{ coordinate }}">
+    <div style="visibility: hidden;height: 0" id="google"></div>
 
-<script src="{% static 'js/bestat.map.js' %}"></script>
+    <script src="{% static 'js/bestat.map.js' %}"></script>
+    <script src="{% static 'js/leaflet.contextmenu.js' %}"></script>
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQi5ECDVGwZ6jpPShEjL1GbLZBvDlee8c&libraries=places"></script>
 {% endblock %}
 

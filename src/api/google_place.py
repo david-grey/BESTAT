@@ -54,6 +54,7 @@ class GooglePlaceWrap:
         return ({'lat': lat, 'lng': lng, 'places': places})
 
     def search_range(self, points, radius):
+        quota = 0
         TP = self.TYPES
         places = {}
         for tp in TP:
@@ -65,17 +66,19 @@ class GooglePlaceWrap:
                     lat_lng={'lat': lat, 'lng': lng},
                     radius=radius, type=key)
                 sets.extend(result_set.places)
+                quota += 1
                 while result_set.has_next_page_token:
                     try:
                         next_page = self.google.nearby_search(
                             pagetoken=result_set.next_page_token)
+                        quota += 1
                         result_set = next_page
                         sets.extend(result_set.places)
                     except GooglePlacesError:
                         time.sleep(1)
                 for place in sets:
                     places[key][place.id] = place.geo_location
-        return places
+        return places, quota
 
 
 if __name__ == '__main__':
@@ -97,4 +100,3 @@ if __name__ == '__main__':
     # left = -74.2694
     # right = -73.6861
     # points = get_circles(up, down, left, right)
-

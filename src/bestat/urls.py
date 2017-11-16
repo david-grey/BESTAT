@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^get_all_city/$', bestat.views.get_all_city, name='get_all_city'),
     url(r'^load_city/(?P<city>[a-zA-z\s]+)$', bestat.views.load_city,
         name='load_city'),
-
+    url(r'^get_neighbor_detail/(?P<neighbor_id>[0-9]+)$', bestat.views.get_neighbor_detail, name='get_neighbor_detail'),
 ]
 
 

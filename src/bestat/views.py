@@ -377,3 +377,19 @@ def get_all_city(request):
 
 def detail(request):
     return render(request, 'detail.html')
+
+
+def get_neighbor_detail(request, neighbor_id):
+    if request.is_ajax():
+        neighbor = Neighbor.objects.get(regionid=neighbor_id)
+        overall, public_service, live_convenience, security_score = get_neighbor_score(
+            neighbor)
+
+        context = {}
+        context['neighbor_name'] = neighbor.name
+        context['overview_score'] = round(overall, 2)
+        context['security_score'] = round(security_score, 2)
+        context['public_service'] = round(public_service, 2)
+        context['live_convenience'] = round(live_convenience, 2)
+
+        return JsonResponse(context)
