@@ -64,6 +64,8 @@ if __name__ == '__main__':
                     pickle.dump(data, f)
                 del cities[k]
                 print('city %s finished, remaining quota %d' % (k, Quota))
+                with open('./bestat/data/remain_city.pkl', 'wb') as f:
+                    pickle.dump(cities, f)
         except GooglePlacesError as e:
             print(e)
             with open('./bestat/data/remain_city.pkl', 'wb') as f:

@@ -7,9 +7,11 @@ var opacity = 0.8;
 var service;
 var map;
 var place_list = [];
-var default_radius = 1000;
-var myIcon = L.icon({
-    iconUrl: '/static/icon/gym.png',
+var default_radius = 1200;
+var places = ['school', 'restaurant', 'cafe', 'church', 'store', 'bank', 'gym', 'hospital'];
+var myIcon = new Map();
+var testicon = L.icon({
+    iconUrl: '/static/icon/cafe.png',
     iconSize: [38, 38],
     iconAnchor: [22, 22],
     popupAnchor: [-3, -76]
@@ -34,6 +36,17 @@ $(document).ready(function () {
         zoom: 15
     });
     service = new google.maps.places.PlacesService(map);
+
+    // initial icon
+    places.map(function (x) {
+        myIcon.set(x, L.icon({
+            iconUrl: '/static/icon/' + x + '.png',
+            iconSize: [38, 38],
+            iconAnchor: [22, 22],
+            popupAnchor: [-3, -76]
+        }))
+    });
+
 
     mymap = L.map('mapid', {
         contextmenu: true,
@@ -95,7 +108,7 @@ $(document).ready(function () {
     }).addTo(mymap);
 
     /* popup */
-    popup = L.popup({closeButton: false});
+    popup = L.popup({closeButton: false, className: 'custom-popup'});
     // mymap.on('click', onMapClick);
 
     /* load neighbor layer */
@@ -317,12 +330,31 @@ function search_place(type, latlng) {
                 var temp_marker = L.marker([place.geometry.location.lat(), place.geometry.location.lng()], {
                     opacity: 0.8,
                     bounceOnAdd: true,
-                    // icon:myIcon
+                    icon: myIcon.get(type)
                 });
-                temp_marker.addTo(mymap).bindPopup(place.name).openPopup();
+                temp_marker.addTo(mymap).bindPopup(L.popup({
+                    closeButton: false,
+                    className: 'custom-popup'
+                }).setContent(place.name));
                 place_list.push(temp_marker);
             });
-            console.log(place_list.length);
+
+
+            let viewport = results.map(a => a.geometry.viewport).reduce(function (x, y) {
+                x.b.b = Math.min(x.b.b, y.b.b);
+                x.b.f = Math.max(x.b.f, y.b.f);
+                x.f.b = Math.min(x.f.b, y.f.b);
+                x.f.f = Math.max(x.f.f, y.f.f);
+                return x;
+            });
+            // console.log(viewport);
+            console.log([viewport.f.f, viewport.f.b, viewport.b.b, viewport.b.f]);
+            // console.log([(viewport.f.f+viewport.f.f.b)/2,(viewport.b.b+viewport.b.f)/2]);
+
+            let bounds = L.latLngBounds([viewport.f.b - 0.01, viewport.b.b - 0.01],
+                [viewport.f.f + 0.01, viewport.b.f + 0.01]);
+            mymap.flyToBounds(bounds);
+
         }
     });
 }
