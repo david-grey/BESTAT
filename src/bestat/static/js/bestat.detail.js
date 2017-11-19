@@ -73,19 +73,6 @@ $(function () {
         initialRating: 3,
         hoverState: true
     });
-
-    $('.review_safety').barrating({
-        theme: 'fontawesome-stars',
-        readonly: true
-    });
-    $('.review_convenience').barrating({
-        theme: 'fontawesome-stars',
-        readonly: true
-    });
-    $('.review_public').barrating({
-        theme: 'fontawesome-stars',
-        readonly: true
-    });
 });
 
 function postReview() {
@@ -107,7 +94,7 @@ function postReview() {
                 $('#convenience').barrating('set', 3);
                 $('#public').barrating('set', 3);
 
-                alert("Review success. "); // show response from the php script.
+                populateList();
             }
         });
 
@@ -115,21 +102,29 @@ function postReview() {
     });
 }
 
-function populateList(neighbor_id) {
+function populateList() {
+    var neighbor_id = $("input[name='neighbor_id']").val();
+
     $.get("/bestat/get_reviews/" + neighbor_id)
         .done(function (data) {
-            console.log("start");
-            var list = $("#reviews");
-            list.html('');
-            //getUpdates();
-            for (var i = 0; i < data.posts.length; i++) {
-                post = data.posts[i];
-                var new_post = $(post.html);
-                new_post.data("post-id", post.id);
-                list.prepend(new_post);
-            }
+            var reviews_div = $("#reviews");
+            reviews_div.html(data.html);
 
+            $('.review_safety').barrating({
+                theme: 'fontawesome-stars',
+                readonly: true
+            });
+            $('.review_convenience').barrating({
+                theme: 'fontawesome-stars',
+                readonly: true
+            });
+            $('.review_public').barrating({
+                theme: 'fontawesome-stars',
+                readonly: true
+            });
         });
+
+
 }
 
 
@@ -137,7 +132,7 @@ $(document).ready(function () {
     var neighbor_id = $("input[name='neighbor_id']").val();
     loadScoreGraph(neighbor_id);
     // Set up to-do list with initial DB items and DOM data
-    populateList(neighbor_id);
+    populateList();
 
     // CSRF set-up copied from Django docs
     function getCookie(name) {

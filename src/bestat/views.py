@@ -22,6 +22,7 @@ import datetime
 import json
 import random
 from bestat.ranking import get_neighbor_score
+from django.utils.html import escape
 
 
 @check_anonymous
@@ -386,7 +387,7 @@ def get_all_city(request):
 
 
 def detail(request, neighbor_id):
-    return render(request, 'detail.html', {'neighbor_id' : neighbor_id})
+    return render(request, 'detail.html', {'neighbor_id': neighbor_id})
 
 
 def get_neighbor_detail(request, neighbor_id):
@@ -408,7 +409,47 @@ def get_neighbor_detail(request, neighbor_id):
 def get_reviews(request, neighbor_id):
     if request.is_ajax():
         neighbor = Neighbor.objects.get(regionid=neighbor_id)
-        reviews = Review.objects.filter(neighbor=neighbor).order_by("-time")
+        reviews = Review.objects.filter(block=NeighborInfo.objects.get(neighbor=neighbor)).order_by("-create_time")
 
-        return JsonResponse(context)
+        reviews_html = ""
+        for review in reviews:
+            s = ('<div class="row"><div class="col-sm-3 review-title">'
+                 '<img src="https://thesocietypages.org/socimages/files/2009/05/nopic_192.gif" class="img-rounded" height="70px" width="70px">'
+                 '<div class="review-block-name"><a href="#"> %s </a></div>'
+                 '<div class="review-block-date"> %s </div></div>'
+                 '<div class="col-sm-9 review-content"><div class="review-block-rate">'
+                 '<div class="col-md-4">'
+                 '<label>Safety: </label>'
+                 '<select class="review_safety">'
+                 '%s'
+                 '</select></div>'
+                 '<div class="col-md-4">'
+                 '<label>Public Service: </label>'
+                 '<select class="review_public">'
+                 '%s'
+                 '</select></div>'
+                 '<div class="col-md-4">'
+                 '<label>Convenience: </label>'
+                 '<select class="review_convenience">'
+                 '%s'
+                 '</select></div></div>'
+                 '<div class="review-block-description"> %s '
+                 '</div></div></div><hr/>') % (review.author.username, review.create_time.strftime('%b %d %Y'),
+                                               setStar(review.safety), setStar(review.public_service),
+                                               setStar(review.convenience), escape(review.text))
+
+            reviews_html += s
+
+        return JsonResponse({"html": reviews_html})
+
+
+def setStar(star):
+    s = ''
+    for i in range(1, 6):
+        if i == star:
+            s += '<option value="' + str(i) + '" selected>' + str(i) + '</option>'
+        else:
+            s += '<option value="' + str(i) + '">' + str(i) + '</option>'
+
+    return s
 
