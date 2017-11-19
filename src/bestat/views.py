@@ -213,9 +213,20 @@ def contact(request):
 @login_required('to create review, you must login first')
 def create_review(request):
     user = request.user
-    review = Review.objects.create(author=user, text=request.POST['text'])
+    neighbor_id = request.POST['neighbor_id']
+
+    review = Review.objects.create(
+        block=NeighborInfo.objects.get(neighbor=Neighbor.objects.get(regionid=neighbor_id)),
+        author=user,
+        text=request.POST['text'],
+        safety=request.POST['safety'],
+        convenience=request.POST['convenience'],
+        public_service=request.POST['public'],
+        create_time=datetime.datetime.now()
+    )
     review.save()
-    return redirect('/profile')
+
+    return render(request, 'detail.html')
 
 
 @require_GET
@@ -374,8 +385,8 @@ def get_all_city(request):
     return HttpResponse(data, "application/json")
 
 
-def detail(request):
-    return render(request, 'detail.html')
+def detail(request, neighbor_id):
+    return render(request, 'detail.html', {'neighbor_id' : neighbor_id})
 
 
 def get_neighbor_detail(request, neighbor_id):
@@ -392,6 +403,8 @@ def get_neighbor_detail(request, neighbor_id):
         context['live_convenience'] = round(live_convenience, 2)
 
         return JsonResponse(context)
+
+
 def get_reviews(request, neighbor_id):
     if request.is_ajax():
         neighbor = Neighbor.objects.get(regionid=neighbor_id)
