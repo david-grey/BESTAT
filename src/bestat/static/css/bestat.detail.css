@@ -20,10 +20,19 @@
     padding-left: 35px;
 }
 
-.review-content {
-    padding-left: 35px;
-}
-
 #reviews {
     margin-top: 250px;
+}
+
+.review-block-description {
+    margin-left: 15px;
+    margin-top: 60px;
+}
+
+.review-block-name {
+    margin-top: 10px;
+}
+
+.recent-works {
+    /*margin-top: 80px;*/
 }
