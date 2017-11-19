@@ -12,22 +12,21 @@
     {% load static %}
 
     <div class="container">
-        <div class="row">
+
+        <div class="col-xs-4 wow animated fadeInRight side">
             <h1 id="neighbor"></h1>
-            <div class="col-xs-3 wow animated fadeInRight side">
-                <h3>Living Index</h3>
+            <h3>Living Index</h3>
+            <hr>
+            <div id="chart_div"></div>
+        </div>
+
+        <div class="col-md-12 wow animated fadeInLeft content">
+
+            <div class="recent-works welcome-block">
+                <h3>Reviews</h3>
                 <hr>
-                <input name="neighbor_id" type="hidden" value="54374">
-                <div id="chart_div"></div>
-            </div>
-
-            <div class="col-md-12 wow animated fadeInLeft content">
-
-                <div class="recent-works welcome-block">
-                    <h3>Reviews</h3>
-                    <hr>
-                    <div id="new-review-div" class="col-md-12">
-
+                <div id="new-review-div" class="col-md-12">
+                    <form id="reviewForm" action="create_review" method="post">
                         <div class="col-md-3">
                             <label>Safety: </label>
                             <select id="safety">
@@ -65,12 +64,61 @@
                         <button class="btn btn-blue btn-effect pull-right" type="submit" id="submit"
                                 onclick="postReview()">Post Review
                         </button>
-                    </div>
-                    <hr>
-                    <div id="reviews">
 
-                    </div>
+                        <input name="neighbor_id" type="hidden" value="{{ neighbor_id }}">
+                    </form>
                 </div>
+
+                <div id="reviews">
+                    <div class="row">
+                        <div class="col-sm-3 review-title">
+                            <img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded">
+                            <div class="review-block-name"><a href="#">nktailor</a></div>
+                            <div class="review-block-date">January 29, 2016</div>
+                        </div>
+                        <div class="col-sm-9 review-content">
+                            <div class="review-block-rate">
+                                <div class="col-md-4">
+                                    <label>Safety: </label>
+                                    <select class="review_safety">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Public Service: </label>
+                                    <select class="review_public">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Convenience: </label>
+                                    <select class="review_convenience">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4" selected>4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="review-block-description">
+                                this was nice in buy. this was nice in buy. this
+                                was nice in buy. this was nice in buy this was nice in buy this was nice in buy this
+                                was nice in buy this was nice in buy
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                </div>
+
             </div>
         </div>
     </div>
@@ -81,6 +129,7 @@
 {% block js %}
     <script src="{% static "js/jquery.barrating.min.js" %}"></script>
     <script src="{% static "js/bestat.detail.js" %}"></script>
-    <script type="text/javascript" src="https://www.google.com/jsapi?autoload= {'modules':[{'name':'visualization','version':'1.1','packages':['corechart']}]}"></script>
+    <script type="text/javascript"
+            src="https://www.google.com/jsapi?autoload= {'modules':[{'name':'visualization','version':'1.1','packages':['corechart']}]}"></script>
 
 {% endblock %}

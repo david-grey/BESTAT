@@ -1,13 +1,11 @@
-
-
 .side {
     position: fixed;
     width: 300px;
 }
+
 .content {
     padding-left: 400px;
 }
-
 
 .btn-blue {
     background-color: rgba(0, 158, 227, 0.78);
@@ -15,4 +13,17 @@
     color: #fff;
     font-size: 14px;
     margin-top: 20px;
+}
+
+.review-title {
+    width: 160px;
+    padding-left: 35px;
+}
+
+.review-content {
+    padding-left: 35px;
+}
+
+#reviews {
+    margin-top: 250px;
 }
