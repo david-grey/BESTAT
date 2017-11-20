@@ -17,6 +17,8 @@ from api.crime import Crime, RADIUS
 from api.circle import get_circles
 import traceback
 import sys
+import json
+import time
 
 if __name__ == '__main__':
     wrapper = Crime()
@@ -24,16 +26,18 @@ if __name__ == '__main__':
     with open('./bestat/data/crime_remain_city.pkl', 'rb') as f:
         cities = pickle.load(f)
     keys = list(cities.keys())
+    print(keys)
     for k in keys:
         try:
             bound = cities[k]
             points = get_circles(bound[0], bound[1], bound[2], bound[3], RADIUS)
             if len(points) >= 30000:
+                print('skip city %s, %d points' % (k, len(points)))
                 continue
             print('city %s, %d points' % (k, len(points)))
 
             data = wrapper.fetch_range(points)
-            with open('./bestat/data/crime_%s.pkl' % (
+            with open('./bestat/data/crime/crime_%s.pkl' % (
                     '+'.join(k.split()).strip()),
                       'wb') as f:
                 pickle.dump(data, f)
@@ -41,6 +45,9 @@ if __name__ == '__main__':
             with open('./bestat/data/crime_remain_city.pkl', 'wb') as f:
                 pickle.dump(cities, f)
             print('city %s finished' % (k))
+        except json.decoder.JSONDecodeError as e:
+            print('banned, sleep for 5 minutes')
+            time.sleep(300)
         except Exception or KeyboardInterrupt as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             print(e)

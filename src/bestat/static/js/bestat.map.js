@@ -4,6 +4,7 @@ var geojson;
 var color_start = 987654;
 var color_end = 000000;
 var opacity = 0.8;
+var viewport_padding = 0.005;
 var service;
 var map;
 var place_list = [];
@@ -351,8 +352,8 @@ function search_place(type, latlng) {
             console.log([viewport.f.f, viewport.f.b, viewport.b.b, viewport.b.f]);
             // console.log([(viewport.f.f+viewport.f.f.b)/2,(viewport.b.b+viewport.b.f)/2]);
 
-            let bounds = L.latLngBounds([viewport.f.b - 0.01, viewport.b.b - 0.01],
-                [viewport.f.f + 0.01, viewport.b.f + 0.01]);
+            let bounds = L.latLngBounds([viewport.f.b - viewport_padding, viewport.b.b - viewport_padding],
+                [viewport.f.f + viewport_padding, viewport.b.f + viewport_padding]);
             mymap.flyToBounds(bounds);
 
         }
