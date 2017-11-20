@@ -1,8 +1,6 @@
 var mymap;
 var popup;
 var geojson;
-var color_start = 987654;
-var color_end = 000000;
 var opacity = 0.8;
 var service;
 var map;
@@ -16,6 +14,7 @@ var testicon = L.icon({
     iconAnchor: [22, 22],
     popupAnchor: [-3, -76]
 });
+var showPopup = 1;
 
 $(window).resize(function () {//resize window
     $('#mapid').height($(window).height() - 15);
@@ -115,6 +114,8 @@ $(document).ready(function () {
     var city = $("input[name='city']").val();
     loadNeighborLayer(city);
 
+
+
     /* add select */
     var sel = L.control({position: 'topright'});
     sel.onAdd = function (map) {
@@ -161,18 +162,6 @@ $(document).ready(function () {
     $('#categorySlt').bind('change', changeCategory);
 });
 
-/**
- * onclick event
- */
-function onMapClick(e) {
-    popup
-        .setLatLng(e.latlng)
-        .setContent("You clicked the map at " + e.latlng.toString())
-        .openOn(mymap);
-
-    geojson.setStyle(changeStyle);
-}
-
 
 function changeCategory(e) {
     var bg_color = $(this).css('background-color');
@@ -213,15 +202,28 @@ function loadNeighborLayer(city) {
 }
 
 
+function goToDetail(e) {
+    var layer = e.target;
+    var props = layer.feature.geometry.properties;
+    window.location.href = "/bestat/detail/" + props.id;
+}
+
+
 function onEachFeature(feature, layer) {
     layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight
+        // mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        mousemove: highlightFeature,
+        click: goToDetail
     });
 }
 
 
 function highlightFeature(e) {
+    if (showPopup == 0) {
+        return;
+    }
+
     var layer = e.target;
 
     layer.setStyle({
@@ -250,13 +252,21 @@ function highlightFeature(e) {
 
 
 function resetHighlight(e) {
+    if (showPopup == 0) {
+        return;
+    }
+
     //geojson.resetStyle(e.target);
     geojson.setStyle({
         weight: 2,
         color: 'white',
         dashArray: '5',
         fillOpacity: opacity
-    })
+    });
+
+    // if () {
+    //     popup.remove();
+    // }
 }
 
 function getColor(d) {
@@ -270,17 +280,6 @@ function getColor(d) {
                                 d > 1 ? '#f1a971' :
                                     '#e99f74';
 }
-// function getColor(d) {
-//     return d > 8 ? '#83d08c' :
-//            d > 7 ? '#9bce7e' :
-//            d > 6 ? '#b9cc90' :
-//            d > 5 ? '#d3d986' :
-//            d > 4 ? '#f5e488' :
-//            d > 3 ? '#f5cf73' :
-//            d > 2 ? '#F4BE78' :
-//            d > 1 ? '#f1a971' :
-//                    '#e99f74';
-// }
 
 var default_style = {
     fillColor: 'blue',
@@ -360,8 +359,6 @@ function search_place(type, latlng) {
 }
 
 function clear_markers() {
-
-
     place_list.map(function (marker) {
         marker.remove();
     });

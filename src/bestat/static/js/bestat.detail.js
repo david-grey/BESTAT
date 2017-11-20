@@ -2,15 +2,31 @@ function drawStacked(arr) {
     var data = google.visualization.arrayToDataTable(arr);
 
     var options = {
-        width: 400,
-        height: 240,
+        width: 300,
+        height: 180,
         isStacked: true,
+        colors: ['#e0440e', '#aaaaaa'],
+        legend: {position: "none"},
+        annotations: {
+            textStyle: {
+                fontName: 'Helvetica Neue',
+                fontSize: 12,
+                color: '#666666',
+                opacity: 0.9
+            }
+        },
+        axisTitlesPosition: 'none',
+        chartArea:{left:0,top:0,width:'100%',height:'80%'},
+        dataOpacity: 0.85,
         hAxis: {
+            textStyle: {
+                fontName: 'Helvetica Neue',
+                color: '#555555',
+                fontSize: 12,
+            },
             minValue: 0,
             maxValue: 10
         },
-        colors: ['#e0440e', 'grey'],
-        legend: {position: "none"},
     };
     var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
     chart.draw(data, options);
@@ -19,12 +35,20 @@ function drawStacked(arr) {
 function loadScoreGraph(neighbor_id) {
     $.get('/bestat/get_neighbor_detail/' + neighbor_id)
         .done(function (data) {
+            // var arr = [
+            //     ['Category', 'Score', {role: 'style'}, {role: 'annotation'}, ''],
+            //     ['Overview', data.overview_score, '#f0a577', data.overview_score, 10 - data.overview_score],
+            //     ['Security', data.security_score, '#bbf098', data.security_score, 10 - data.security_score],
+            //     ['Service', data.public_service, '#56bef0', data.public_service, 10 - data.public_service],
+            //     ['Convenience', data.live_convenience, '#ecf09e', data.live_convenience, 10 - data.live_convenience]
+            // ];
+
             var arr = [
                 ['Category', 'Score', {role: 'style'}, {role: 'annotation'}, ''],
-                ['Overview', data.overview_score, '#eba275', data.overview_score, 10 - data.overview_score],
-                ['Security', data.security_score, '#9bce7e', data.security_score, 10 - data.security_score],
-                ['Public Service', data.public_service, '#4e93c5', data.public_service, 10 - data.public_service],
-                ['Convenience', data.live_convenience, '#e8ec9a', data.live_convenience, 10 - data.live_convenience]
+                ['Overview', data.overview_score, '#d78c6e', 'Overview', 10 - data.overview_score],
+                ['Security', data.security_score, '#a2d683', 'Security', 10 - data.security_score],
+                ['Service', data.public_service, '#50a6d7', 'Service', 10 - data.public_service],
+                ['Convenience', data.live_convenience, '#d3d788', 'Convenience', 10 - data.live_convenience]
             ];
 
             drawStacked(arr);
@@ -52,24 +76,56 @@ $(function () {
 });
 
 function postReview() {
+    if ($('#newReviewTxt').val().trim() === "") {
+        alert("Please input review content.");
+        return;
+    }
 
+    $("#reviewForm").submit(function (e) {
+        var url = "/bestat/create_review"; // the script where you handle the form input.
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#reviewForm").serialize(), // serializes the form's elements.
+            success: function (data) {
+                $('#newReviewTxt').val("");
+                $('#safety').barrating('set', 3);
+                $('#convenience').barrating('set', 3);
+                $('#public').barrating('set', 3);
+
+                populateList();
+            }
+        });
+
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+    });
 }
 
-function populateList(neighbor_id) {
+function populateList() {
+    var neighbor_id = $("input[name='neighbor_id']").val();
+
     $.get("/bestat/get_reviews/" + neighbor_id)
         .done(function (data) {
-            console.log("start");
-            var list = $("#reviews");
-            list.html('');
-            //getUpdates();
-            for (var i = 0; i < data.posts.length; i++) {
-                revies = data.posts[i];
-                var new_post = $(post.html);
-                new_post.data("post-id", post.id);
-                list.prepend(new_post);
-            }
 
+            var reviews_div = $("#reviews");
+            reviews_div.html(data.html);
+
+            $('.review_safety').barrating({
+                theme: 'fontawesome-stars',
+                readonly: true
+            });
+            $('.review_convenience').barrating({
+                theme: 'fontawesome-stars',
+                readonly: true
+            });
+            $('.review_public').barrating({
+                theme: 'fontawesome-stars',
+                readonly: true
+            });
         });
+
+
 }
 
 
@@ -77,7 +133,7 @@ $(document).ready(function () {
     var neighbor_id = $("input[name='neighbor_id']").val();
     loadScoreGraph(neighbor_id);
     // Set up to-do list with initial DB items and DOM data
-    populateList(neighbor_id);
+    populateList();
 
     // CSRF set-up copied from Django docs
     function getCookie(name) {
