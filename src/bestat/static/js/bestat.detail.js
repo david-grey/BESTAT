@@ -63,7 +63,7 @@ function populateList(neighbor_id) {
             list.html('');
             //getUpdates();
             for (var i = 0; i < data.posts.length; i++) {
-                post = data.posts[i];
+                revies = data.posts[i];
                 var new_post = $(post.html);
                 new_post.data("post-id", post.id);
                 list.prepend(new_post);
