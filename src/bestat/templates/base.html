@@ -105,7 +105,7 @@
                     <a id="logout" class="btn btn-danger"
                        href="{% url 'bestat:logout' %}"
                        role="button">Logout</a>
-                    <img src="#"
+                    <img src="{{ user.profile.img.url }}"
                          class="img-circle" width="35" height="35">
                 </div>
             {% endif %}
