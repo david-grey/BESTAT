@@ -4,7 +4,7 @@ $(function () {
     //     duration: 3000,
     //     fade: 750
     // });
-        $.backstretch(["/static/img/backgrounds/home1.jpg", "/static/img/backgrounds/home2.jpg","/static/img/backgrounds/home3.jpg","/static/img/backgrounds/home4.jpg","/static/img/backgrounds/home5.jpg"], {
+    $.backstretch(["/static/img/backgrounds/home1.jpg", "/static/img/backgrounds/home3.jpg", "/static/img/backgrounds/home4.jpg", "/static/img/backgrounds/home5.jpg"], {
         duration: 3000,
         fade: 750
     });
