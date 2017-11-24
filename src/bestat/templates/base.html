@@ -5,6 +5,7 @@
     {% load static %}
     <!-- meta character set -->
     <meta charset="UTF-8">
+    <meta name="google-site-verification" content="bsR0zX0H8d_rSuBHyv1dtoFFTgGtLHgdVkoO6GiKgDM"/>
     <!-- Always force latest IE rendering engine or request Chrome Frame -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <!-- Mobile Specific Meta -->
@@ -49,10 +50,10 @@
 
                 </button>
                 <a class="navbar-brand"
-                      href="{% url 'bestat:home' %}">BESTAT</a>
+                   href="{% url 'bestat:home' %}">BESTAT</a>
             </div>
             {% if user.is_anonymous %}
-                <div class="navbar-form navbar-right">
+                <div class="navbar-form navbar-right collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <a class="btn btn-success" href="{% url 'bestat:signin' %}"
                        role="button">Sign
                         in</a>
@@ -61,7 +62,7 @@
                         up</a>
                 </div>
             {% else %}
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle"
                            data-toggle="dropdown" role="button"
@@ -143,6 +144,7 @@
 <!-- Custom Functions -->
 <script src="{% static "js/main.js" %}"></script>
 
+<script src="{% static "js/jquery.backstretch.js" %}"></script>
 {% block js %}
 {% endblock %}
 </body>

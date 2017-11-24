@@ -52,13 +52,12 @@ def signup(request):
                                         params['password'],
                                         first_name=params['first_name'],
                                         last_name=params['last_name'])
+        user.is_active = False
         user.save()
         profile = Profile.objects.create(user=user,
                                          nick_name=params['nick_name'])
         profile.save()
         token = default_token_generator.make_token(user)
-
-        login(request, user)
 
         email_body = '''
            Welcome to bestat. Please click the link below to verify your email address and complete the registration proceess. http://%s%s
@@ -66,10 +65,9 @@ def signup(request):
                   reverse('bestat:confirm', args=(user.username, token)))
         send_mail(subject="Verify your email address",
                   message=email_body,
-                  from_email="ziqil1@andrew.cmu.edu",
+                  from_email="bestat.verify@gmail.com",
                   recipient_list=[user.email])
-        context[
-            'msg'] = 'Your confirmation link has been send to your register email.'
+        context['msg'] = 'Your confirmation link has been send to your register email.'
         return render(request, 'blank.html', context)
 
 
@@ -83,6 +81,7 @@ def signin(request):
         pass
     else:
         form = LoginForm(request.POST)
+        context['form'] = form
         if not form.is_valid():
             errors = [v.as_text() for k, v in form.errors.items()]
             context['errors'] = errors
@@ -91,23 +90,23 @@ def signin(request):
             username = params['username']
             password = params['password']
             user = authenticate(request, username=username, password=password)
-
             if user is not None:
                 print('flag2')
                 # login success
-                if user.is_active:
-                    print('login success')
-                    login(request, user)
-                    return redirect('/')
-                else:
-                    context['errors'] = ['account banned!']
+                print('login success')
+                login(request, user)
+                return redirect('/')
+
             else:
                 print('flag1')
                 errors = ['password incorrect']
                 try:
-                    User.objects.get(username=username)
+                    u = User.objects.get(username=username)
+                    if not u.is_active:
+                        errors = ['user not activated']
                 except User.DoesNotExist:
                     errors = ['user not exist']
+
                 context["errors"] = errors
 
     return render(request, 'signin.html', context=context)
@@ -187,10 +186,12 @@ def logout_user(request):
 
 @require_GET
 def confirm(request, username, token):
-    generator = PasswordResetTokenGenerator()
+
     try:
         user = User.objects.get(username=username)
-        if generator.check_token(user, token):
+        if default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.save()
             login(request, user)
             return redirect('/')
         else:
@@ -230,41 +231,6 @@ def create_review(request):
     return render(request, 'detail.html')
 
 
-@require_GET
-@login_required()
-def likes(request, block_id):
-    blog = get_object_or_404(NeighborInfo, id=block_id)
-    flag = True
-    if blog.liked(request.user):
-        blog.likes.remove(request.user)
-        flag = False
-    else:
-        blog.likes.add(request.user)
-    return JsonResponse({'likes_num': blog.likes_num, 'liked': flag})
-
-
-@check_anonymous
-@require_POST
-@login_required()
-def update_reviews(request):
-    params = dict(request.POST)
-    time = params.get('max_time', None)
-
-    _personal = params.get('personal', None)
-    _stream = params.get('stream', False)
-    user = request.user
-    if time:
-        time = int(time[0])
-        max_time = Review.get_max_time()
-
-        _blogs = Review.get_changes(time, user if _personal else None, _stream)
-
-        blogs = [render_to_string('ajax_blog.html', {'blog': bl, 'user': user},
-                                  request) for bl in _blogs]
-        context = {'max_time': max_time, 'blogs': blogs}
-        return JsonResponse(data=context)
-    return Http404
-
 
 
 @require_http_methods(['GET', 'POST'])
@@ -293,8 +259,7 @@ def forget_password(request):
                   message=email_body,
                   from_email="ziqil1@andrew.cmu.edu",
                   recipient_list=[user.email])
-        context[
-            'msg'] = 'Your password reset link has been send to your register email.'
+        context['msg'] = 'Your password reset link has been send to your register email.'
         return render(request, 'blank.html', context)
 
 
@@ -366,7 +331,7 @@ def load_city(request, city):
 def get_city(request):
     city = request.GET.get('name', '')
     try:
-        cityob = City.objects.get(name=city)
+        cityob = City.objects.filter(name=city)[0]
     except:
         return render(request, 'blank.html', {'msg': 'City not exist!'})
     coordinate = json.loads(cityob.point.geojson)[
@@ -377,9 +342,7 @@ def get_city(request):
 def get_all_city(request):
     if request.is_ajax():
         q = request.GET.get('term', '')
-        print(q)
-        results = [c.name for c in City.objects.filter(name__icontains=q)[:5]]
-
+        results = [c.name for c in City.objects.filter(activate=1).filter(name__icontains=q)[:5]]
         data = json.dumps(results)
     else:
         data = "No"
@@ -429,11 +392,11 @@ def get_reviews(request, neighbor_id):
                  '%s'
                  '</select></div>'
                  '<div class="col-md-4">'
-                 '<label>Convenience: </label>'
+                 '<label>Convenience: </label>'        
                  '<select class="review_convenience">'
                  '%s'
-                 '</select></div></div>'
-                 '<div class="review-block-description"> %s '
+                 '</select></div></div><hr/>'
+                 '<div class="col-md-12 "> %s '
                  '</div></div></div><hr/>') % (review.author.username, review.create_time.strftime('%b %d %Y'),
                                                setStar(review.safety), setStar(review.public_service),
                                                setStar(review.convenience), escape(review.text))

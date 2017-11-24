@@ -150,7 +150,13 @@ $(document).ready(function () {
         return div;
     };
     legend.addTo(mymap);
-
+    var zillow = L.control({position: 'bottomright'});
+    zillow.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'zillow');
+        div.innerHTML += '<hr><br><a href="https://www.zillow.com/howto/api/neighborhood-boundaries.htm"><img src="https://www.zillowstatic.com/vstatic/64dd1c9/static/logos/Zillow_Logo_HoodsProvided_RightAligned.gif" ></a>';
+        return div;
+    };
+    zillow.addTo(mymap);
     // var popup_menu = L.popup({closeButton: false, className: 'custom-popup'});
     // mymap.on("contextmenu", function (e) {
     //     console.log(e.latlng);

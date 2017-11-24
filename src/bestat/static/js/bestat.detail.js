@@ -1,3 +1,10 @@
+
+$.backstretch([
+    "/static/img/backgrounds/a.jpg"
+    , "/static/img/backgrounds/b.jpg"
+    , "/static/img/backgrounds/c.jpg"
+], {duration: 3000, fade: 750});
+
 function drawStacked(arr) {
     var data = google.visualization.arrayToDataTable(arr);
 
@@ -5,28 +12,30 @@ function drawStacked(arr) {
         width: 300,
         height: 180,
         isStacked: true,
-        colors: ['#e0440e', '#aaaaaa'],
+        backgroundColor: { fill:'transparent' },
+        colors: ['#e0440e', '#f7f7f7'],
         legend: {position: "none"},
         annotations: {
             textStyle: {
                 fontName: 'Helvetica Neue',
                 fontSize: 12,
-                color: '#666666',
+                color: '#f7f7f7',
                 opacity: 0.9
             }
         },
+        is3D:true,
         axisTitlesPosition: 'none',
         chartArea:{left:0,top:0,width:'100%',height:'80%'},
         dataOpacity: 0.85,
         hAxis: {
             textStyle: {
                 fontName: 'Helvetica Neue',
-                color: '#555555',
+                color: '#f7f7f7',
                 fontSize: 12,
             },
             minValue: 0,
             maxValue: 10
-        },
+        }
     };
     var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
     chart.draw(data, options);
@@ -60,17 +69,17 @@ function loadScoreGraph(neighbor_id) {
 $(function () {
     $('#safety').barrating({
         theme: 'fontawesome-stars',
-        initialRating: 3,
+        initialRating: 1,
         hoverState: true
     });
     $('#convenience').barrating({
         theme: 'fontawesome-stars',
-        initialRating: 3,
+        initialRating: 1,
         hoverState: true
     });
     $('#public').barrating({
         theme: 'fontawesome-stars',
-        initialRating: 3,
+        initialRating: 1,
         hoverState: true
     });
 });
@@ -90,9 +99,9 @@ function postReview() {
             data: $("#reviewForm").serialize(), // serializes the form's elements.
             success: function (data) {
                 $('#newReviewTxt').val("");
-                $('#safety').barrating('set', 3);
-                $('#convenience').barrating('set', 3);
-                $('#public').barrating('set', 3);
+                $('#safety').barrating('set', 1);
+                $('#convenience').barrating('set', 1);
+                $('#public').barrating('set', 1);
 
                 populateList();
             }
