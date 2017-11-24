@@ -52,7 +52,9 @@ $(document).ready(function () {
         contextmenu: true,
         contextmenuWidth: 140,
         contextmenuItems: [{
-            text: 'Education',
+            text: 'Find the places nearby:'
+
+        },'-', {text: 'Education',
             callback: function (e) {
                 search_place('school', e.latlng)
             }

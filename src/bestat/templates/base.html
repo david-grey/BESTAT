@@ -27,8 +27,6 @@
     <!-- bootstrap.min -->
     <link rel="stylesheet" href="{% static "css/animate.css" %}">
     <!-- Main Stylesheet -->
-    <!-- link rel="stylesheet" href="" -->
-    <!-- Navbar -->
     <link rel="stylesheet" href="{% static "css/bestat.navbar.css" %}">
     {% block css %}
     {% endblock %}
@@ -121,7 +119,36 @@
 
 
 {% endblock %}
+{% block footer %}
 
+    <footer class="footer-distributed">
+
+        <div class="footer-right">
+
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+            <a href="#"><i class="fa fa-github"></i></a>
+
+        </div>
+
+        <div class="footer-left">
+
+            <p class="footer-links">
+                <a class="link-1" href="{% url 'bestat:home' %}">Home</a>
+
+                <a href="#">Blog</a>
+
+                <a href="#">About</a>
+
+                <a href="#">Contact</a>
+            </p>
+
+            <p>BestAt &copy; 2017</p>
+        </div>
+
+    </footer>
+{% endblock %}
 <!-- Essential jQuery Plugins
 ================================================== -->
 <!-- Main jQuery -->
