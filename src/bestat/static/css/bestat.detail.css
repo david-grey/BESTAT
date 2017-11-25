@@ -1,14 +1,14 @@
 .side {
     position: fixed;
     width: 350px;
-    background-color: rgba(0, 0, 0, 0.31);
-    color:white;
+    background-color: rgba(247, 247, 247, 0.68);
+    color: rgba(71, 71, 71, 0.8);
 }
 
 .content {
     padding-left: 400px;
-    color:white;
-
+    color:rgba(71, 71, 71, 0.8);
+    min-height:100%;
 }
 
 .btn-blue {

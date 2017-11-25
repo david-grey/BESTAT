@@ -9,7 +9,6 @@
 {% endblock %}
 {% block body %}
 
-    {% load static %}
 
     <div class="container">
 
@@ -25,7 +24,7 @@
                 <h3>Reviews</h3>
                 <hr>
                 <div id="new-review-div" class="col-md-12">
-                    <form id="reviewForm" action="create_review" method="post">
+                    <form id="reviewForm" >
                         <div class="col-md-3">
                             <label>Safety: </label>
                             <select id="safety" name="safety">
@@ -60,7 +59,7 @@
                                   id="newReviewTxt" name="text"
                                   placeholder="Type in your review"
                                   rows="2"></textarea>
-                        <button class="btn btn-blue btn-effect pull-right" type="submit" id="submit"
+                        <button class="btn btn-blue btn-effect pull-right"  id="submit"
                                 onclick="postReview()">Post Review
                         </button>
 

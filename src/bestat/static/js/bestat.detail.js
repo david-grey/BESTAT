@@ -1,10 +1,4 @@
 
-$.backstretch([
-    "/static/img/backgrounds/a.jpg"
-    , "/static/img/backgrounds/b.jpg"
-    , "/static/img/backgrounds/c.jpg"
-], {duration: 3000, fade: 750});
-
 function drawStacked(arr) {
     var data = google.visualization.arrayToDataTable(arr);
 
@@ -12,7 +6,7 @@ function drawStacked(arr) {
         width: 300,
         height: 180,
         isStacked: true,
-        backgroundColor: { fill:'transparent' },
+        backgroundColor: {fill: 'transparent'},
         colors: ['#e0440e', '#f7f7f7'],
         legend: {position: "none"},
         annotations: {
@@ -23,9 +17,9 @@ function drawStacked(arr) {
                 opacity: 0.9
             }
         },
-        is3D:true,
+        is3D: true,
         axisTitlesPosition: 'none',
-        chartArea:{left:0,top:0,width:'100%',height:'80%'},
+        chartArea: {left: 0, top: 0, width: '100%', height: '80%'},
         dataOpacity: 0.85,
         hAxis: {
             textStyle: {
@@ -87,28 +81,28 @@ $(function () {
 function postReview() {
     if ($('#newReviewTxt').val().trim() === "") {
         alert("Please input review content.");
-        return;
     }
+    else {
+        $("#reviewForm").submit(function (e) {
+            var url = "/bestat/create_review"; // the script where you handle the form input.
 
-    $("#reviewForm").submit(function (e) {
-        var url = "/bestat/create_review"; // the script where you handle the form input.
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: $("#reviewForm").serialize(), // serializes the form's elements.
+                success: function (data) {
+                    $('#newReviewTxt').val("");
+                    $('#safety').barrating('set', 1);
+                    $('#convenience').barrating('set', 1);
+                    $('#public').barrating('set', 1);
 
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: $("#reviewForm").serialize(), // serializes the form's elements.
-            success: function (data) {
-                $('#newReviewTxt').val("");
-                $('#safety').barrating('set', 1);
-                $('#convenience').barrating('set', 1);
-                $('#public').barrating('set', 1);
+                    populateList();
+                }
+            });
 
-                populateList();
-            }
+            e.preventDefault(); // avoid to execute the actual submit of the form.
         });
-
-        e.preventDefault(); // avoid to execute the actual submit of the form.
-    });
+    }
 }
 
 function populateList() {

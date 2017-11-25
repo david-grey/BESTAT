@@ -23,11 +23,12 @@ import json
 import random
 from bestat.ranking import get_neighbor_score
 from django.utils.html import escape
-
+from bestat.tasks import test,emailto
 
 @check_anonymous
 @require_GET
 def home(request):
+    test.delay("aaaa")
     return render(request, 'homepage.html')
 
 
@@ -63,10 +64,7 @@ def signup(request):
            Welcome to bestat. Please click the link below to verify your email address and complete the registration proceess. http://%s%s
            ''' % (request.get_host(),
                   reverse('bestat:confirm', args=(user.username, token)))
-        send_mail(subject="Verify your email address",
-                  message=email_body,
-                  from_email="bestat.verify@gmail.com",
-                  recipient_list=[user.email])
+        emailto.delay(email_body,user.email)
         context['msg'] = 'Your confirmation link has been send to your register email.'
         return render(request, 'blank.html', context)
 
@@ -103,7 +101,13 @@ def signin(request):
                 try:
                     u = User.objects.get(username=username)
                     if not u.is_active:
-                        errors = ['user not activated']
+                        token = default_token_generator.make_token(u)
+                        email_body = '''
+                           Welcome to bestat. Please click the link below to verify your email address and complete the registration proceess. http://%s%s
+                           ''' % (request.get_host(),
+                                  reverse('bestat:confirm', args=(u.username, token)))
+                        emailto.delay(email_body, u.email)
+                        errors = ['User not activated. A new email has been sent to you.']
                 except User.DoesNotExist:
                     errors = ['user not exist']
 

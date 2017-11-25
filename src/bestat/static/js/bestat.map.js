@@ -155,7 +155,7 @@ $(document).ready(function () {
     var zillow = L.control({position: 'bottomright'});
     zillow.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'zillow');
-        div.innerHTML += '<hr><br><a href="https://www.zillow.com/howto/api/neighborhood-boundaries.htm"><img src="https://www.zillowstatic.com/vstatic/64dd1c9/static/logos/Zillow_Logo_HoodsProvided_RightAligned.gif" ></a>';
+        div.innerHTML += '<a href="https://www.zillow.com/howto/api/neighborhood-boundaries.htm"><img src="https://www.zillowstatic.com/vstatic/64dd1c9/static/logos/Zillow_Logo_HoodsProvided_RightAligned.gif" ></a>';
         return div;
     };
     zillow.addTo(mymap);

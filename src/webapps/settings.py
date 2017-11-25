@@ -109,6 +109,7 @@ EMAIL_HOST_USER = 'bestat.verify@gmail.com'
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -121,6 +122,13 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+CELERY_BROKER_URL = 'redis://localhost:6379/5'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/6'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
