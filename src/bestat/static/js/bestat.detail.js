@@ -1,4 +1,3 @@
-
 function drawStacked(arr) {
     var data = google.visualization.arrayToDataTable(arr);
 
@@ -7,13 +6,13 @@ function drawStacked(arr) {
         height: 180,
         isStacked: true,
         backgroundColor: {fill: 'transparent'},
-        colors: ['#e0440e', '#f7f7f7'],
+        colors: ['#e0440e', '#474747'],
         legend: {position: "none"},
         annotations: {
             textStyle: {
                 fontName: 'Helvetica Neue',
                 fontSize: 12,
-                color: '#f7f7f7',
+                color: '#474747',
                 opacity: 0.9
             }
         },
@@ -24,7 +23,7 @@ function drawStacked(arr) {
         hAxis: {
             textStyle: {
                 fontName: 'Helvetica Neue',
-                color: '#f7f7f7',
+                color: '#474747',
                 fontSize: 12,
             },
             minValue: 0,
@@ -58,6 +57,17 @@ function loadScoreGraph(neighbor_id) {
 
             $('#neighbor').html(data.neighbor_name);
         });
+}
+
+function loadPicture(neighbor, city) {
+
+    $.get('/bestat/get_picture?neighbor='+neighbor+'&city='+city)
+        .done(function (data) {
+            var htmlimg = '<img src="' + data.link + '" width=\"350\" >';
+            console.log(htmlimg);
+            document.getElementById('pic').innerHTML = htmlimg
+        });
+
 }
 
 $(function () {
@@ -134,7 +144,10 @@ function populateList() {
 
 $(document).ready(function () {
     var neighbor_id = $("input[name='neighbor_id']").val();
+    var neighbor = $("input[name='neighbor_name']").val();
+    var city = $("input[name='city']").val();
     loadScoreGraph(neighbor_id);
+    loadPicture(neighbor, city);
     // Set up to-do list with initial DB items and DOM data
     populateList();
 

@@ -23,8 +23,9 @@ import json
 import random
 from bestat.ranking import get_neighbor_score
 from django.utils.html import escape
-from bestat.tasks import test,emailto
-
+from bestat.tasks import test, emailto
+from api.GooglePlaces import GooglePlaces, types, GooglePlacesError
+from api.picture import Picture
 @check_anonymous
 @require_GET
 def home(request):
@@ -64,7 +65,7 @@ def signup(request):
            Welcome to bestat. Please click the link below to verify your email address and complete the registration proceess. http://%s%s
            ''' % (request.get_host(),
                   reverse('bestat:confirm', args=(user.username, token)))
-        emailto.delay(email_body,user.email)
+        emailto.delay(email_body, user.email)
         context['msg'] = 'Your confirmation link has been send to your register email.'
         return render(request, 'blank.html', context)
 
@@ -182,6 +183,18 @@ def get_photo(request, user_id):
 
 
 @require_GET
+def get_picture(request):
+    neighbor = request.GET['neighbor']
+    city = request.GET['city']
+
+    loc = neighbor+" "+city
+    gp = Picture("AIzaSyAQi5ECDVGwZ6jpPShEjL1GbLZBvDlee8c")
+    res = {"link":gp.find_picture(loc)}
+    print(res)
+    return JsonResponse(res)
+
+
+@require_GET
 @login_required("you haven't login!")
 def logout_user(request):
     logout(request)
@@ -190,7 +203,6 @@ def logout_user(request):
 
 @require_GET
 def confirm(request, username, token):
-
     try:
         user = User.objects.get(username=username)
         if default_token_generator.check_token(user, token):
@@ -233,8 +245,6 @@ def create_review(request):
     review.save()
 
     return render(request, 'detail.html')
-
-
 
 
 @require_http_methods(['GET', 'POST'])
@@ -354,7 +364,11 @@ def get_all_city(request):
 
 
 def detail(request, neighbor_id):
-    return render(request, 'detail.html', {'neighbor_id': neighbor_id})
+    neighbor = Neighbor.objects.get(regionid=neighbor_id)
+    if neighbor is None:
+        return render(request, 'blank.html', {'msg': 'This neighbor does not exist!'})
+    return render(request, 'detail.html',
+                  {'neighbor_id': neighbor_id, 'neighbor': neighbor.name, 'city': neighbor.city})
 
 
 def get_neighbor_detail(request, neighbor_id):
@@ -396,7 +410,7 @@ def get_reviews(request, neighbor_id):
                  '%s'
                  '</select></div>'
                  '<div class="col-md-4">'
-                 '<label>Convenience: </label>'        
+                 '<label>Convenience: </label>'
                  '<select class="review_convenience">'
                  '%s'
                  '</select></div></div><hr/>'
@@ -419,4 +433,3 @@ def setStar(star):
             s += '<option value="' + str(i) + '">' + str(i) + '</option>'
 
     return s
-

@@ -128,38 +128,8 @@ class Review(models.Model):
         return self.create_time.timestamp()
 
     @staticmethod
-    def get_changes(time, user=None, stream=False):
-        '''
-
-        :param time: 
-        :param user: if specify, then return personal blog or personal streams
-        :param stream: used with user
-        :return: 
-        '''
-
-        time = datetime.datetime.fromtimestamp(time + 1)
-        if user:
-            if stream:
-                followees = user.profile.followees.all()
-                stream_blogs = []
-                for f in followees:
-                    stream_blogs.extend(
-                        f.user.blogs.filter(create_time__gt=time))
-                stream_blogs = sorted(stream_blogs,
-                                      key=lambda blog: blog.id,
-                                      reverse=True)
-                return stream_blogs
-            else:
-                return Review.objects.filter(author=user,
-                                             create_time__gt=time)
-        else:
-            # global stream
-            return Review.objects.filter(create_time__gt=time)
-
-    @staticmethod
     def get_max_time():
-        return int((Review.objects.all().aggregate(Max('create_time'))[
-                        'create_time__max'] or datetime.datetime.now()).timestamp())
+        return int((Review.objects.all().aggregate(Max('create_time'))['create_time__max'] or datetime.datetime.now()).timestamp())
 
 
 
