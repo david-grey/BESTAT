@@ -90,14 +90,12 @@ def signin(request):
             password = params['password']
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                print('flag2')
                 # login success
                 print('login success')
                 login(request, user)
                 return redirect('/')
 
             else:
-                print('flag1')
                 errors = ['password incorrect']
                 try:
                     u = User.objects.get(username=username)
