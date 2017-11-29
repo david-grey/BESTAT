@@ -15,32 +15,41 @@ import csv
 from bestat.models import Neighbor, PLACES_TYPE
 from tqdm import tqdm
 
+prefix = 'nb_'
 with open('./bestat/data/nrelation.csv', 'r') as f:
     reader = csv.reader(f, delimiter=",")
-    data = [(line[1], line[3]) for line in reader]
-graph = {}
+    data = [(line[0],line[1], line[3]) for line in reader]
 
-for source, adj in data:
-    if source in graph:
-        graph[source].append(adj)
-    else:
-        graph[source] = [adj]
 
-prefix = 'nb_'
-for source in tqdm(graph):
-    try:
-        nb = Neighbor.objects.get(id=source)
-        adj_resource = {}
-        for tp in PLACES_TYPE:
-            adj_resource[tp] = 0
+def update_adj_nb(city_name):
+    global prefix
+    print('updating adj data of city %s...' % city_name)
+    _data = [(source, adj) for city, source, adj in data if city == city_name]
+    print(_data)
+    graph = {}
 
-        for adj_id in graph[source]:
-            adj_nb = Neighbor.objects.get(id=adj_id)
+    for source, adj in _data:
+        if source in graph:
+            graph[source].append(adj)
+        else:
+            graph[source] = [adj]
+
+    for source in tqdm(graph):
+        try:
+            nb = Neighbor.objects.get(id=source)
+            adj_resource = {}
+            for tp in PLACES_TYPE:
+                adj_resource[tp] = 0
+
+            for adj_id in graph[source]:
+                adj_nb = Neighbor.objects.get(id=adj_id)
+                for tp in adj_resource:
+                    adj_resource[tp] += getattr(adj_nb.info, tp, 0)
+
             for tp in adj_resource:
-                adj_resource[tp] += getattr(adj_nb, tp, 0)
+                setattr(nb.info, prefix + tp, adj_resource[tp])
+            nb.info.save()
 
-        for tp in adj_resource:
-            setattr(nb, prefix + tp, adj_resource[tp])
 
-    except Neighbor.DoesNotExist:
-        pass
+        except Neighbor.DoesNotExist:
+            pass

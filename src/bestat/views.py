@@ -10,18 +10,17 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_http_methods, require_GET, \
     require_POST
-
+import numpy as np
 from django.urls import reverse
-from bestat.models import Profile, Review, NeighborInfo, Neighbor, City, CrimeRecord
+from bestat.models import *
 from bestat.decorator import check_anonymous, login_required, anonymous_only
-from bestat.forms import UserCreationForm, LoginForm, ChangePasswordForm, \
-    ProfileForm, UsernameForm, ResetPassword
+from bestat.forms import *
 from bestat.utils import is_anonymous
 from django.http import JsonResponse, Http404
 import datetime
 import json
 import random
-from bestat.ranking import get_neighbor_score
+from bestat.ranking import get_neighbor_score, default_weights, my_sigmoid
 from django.utils.html import escape
 from bestat.tasks import test, emailto
 from api.GooglePlaces import GooglePlaces, types, GooglePlacesError
@@ -61,6 +60,7 @@ def signup(request):
         profile = Profile.objects.create(user=user,
                                          nick_name=params['nick_name'])
         profile.save()
+
         token = default_token_generator.make_token(user)
 
         email_body = '''
@@ -68,7 +68,8 @@ def signup(request):
            ''' % (request.get_host(),
                   reverse('bestat:confirm', args=(user.username, token)))
         emailto.delay(email_body, user.email)
-        context['msg'] = 'Your confirmation link has been send to your register email.'
+        context[
+            'msg'] = 'Your confirmation link has been send to your register email.'
         return render(request, 'blank.html', context)
 
 
@@ -92,14 +93,12 @@ def signin(request):
             password = params['password']
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                print('flag2')
                 # login success
                 print('login success')
                 login(request, user)
                 return redirect('/')
 
             else:
-                print('flag1')
                 errors = ['password incorrect']
                 try:
                     u = User.objects.get(username=username)
@@ -108,9 +107,11 @@ def signin(request):
                         email_body = '''
                            Welcome to bestat. Please click the link below to verify your email address and complete the registration proceess. http://%s%s
                            ''' % (request.get_host(),
-                                  reverse('bestat:confirm', args=(u.username, token)))
+                                  reverse('bestat:confirm',
+                                          args=(u.username, token)))
                         emailto.delay(email_body, u.email)
-                        errors = ['User not activated. A new email has been sent to you.']
+                        errors = [
+                            'User not activated. A new email has been sent to you.']
                 except User.DoesNotExist:
                     errors = ['user not exist']
 
@@ -236,7 +237,8 @@ def create_review(request):
     neighbor_id = request.POST['neighbor_id']
 
     review = Review.objects.create(
-        block=NeighborInfo.objects.get(neighbor=Neighbor.objects.get(regionid=neighbor_id)),
+        block=NeighborInfo.objects.get(
+            neighbor=Neighbor.objects.get(regionid=neighbor_id)),
         author=user,
         text=request.POST['text'],
         safety=request.POST['safety'],
@@ -275,7 +277,8 @@ def forget_password(request):
                   message=email_body,
                   from_email="ziqil1@andrew.cmu.edu",
                   recipient_list=[user.email])
-        context['msg'] = 'Your password reset link has been send to your register email.'
+        context[
+            'msg'] = 'Your password reset link has been send to your register email.'
         return render(request, 'blank.html', context)
 
 
@@ -315,11 +318,26 @@ def map(request):
     return render(request, 'map.html')
 
 
+def get_preference(request):
+    weights = default_weights.copy()
+    crime_weight = my_sigmoid(weights['crime'], (2, 8)) * 2
+    del weights['crime']
+    if not is_anonymous(request):
+        pref = request.user.preference
+        for k in weights:
+            weights[k] = getattr(pref, k, 5.)
+
+    mean = np.asarray(list(weights.values())).mean()
+    for k in weights:
+        weights[k] /= mean
+    return weights, crime_weight
+
+
 def load_city(request, city):
     context = {}
     features = []
     neighbors = Neighbor.objects.filter(city=city)
-    city_obj = City.objects.filter(name=city)
+    weights, crime_weight = get_preference(request)
 
     for neighbor in neighbors:
         properties = {}
@@ -328,7 +346,7 @@ def load_city(request, city):
         properties['name'] = neighbor.name
         properties['random'] = random.randint(0, 10)
         overall, public_service, live_convenience, security_score = get_neighbor_score(
-            neighbor)
+            neighbor, weights, crime_weight)
         # larger, better, [0,10]
         properties['overview_score'] = round(overall, 2)
         properties['security_score'] = round(security_score, 2)
@@ -358,7 +376,9 @@ def get_city(request):
 def get_all_city(request):
     if request.is_ajax():
         q = request.GET.get('term', '')
-        results = [c.name for c in City.objects.filter(activate=1).filter(name__icontains=q)[:5]]
+        results = [c.name for c in
+                   City.objects.filter(activate=1).filter(name__icontains=q)[
+                   :5]]
         data = json.dumps(results)
     else:
         data = "No"
@@ -368,16 +388,19 @@ def get_all_city(request):
 def detail(request, neighbor_id):
     neighbor = Neighbor.objects.get(regionid=neighbor_id)
     if neighbor is None:
-        return render(request, 'blank.html', {'msg': 'This neighbor does not exist!'})
+        return render(request, 'blank.html',
+                      {'msg': 'This neighbor does not exist!'})
     return render(request, 'detail.html',
-                  {'neighbor_id': neighbor_id, 'neighbor': neighbor.name, 'city': neighbor.city})
+                  {'neighbor_id': neighbor_id, 'neighbor': neighbor.name,
+                   'city': neighbor.city})
 
 
 def get_neighbor_detail(request, neighbor_id):
     if request.is_ajax():
+        weights, crime_weight = get_preference(request)
         neighbor = Neighbor.objects.get(regionid=neighbor_id)
         overall, public_service, live_convenience, security_score = get_neighbor_score(
-            neighbor)
+            neighbor, weights, crime_weight)
 
         context = {}
         context['neighbor_name'] = neighbor.name
@@ -418,7 +441,9 @@ def get_review_detail(request, neighbor_id):
 def get_reviews(request, neighbor_id):
     if request.is_ajax():
         neighbor = Neighbor.objects.get(regionid=neighbor_id)
-        reviews = Review.objects.filter(block=NeighborInfo.objects.get(neighbor=neighbor)).order_by("-create_time")
+        reviews = Review.objects.filter(
+            block=NeighborInfo.objects.get(neighbor=neighbor)).order_by(
+            "-create_time")
 
         reviews_html = ""
         for review in reviews:
@@ -429,6 +454,7 @@ def get_reviews(request, neighbor_id):
                     setStar(review.safety), setStar(review.public_service),
                     setStar(review.convenience))
 
+
             reviews_html += s
 
         return JsonResponse({"html": reviews_html})
@@ -438,8 +464,26 @@ def setStar(star):
     s = ''
     for i in range(1, 6):
         if i == star:
-            s += '<option value="' + str(i) + '" selected>' + str(i) + '</option>'
+            s += '<option value="' + str(i) + '" selected>' + str(
+                i) + '</option>'
         else:
             s += '<option value="' + str(i) + '">' + str(i) + '</option>'
 
     return s
+
+
+@login_required("you haven't login!")
+def preference(request):
+    pref = Preference(user=request.user)
+
+    if request.method == 'GET':
+        form = PreferenceForm(instance=pref)
+        context = {'form': form}
+        return context
+        # todo
+    else:
+        form = PreferenceForm(request.POST, instance=pref)
+        if not form.is_valid():
+            return Http404
+        else:
+            form.save()

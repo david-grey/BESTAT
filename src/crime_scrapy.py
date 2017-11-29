@@ -25,8 +25,10 @@ if __name__ == '__main__':
 
     with open('./bestat/data/crime_remain_city.pkl', 'rb') as f:
         cities = pickle.load(f)
+
     keys = list(cities.keys())
-    print(keys)
+
+    keys=['Pittsburgh','New York','Chicago']
     for k in keys:
         try:
             bound = cities[k]

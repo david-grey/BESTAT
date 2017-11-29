@@ -12,7 +12,8 @@
 @desc:
 '''
 
-from bestat.models import Neighbor, NeighborInfo
+from bestat.models import Neighbor, NeighborInfo, PLACES_TYPE, CRIME_SCORES
+from tqdm import tqdm
 
 
 def is_anonymous(request):
@@ -29,3 +30,41 @@ def get_neighbor(lat, lng):
     pnt_wkt = 'POINT(%f %f)' % (lng, lat)
     set = Neighbor.objects.filter(geom__contains=pnt_wkt)
     return set[0] if len(set) > 0 else None
+
+
+def clean_nb_data(city_name):
+    '''
+    
+    :param city: 
+    :return: clean place type and nb place type data
+    '''
+    print('cleaning data of city %s...' % city_name)
+    nbs = Neighbor.objects.filter(city=city_name)
+    for nb in tqdm(nbs):
+        for key in PLACES_TYPE:
+            setattr(nb.info, key, 0)
+        nb.info.save()
+
+
+def clean_adj_data(city_name):
+    prefix = 'nb_'
+    print('cleaning adj data of city %s...' % city_name)
+    nbs = Neighbor.objects.filter(city=city_name)
+    for nb in tqdm(nbs):
+        for key in PLACES_TYPE:
+            setattr(nb.info, prefix + key, 0)
+        nb.info.save()
+
+
+def clean_crime(city_name):
+    print('cleaning crime data of city %s...' % city_name)
+    nbs = Neighbor.objects.filter(city=city_name)
+    for nb in tqdm(nbs):
+        for key in CRIME_SCORES:
+            setattr(nb.crimes, key, 0)
+        nb.crimes.save()
+
+
+if __name__ == '__main__':
+    pass
+    # clean_nb_data('Pittsburgh')

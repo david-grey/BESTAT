@@ -39,7 +39,7 @@ nosetests.xml
 
 
 # PYTHON
-#.pkl
-#.pyc
+*.pkl
+*.pyc
 
 

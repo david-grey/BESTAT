@@ -104,6 +104,22 @@ class Profile(models.Model):
     img = models.ImageField(upload_to='', default='user_default.png')
     favorites = models.ManyToManyField(NeighborInfo, related_name='liked_users')
 
+class Preference(models.Model):
+    user = models.OneToOneField(User, related_name='preference',
+                                on_delete=models.CASCADE,
+                                primary_key=True, )
+    hospital = models.FloatField(default=5.)
+    restaurant = models.FloatField(default=5.)
+    store = models.FloatField(default=5.)
+    bank = models.FloatField(default=5.)
+    school = models.FloatField(default=5.)
+    church = models.FloatField(default=5.)
+    cafe = models.FloatField(default=5.)
+    gym = models.FloatField(default=5.)
+    grocery_or_supermarket = models.FloatField(default=5.)
+    crime=models.FloatField(default=5.)
+
+
 
 class Review(models.Model):
     block = models.ForeignKey(NeighborInfo, on_delete=models.CASCADE,
