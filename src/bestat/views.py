@@ -59,6 +59,7 @@ def signup(request):
         profile = Profile.objects.create(user=user,
                                          nick_name=params['nick_name'])
         profile.save()
+
         token = default_token_generator.make_token(user)
 
         email_body = '''
