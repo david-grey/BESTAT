@@ -30,7 +30,6 @@ from api.picture import Picture
 @check_anonymous
 @require_GET
 def home(request):
-    test.delay("aaaa")
     return render(request, 'homepage.html')
 
 
