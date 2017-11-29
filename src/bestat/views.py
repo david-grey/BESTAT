@@ -322,6 +322,7 @@ def get_preference(request):
     weights = default_weights.copy()
     crime_weight = my_sigmoid(weights['crime'], (2, 8)) * 2
     del weights['crime']
+    print(request.user.is_anonymous)
     if not is_anonymous(request):
         pref = request.user.preference
         for k in weights:
