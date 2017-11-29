@@ -42,7 +42,8 @@ def clean_nb_data(city_name):
     nbs = Neighbor.objects.filter(city=city_name)
     for nb in tqdm(nbs):
         for key in PLACES_TYPE:
-            setattr(nb, key, 0)
+            setattr(nb.info, key, 0)
+        nb.info.save()
 
 
 def clean_adj_data(city_name):
@@ -51,7 +52,8 @@ def clean_adj_data(city_name):
     nbs = Neighbor.objects.filter(city=city_name)
     for nb in tqdm(nbs):
         for key in PLACES_TYPE:
-            setattr(nb, prefix + key, 0)
+            setattr(nb.info, prefix + key, 0)
+        nb.info.save()
 
 
 if __name__ == '__main__':

@@ -56,10 +56,12 @@ def get_item_score(name, val):
 
 
 def get_neighbor_score(nb, weights=default_weights):
+    weights = weights.copy()
     global CRIME_WEIGHT
     crime_weight = my_sigmoid(weights['crime'], (2, 8)) * 2
     del weights['crime']
-    mean = np.asarray(default_weights.values()).mean()
+    mean = np.asarray(list(default_weights.values())).mean()
+
     for k in default_weights:
         default_weights[k] /= mean
     score = 0
