@@ -113,11 +113,11 @@ class Preference(models.Model):
     store = models.FloatField(default=5.)
     bank = models.FloatField(default=5.)
     school = models.FloatField(default=5.)
-    subway_station = models.FloatField(default=5.)
     church = models.FloatField(default=5.)
     cafe = models.FloatField(default=5.)
     gym = models.FloatField(default=5.)
     grocery_or_supermarket = models.FloatField(default=5.)
+    crime=models.FloatField(default=5.)
 
 
 

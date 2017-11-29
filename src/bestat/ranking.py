@@ -55,15 +55,8 @@ def get_item_score(name, val):
     return my_sigmoid(val, NTILE[name])
 
 
-def get_neighbor_score(nb, weights=default_weights):
-    weights = weights.copy()
+def get_neighbor_score(nb, weights,crime_weight):
     global CRIME_WEIGHT
-    crime_weight = my_sigmoid(weights['crime'], (2, 8)) * 2
-    del weights['crime']
-    mean = np.asarray(list(default_weights.values())).mean()
-
-    for k in default_weights:
-        default_weights[k] /= mean
     score = 0
     public_service = 0  # hospital, school, church
     live_convenience = 0  # store, cafe, gym, bank, restaurant, grocery_or_supermarket

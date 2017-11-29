@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_http_methods, require_GET, \
     require_POST
-
+import numpy as np
 from django.urls import reverse
 from bestat.models import *
 from bestat.decorator import check_anonymous, login_required, anonymous_only
@@ -20,7 +20,7 @@ from django.http import JsonResponse, Http404
 import datetime
 import json
 import random
-from bestat.ranking import get_neighbor_score
+from bestat.ranking import get_neighbor_score, default_weights, my_sigmoid
 from django.utils.html import escape
 from bestat.tasks import test, emailto
 from api.GooglePlaces import GooglePlaces, types, GooglePlacesError
@@ -318,11 +318,26 @@ def map(request):
     return render(request, 'map.html')
 
 
+def get_preference(request):
+    weights = default_weights.copy()
+    crime_weight = my_sigmoid(weights['crime'], (2, 8)) * 2
+    del weights['crime']
+    if not is_anonymous(request):
+        pref = request.user.preference
+        for k in weights:
+            weights[k] = getattr(pref, k, 5.)
+
+    mean = np.asarray(list(weights.values())).mean()
+    for k in weights:
+        weights[k] /= mean
+    return weights, crime_weight
+
+
 def load_city(request, city):
     context = {}
     features = []
     neighbors = Neighbor.objects.filter(city=city)
-    city_obj = City.objects.filter(name=city)
+    weights, crime_weight = get_preference(request)
 
     for neighbor in neighbors:
         properties = {}
@@ -331,7 +346,7 @@ def load_city(request, city):
         properties['name'] = neighbor.name
         properties['random'] = random.randint(0, 10)
         overall, public_service, live_convenience, security_score = get_neighbor_score(
-            neighbor)
+            neighbor, weights, crime_weight)
         # larger, better, [0,10]
         properties['overview_score'] = round(overall, 2)
         properties['security_score'] = round(security_score, 2)
@@ -382,9 +397,10 @@ def detail(request, neighbor_id):
 
 def get_neighbor_detail(request, neighbor_id):
     if request.is_ajax():
+        weights, crime_weight = get_preference(request)
         neighbor = Neighbor.objects.get(regionid=neighbor_id)
         overall, public_service, live_convenience, security_score = get_neighbor_score(
-            neighbor)
+            neighbor, weights, crime_weight)
 
         context = {}
         context['neighbor_name'] = neighbor.name
