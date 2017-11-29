@@ -25,7 +25,7 @@ NTILE = {'hospital': (2, 0), 'store': (47, 10), 'cafe': (3, 0),
 default_weights = {'hospital': 5., 'store': 5., 'cafe': 5.,
                    'church': 5., 'school': 5., 'grocery_or_supermarket': 5.,
                    'bank': 5., 'gym': 5., 'restaurant': 5.,
-                   'subway_station': 5.}
+                   'subway_station': 5., 'crime': 5.}
 
 CRIME_SCORES = {'Theft': 2, 'Robbery': 3, 'Burglary': 3,
                 'Vandalism': 2, 'Shooting': 5, 'Arson': 4, 'Arrest': 4,
