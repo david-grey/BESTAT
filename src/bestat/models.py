@@ -105,7 +105,7 @@ class Profile(models.Model):
     favorites = models.ManyToManyField(NeighborInfo, related_name='liked_users')
 
 class Preference(models.Model):
-    user = models.OneToOneField(User, related_name='profile',
+    user = models.OneToOneField(User, related_name='preference',
                                 on_delete=models.CASCADE,
                                 primary_key=True, )
     hospital = models.FloatField(default=5.)
