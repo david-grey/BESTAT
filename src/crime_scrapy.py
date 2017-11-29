@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     keys = list(cities.keys())
 
-    keys=['Pittsburgh','New York','Chicago']
+    keys = ['New York', 'Chicago']
     for k in keys:
         try:
             bound = cities[k]

@@ -32,7 +32,7 @@ def load_data(pkl_name):
         data = pickle.load(f)
     for key in data:
         records = data[key]
-        for id in tqdm(records):
+        for id in records:
             r = records[id]
             lat = r['lat']
             lng = r['lng']

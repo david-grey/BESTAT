@@ -59,7 +59,7 @@ class GooglePlaceWrap:
         places = {}
         for tp in TP:
             places[tp] = {}
-        for lat, lng in tqdm(points):
+        for lat, lng in points:
             for key in places:
                 sets = []
                 result_set = self.google.nearby_search(
