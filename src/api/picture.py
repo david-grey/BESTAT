@@ -21,7 +21,7 @@ import os
 
 class Picture(object):
     _url = "https://maps.googleapis.com/maps/api/streetview?size={}&location={}&heading=90&pitch=10&key={}"
-    _placeurl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=350&photoreference={}&key={}"
+    _placeurl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=350&photoreference={}&key={}&maxheight=350"
     _key = "AIzaSyAQi5ECDVGwZ6jpPShEjL1GbLZBvDlee8c"
     def __init__(self, key):
         self._key = key

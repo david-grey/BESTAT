@@ -3,10 +3,10 @@ function drawStacked(arr) {
 
     var options = {
         width: 300,
-        height: 180,
-        isStacked: true,
+        height: 120,
+
         backgroundColor: {fill: 'transparent'},
-        colors: ['#e0440e', '#474747'],
+        colors: ['#e0440e', '#cecece'],
         legend: {position: "none"},
         annotations: {
             textStyle: {
@@ -18,19 +18,24 @@ function drawStacked(arr) {
         },
         is3D: true,
         axisTitlesPosition: 'none',
-        chartArea: {left: 0, top: 0, width: '100%', height: '80%'},
+        chartArea: {left: 0, top: 0, width: '90%', height: '90%'},
         dataOpacity: 0.85,
         hAxis: {
             textStyle: {
                 fontName: 'Helvetica Neue',
-                color: '#474747',
-                fontSize: 12,
+                color: '#transparent',
+                fontSize: 20,
             },
             minValue: 0,
-            maxValue: 10
-        }
+            maxValue: 10,
+            gridlines: {
+                count: 0
+            }
+        },
+
+
     };
-    var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+    let chart = new google.visualization.BarChart(document.getElementById('chart_div'));
     chart.draw(data, options);
 }
 
@@ -45,12 +50,12 @@ function loadScoreGraph(neighbor_id) {
             //     ['Convenience', data.live_convenience, '#ecf09e', data.live_convenience, 10 - data.live_convenience]
             // ];
 
-            var arr = [
-                ['Category', 'Score', {role: 'style'}, {role: 'annotation'}, ''],
-                ['Overview', data.overview_score, '#d78c6e', 'Overview', 10 - data.overview_score],
-                ['Security', data.security_score, '#a2d683', 'Security', 10 - data.security_score],
-                ['Service', data.public_service, '#50a6d7', 'Service', 10 - data.public_service],
-                ['Convenience', data.live_convenience, '#d3d788', 'Convenience', 10 - data.live_convenience]
+            let arr = [
+                ['Category', 'Score', {role: 'style'}, {role: 'annotation'}],
+                ['Overview', data.overview_score, '#00649F', 'Overview'],
+                ['Security', data.security_score, '#01AAC1', 'Security'],
+                ['Service', data.public_service, '#00DBE7', 'Service'],
+                ['Convenience', data.live_convenience, '#97ECC5', 'Convenience']
             ];
 
             drawStacked(arr);
@@ -59,11 +64,43 @@ function loadScoreGraph(neighbor_id) {
         });
 }
 
+function loadReviewGraph(neighbor_id) {
+    $.get('/bestat/get_review_detail/' + neighbor_id)
+        .done(function (data) {
+
+            let arr = [
+                ['Review', 'number'],
+                ['Excellent', data.excellent],
+                ['Good', data.good],
+                ['OK', data.ok],
+                ['Bad', data.bad],
+                ['Terrible', data.terrible]
+            ];
+
+            drawChart(arr);
+        });
+}
+
+function drawChart(arr) {
+    console.log("draw")
+    let data = google.visualization.arrayToDataTable(arr);
+
+    let options = {
+        chartArea: {left: 0, top: 0, width: '90%', height: '90%'},
+        backgroundColor: {fill: 'transparent'},
+        colors: ['#00649F', '#01AAC1', '#00DBE7', '#97ECC5', '#AEECE7']
+    };
+    console.log("draw");
+    let chart = new google.visualization.PieChart(document.getElementById('piechart'));
+    console.log("draw");
+    chart.draw(data, options);
+}
+
 function loadPicture(neighbor, city) {
 
-    $.get('/bestat/get_picture?neighbor='+neighbor+'&city='+city)
+    $.get('/bestat/get_picture?neighbor=' + neighbor + '&city=' + city)
         .done(function (data) {
-            var htmlimg = '<img src="' + data.link + '" width=\"350\" >';
+            let htmlimg = '<img class="center-block" src="' + data.link + '" height=\"350\" >';
             console.log(htmlimg);
             document.getElementById('pic').innerHTML = htmlimg
         });
@@ -148,6 +185,7 @@ $(document).ready(function () {
     var city = $("input[name='city']").val();
     loadScoreGraph(neighbor_id);
     loadPicture(neighbor, city);
+    loadReviewGraph(neighbor_id)
     // Set up to-do list with initial DB items and DOM data
     populateList();
 
@@ -176,6 +214,17 @@ $(document).ready(function () {
     });
 });
 
+function initMap() {
+    var nb = {lat: -25.363, lng: 131.044};
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 10,
+        center: nb
+    });
+    var marker = new google.maps.Marker({
+        position: nb,
+        map: map
+    });
+}
 
 
 

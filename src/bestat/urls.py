@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^load_city/(?P<city>[a-zA-z\s]+)$', bestat.views.load_city,
         name='load_city'),
     url(r'^get_neighbor_detail/(?P<neighbor_id>[0-9]+)$', bestat.views.get_neighbor_detail, name='get_neighbor_detail'),
+    url(r'^get_review_detail/(?P<neighbor_id>[0-9]+)$', bestat.views.get_review_detail, name='get_review_detail'),
     url(r'^get_reviews/(?P<neighbor_id>[0-9]+)$', bestat.views.get_reviews, name='get_reviews'),
     url(r'^create_review$', bestat.views.create_review, name='create_review'),
     url(r'^get_picture/$', bestat.views.get_picture, name='get_picture'),

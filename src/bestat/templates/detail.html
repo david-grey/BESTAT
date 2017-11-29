@@ -12,62 +12,91 @@
 
     <div class="container">
 
-        <div class="col-xs-4 wow animated fadeInRight side">
+
+        <div class="col-md-12 content">
             <h1 id="neighbor"></h1>
-            <div id="pic"></div>
-            <h3>Living Index</h3>
-            <div id="chart_div"></div>
-        </div>
 
-        <div class="col-md-12 wow animated fadeInLeft content">
-
-            <div class="recent-works welcome-block">
+            <div class="col-xs-7">
+                <div id="pic"></div>
+            </div>
+            <div class="col-xs-5">
+                <h4>Region Livability</h4>
+                <div class="col-xs-12" id="chart_div"></div>
+                <h4>Reviews overview</h4>
+                <div class="col-xs-12" id="piechart"></div>
+                {#                <div id="map"></div>#}
+                <!-- Replace the value of the key parameter with your own API key. -->
+            </div>
+            <div class="col-md-12">
                 <h3>Reviews</h3>
                 <hr>
                 <div id="new-review-div" class="col-md-12">
                     <form id="reviewForm">
-                        <div class="col-md-3">
-                            <label>Safety: </label>
-                            <select id="safety" name="safety">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select>
+
+                        <div class="col-md-4">
+                            <row class="col-md-12">
+                                <div class="col-md-6">
+                                    <label class="pull-right">Safety: </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <select id="safety" name="safety" class="pull-left">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </row>
+                            <row class="col-md-12">
+                                <div class="col-md-6">
+                                    <label class="pull-right">Public Service: </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <select id="public" name="public" class="pull-left">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </row>
+                            <row class="col-md-12">
+                                <div class="col-md-6">
+                                    <label class="pull-right">Convenience: </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <select id="convenience" name="convenience" class="pull-left">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+
+                            </row>
                         </div>
-                        <div class="col-md-3">
-                            <label>Public Service: </label>
-                            <select id="public" name="public">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label>Convenience: </label>
-                            <select id="convenience" name="convenience">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select>
-                        </div>
+
+                        <div class="col-md-8">
                         <textarea class="review form-control"
                                   id="newReviewTxt" name="text"
                                   placeholder="Type in your review"
-                                  rows="2"></textarea>
-                        <button class="btn btn-blue btn-effect pull-right" id="submit"
-                                onclick="postReview()">Post Review
-                        </button>
+                                  rows="3"></textarea>
+
+                            <div class="col-md-12">
+                                <button class="btn btn-blue btn-effect pull-right" id="submit"
+                                        onclick="postReview()">Post Review
+                                </button>
+                            </div>
+                        </div>
 
                         <input name="neighbor_id" type="hidden" value="{{ neighbor_id }}">
                         <input name="neighbor_name" type="hidden" value="{{ neighbor }}">
                         <input name="city" type="hidden" value="{{ city }}">
                     </form>
+                    <hr>
                 </div>
 
                 <div id="reviews">
@@ -85,5 +114,7 @@
     <script src="{% static "js/bestat.detail.js" %}"></script>
     <script type="text/javascript"
             src="https://www.google.com/jsapi?autoload= {'modules':[{'name':'visualization','version':'1.1','packages':['corechart']}]}"></script>
-
+    {#    <script async defer#}
+    {#            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQi5ECDVGwZ6jpPShEjL1GbLZBvDlee8c&callback=initMap">#}
+    {#    </script>#}
 {% endblock %}
