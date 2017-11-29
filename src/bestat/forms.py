@@ -12,7 +12,7 @@
 @desc:
 '''
 from django import forms
-from .models import User
+from .models import User,Preference
 
 
 class UserCreationForm(forms.Form):
@@ -279,3 +279,9 @@ class ResetPassword(forms.Form):
 
         # Generally return the cleaned data we got from our parent.
         return cleaned_data
+
+
+class PreferenceForm(forms.ModelForm):
+    class Meta:
+        model = Preference
+        fields = '__all__'
