@@ -179,6 +179,7 @@ class Zipcode(models.Model):
     intptlon10 = models.CharField(max_length=12)
     geom = models.MultiPolygonField(srid=4326)
 
+# Auto-generated `LayerMapping` dictionary for Zipcode model
 
 class ZipcodeInfo(models.Model):
     code = models.CharField(primary_key=True, max_length=5)
@@ -189,4 +190,3 @@ class ZipcodeInfo(models.Model):
     population = models.IntegerField(null=True, blank=True)
     poverty = models.FloatField(null=True, blank=True)
 
-# Auto-generated `LayerMapping` dictionary for Zipcode model
