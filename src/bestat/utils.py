@@ -12,7 +12,7 @@
 @desc:
 '''
 
-from bestat.models import Neighbor, NeighborInfo, PLACES_TYPE
+from bestat.models import Neighbor, NeighborInfo, PLACES_TYPE, CRIME_SCORES
 from tqdm import tqdm
 
 
@@ -54,6 +54,15 @@ def clean_adj_data(city_name):
         for key in PLACES_TYPE:
             setattr(nb.info, prefix + key, 0)
         nb.info.save()
+
+
+def clean_crime(city_name):
+    print('cleaning crime data of city %s...' % city_name)
+    nbs = Neighbor.objects.filter(city=city_name)
+    for nb in tqdm(nbs):
+        for key in CRIME_SCORES:
+            setattr(nb.crimes, key, 0)
+        nb.crimes.save()
 
 
 if __name__ == '__main__':

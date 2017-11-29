@@ -38,3 +38,9 @@ def get_city_bound(city_name):
     sw = np.min(sw, 0)
 
     return ne[1], sw[1], sw[0], ne[0]
+
+
+def get_all_city_bound():
+    cities = [nb.city for nb in Neighbor.objects.all().distinct('city')]
+    bounds = [get_city_bound(c) for c in cities]
+    return bounds
