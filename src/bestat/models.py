@@ -104,6 +104,7 @@ class Profile(models.Model):
     img = models.ImageField(upload_to='', default='user_default.png')
     favorites = models.ManyToManyField(NeighborInfo, related_name='liked_users')
 
+
 class Preference(models.Model):
     user = models.OneToOneField(User, related_name='preference',
                                 on_delete=models.CASCADE,
@@ -117,8 +118,7 @@ class Preference(models.Model):
     cafe = models.FloatField(default=5.)
     gym = models.FloatField(default=5.)
     grocery_or_supermarket = models.FloatField(default=5.)
-    crime=models.FloatField(default=5.)
-
+    crime = models.FloatField(default=5.)
 
 
 class Review(models.Model):
@@ -145,9 +145,8 @@ class Review(models.Model):
 
     @staticmethod
     def get_max_time():
-        return int((Review.objects.all().aggregate(Max('create_time'))['create_time__max'] or datetime.datetime.now()).timestamp())
-
-
+        return int((Review.objects.all().aggregate(Max('create_time'))[
+                        'create_time__max'] or datetime.datetime.now()).timestamp())
 
 
 # Auto-generated `LayerMapping` dictionary for Neighbor model
@@ -179,5 +178,15 @@ class Zipcode(models.Model):
     intptlat10 = models.CharField(max_length=11)
     intptlon10 = models.CharField(max_length=12)
     geom = models.MultiPolygonField(srid=4326)
+
+
+class ZipcodeInfo(models.Model):
+    code = models.CharField(primary_key=True, max_length=5)
+    income = models.IntegerField(null=True, blank=True)
+    education = models.FloatField(null=True, blank=True)
+    housing = models.IntegerField(null=True, blank=True)
+    age = models.FloatField(null=True, blank=True)
+    population = models.IntegerField(null=True, blank=True)
+    poverty = models.FloatField(null=True, blank=True)
 
 # Auto-generated `LayerMapping` dictionary for Zipcode model
