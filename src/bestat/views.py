@@ -189,8 +189,12 @@ def get_picture(request):
     gp = Picture("AIzaSyAQi5ECDVGwZ6jpPShEjL1GbLZBvDlee8c")
     res = {"link": gp.find_picture(loc)}
     print(res)
-    return JsonResponse(res)
+    if request.is_ajax():
 
+        return JsonResponse(res)
+    else:
+        image_data = open("bestat/" + res['link'], "rb").read()
+        return HttpResponse(image_data, content_type="image/png")
 
 @require_GET
 @login_required("you haven't login!")
@@ -420,3 +424,61 @@ def preference(request):
             return Http404
         else:
             form.save()
+
+
+def cities(request):
+    if request.method != 'GET':
+        return Http404
+    rank = request.GET.get("rank")
+    context = {}
+    citiall = City.objects.all()
+    citi = []
+    income = {'Washington', 'Boston', 'San Jose', 'San Francisco', 'Honolulu', 'Seattle', 'Minneapolis', 'Denver',  'Portland', 'Sarasota', 'Anchorage'}
+    happy = set()
+    if rank=="population":
+        citi = citiall.order_by("-population")[:20]
+    elif rank=="income":
+        for c in citiall:
+            if c.name in income:
+                citi.append(c)
+            if len(citi) == len(income):
+                break
+    elif rank=="happiness":
+        for c in citiall:
+            if c.name in happy:
+                citi.append(c)
+            if len(citi) == len(happy):
+                break
+    else:
+        ran = random.sample(range(1, len(citiall)), 10)
+        for i in ran:
+            citi.append(citiall[i])
+    context['cities'] = citi
+    return render(request, "cities.html", context)
+
+def neighbors(request):
+    if request.method != 'GET':
+        return Http404
+    rank = request.GET.get("rank")
+    nis_all = NeighborInfo.objects.all()
+    nis = []
+    if rank == "top":
+        nis = nis_all[:10]
+    else:
+        ran = random.sample(range(1, len(nis_all)), 10)
+        for i in ran:
+            nis.append(nis_all[i])
+    context = {"nis": nis}
+    return render(request, "neighbors.html", context)
+
+
+def get_city_pic(request):
+
+    city = request.GET.get('city')
+
+    gp = Picture("AIzaSyAQi5ECDVGwZ6jpPShEjL1GbLZBvDlee8c")
+    res = gp.find_picture(city)
+    if res == "/static/img/region/NA.png":
+        return HttpResponse()
+    image_data = open("bestat/" + res, "rb").read()
+    return HttpResponse(image_data, content_type="image/png")

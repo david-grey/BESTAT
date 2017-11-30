@@ -40,5 +40,8 @@ urlpatterns = [
     url(r'^change_password/$', bestat.views.change_password,
         name='change_password'),
     url(r'^preference/$', bestat.views.preference, name='preference'),
+    url(r'^cities/$', bestat.views.cities, name='cities'),
+    url(r'^neighbors/$', bestat.views.neighbors, name='neighbors'),
+    url(r'get_city_picture/$', bestat.views.get_city_pic, name="get_city_picture")
 
 ]
