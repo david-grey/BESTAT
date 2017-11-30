@@ -224,14 +224,16 @@ function changeCategory(e) {
 function loadNeighborLayer(city) {
     $.get('/bestat/load_city/' + city)
         .done(function (data) {
+            if (geojson != null) {
+                 geojson.clearLayers();
+            }
             // geojsonFeature = [{"type": "FeatureCollection", "features": []}];
-
             geojson = L.geoJson(data.map_data, {
                 style: allStyle,
                 onEachFeature: onEachFeature
             }).addTo(mymap);
 
-            alert(data.recommendation);
+            // alert(data.recommendation);
         });
 }
 
