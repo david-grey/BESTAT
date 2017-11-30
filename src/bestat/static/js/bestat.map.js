@@ -172,8 +172,29 @@ $(document).ready(function () {
     // });
 
     $('#categorySlt').bind('change', changeCategory);
-});
+    $("ul#category").on("click", "li", function () {
+        if ($(this).hasClass('active')) {
+            $(this).removeClass('active');
+            geojson.setStyle(allStyle);
+        } else {
+            $(this).parent().children().removeClass('active');
+            $(this).addClass('active');
 
+            var category = $(this).attr('class');
+            switch (category) {
+                case 'security active':
+                    geojson.setStyle(securityStyle);
+                    break;
+                case 'services active':
+                    geojson.setStyle(publicStyle);
+                    break;
+                case 'convenience active':
+                    geojson.setStyle(liveStyle);
+                    break;
+            }
+        }
+    });
+});
 
 function changeCategory(e) {
     var bg_color = $(this).css('background-color');
@@ -197,7 +218,6 @@ function changeCategory(e) {
         $(this).css('background-color', '#fff');
         geojson.setStyle(allStyle);
     }
-
 }
 
 

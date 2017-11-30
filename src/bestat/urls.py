@@ -32,4 +32,5 @@ urlpatterns = [
     url(r'^get_reviews/(?P<neighbor_id>[0-9]+)$', bestat.views.get_reviews, name='get_reviews'),
     url(r'^create_review$', bestat.views.create_review, name='create_review'),
     url(r'^get_picture/$', bestat.views.get_picture, name='get_picture'),
+    url(r'^preference/$', bestat.views.preference, name='preference'),
 ]
