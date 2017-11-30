@@ -39,4 +39,6 @@ urlpatterns = [
     url(r'^edit_profile/$', bestat.views.edit_profile, name='edit_profile'),
     url(r'^change_password/$', bestat.views.change_password,
         name='change_password'),
+    url(r'^preference/$', bestat.views.preference, name='preference'),
+
 ]

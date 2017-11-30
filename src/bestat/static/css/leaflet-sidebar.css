@@ -78,7 +78,7 @@
         text-decoration: none;
         text-align: center; }
   .sidebar-tabs > ul + ul {
-    bottom: 0; }
+    bottom: 15px; }
 
 .sidebar-content {
   position: absolute;

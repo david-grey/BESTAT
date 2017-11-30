@@ -17,3 +17,12 @@ var rangeSlider = function () {
 };
 
 rangeSlider();
+
+$(document).ready(function () {
+    /* load preference */
+    $.get('/bestat/preference/')
+        .done(function (data) {
+            // geojsonFeature = [{"type": "FeatureCollection", "features": []}];
+            alert(data);
+        });
+});
