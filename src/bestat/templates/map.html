@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Map{% endblock %}
+{% block title %}BESTAT - Map{% endblock %}
 <!DOCTYPE html>
 
 {% block css %}
@@ -47,6 +47,7 @@
                         <p>Log in to see recommendations.</p>
                     </div>
                 {% else %}
+
                 {% endif %}
 
             </div>
@@ -58,7 +59,7 @@
                         <p>Log in to set your own preference.</p>
                     </div>
                 {% else %}
-                    <form method="post" action="">
+                    <form id="preferenceForm">
                         <div class="sidebar-setting">
                             <h4>Live Convience</h4>
                             <div class="range-slider">
@@ -118,9 +119,13 @@
                             </div>
                         </div>
 
-                        <div>
-                            <button type="submit" class="btn btn-default">Set</button>
+                        <div id="btnDiv">
+                            <button id="saveBtn" type="button" class="btn btn-default">Save</button>
+                            <button id="resetBtn" type="button" class="btn btn-default">Reset</button>
+
                         </div>
+
+                        <input name="user" type="hidden" value="{{ user.id }}">
                     </form>
                 {% endif %}
             </div>

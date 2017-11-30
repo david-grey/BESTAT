@@ -120,6 +120,20 @@ class Preference(models.Model):
     grocery_or_supermarket = models.FloatField(default=5.)
     crime = models.FloatField(default=5.)
 
+    def as_dict(self):
+        return {
+            "hospital": self.hospital,
+            "restaurant": self.restaurant,
+            "store": self.store,
+            "bank": self.bank,
+            "school": self.school,
+            "church": self.church,
+            "cafe": self.cafe,
+            "gym": self.gym,
+            "grocery_or_supermarket": self.grocery_or_supermarket,
+            "crime": self.crime,
+        }
+
 
 class Review(models.Model):
     block = models.ForeignKey(NeighborInfo, on_delete=models.CASCADE,

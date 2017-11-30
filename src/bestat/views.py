@@ -1,30 +1,30 @@
-from mimetypes import guess_type
-
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.contrib.auth.tokens import default_token_generator, \
-    PasswordResetTokenGenerator
-from django.core.mail import send_mail
-from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.template.loader import render_to_string
-from django.views.decorators.http import require_http_methods, require_GET, \
-    require_POST
-import numpy as np
-from django.urls import reverse
-from bestat.models import *
-from bestat.decorator import check_anonymous, login_required, anonymous_only
-from bestat.forms import *
-from bestat.utils import is_anonymous
-from django.http import JsonResponse, Http404
 import datetime
 import json
 import random
-from bestat.ranking import get_neighbor_score, default_weights, my_sigmoid
+import queue
+from mimetypes import guess_type
+
+import numpy as np
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.tokens import default_token_generator, \
+    PasswordResetTokenGenerator
+from django.core.mail import send_mail
+from django.core import serializers
+from django.http import HttpResponse
+from django.http import JsonResponse, Http404
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils.html import escape
-from bestat.tasks import test, emailto
-from api.GooglePlaces import GooglePlaces, types, GooglePlacesError
+from django.views.decorators.http import require_http_methods, require_GET, \
+    require_POST
+
 from api.picture import Picture
+from bestat.decorator import check_anonymous, login_required, anonymous_only
+from bestat.forms import *
+from bestat.models import *
+from bestat.ranking import get_neighbor_score, default_weights, my_sigmoid
+from bestat.tasks import emailto
+from bestat.utils import is_anonymous
 
 
 @check_anonymous
@@ -196,6 +196,7 @@ def get_picture(request):
         image_data = open("bestat/" + res['link'], "rb").read()
         return HttpResponse(image_data, content_type="image/png")
 
+
 @require_GET
 @login_required("you haven't login!")
 def logout_user(request):
@@ -272,9 +273,13 @@ def get_preference(request):
 
 def load_city(request, city):
     context = {}
+    map_data = {}
+    recommendation = []
     features = []
     neighbors = Neighbor.objects.filter(city=city)
     weights, crime_weight = get_preference(request)
+
+    que = queue.PriorityQueue()
 
     for neighbor in neighbors:
         properties = {}
@@ -292,8 +297,19 @@ def load_city(request, city):
         block['properties'] = properties
         features.append(block)
 
-    context['type'] = 'FeatureCollection'
-    context['features'] = features
+        # Priorityqueue
+        que.put(BlockScore(neighbor.regionid, neighbor.name, overall))
+        if que.qsize() > 3:
+            que.get()
+
+    map_data['type'] = 'FeatureCollection'
+    map_data['features'] = features
+
+    while not que.empty():
+        recommendation.append(que.get().as_dict())
+
+    context['map_data'] = map_data
+    context['recommendation'] = recommendation
 
     return JsonResponse(context)
 
@@ -411,19 +427,18 @@ def setStar(star):
 
 @login_required("you haven't login!")
 def preference(request):
-    pref = Preference(user=request.user)
+    pref = Preference.objects.get(user=request.user)
 
     if request.method == 'GET':
-        form = PreferenceForm(instance=pref)
-        context = {'form': form}
-        return context
-        # todo
+        return JsonResponse(pref.as_dict())
     else:
         form = PreferenceForm(request.POST, instance=pref)
-        if not form.is_valid():
-            return Http404
-        else:
+        if form.is_valid():
             form.save()
+        else:
+            print(form.errors)
+
+        return JsonResponse(Preference.objects.get(user=request.user).as_dict())
 
 
 def cities(request):
@@ -433,17 +448,18 @@ def cities(request):
     context = {}
     citiall = City.objects.all()
     citi = []
-    income = {'Washington', 'Boston', 'San Jose', 'San Francisco', 'Honolulu', 'Seattle', 'Minneapolis', 'Denver',  'Portland', 'Sarasota', 'Anchorage'}
+    income = {'Washington', 'Boston', 'San Jose', 'San Francisco', 'Honolulu', 'Seattle', 'Minneapolis', 'Denver',
+              'Portland', 'Sarasota', 'Anchorage'}
     happy = set()
-    if rank=="population":
+    if rank == "population":
         citi = citiall.order_by("-population")[:20]
-    elif rank=="income":
+    elif rank == "income":
         for c in citiall:
             if c.name in income:
                 citi.append(c)
             if len(citi) == len(income):
                 break
-    elif rank=="happiness":
+    elif rank == "happiness":
         for c in citiall:
             if c.name in happy:
                 citi.append(c)
@@ -455,6 +471,7 @@ def cities(request):
             citi.append(citiall[i])
     context['cities'] = citi
     return render(request, "cities.html", context)
+
 
 def neighbors(request):
     if request.method != 'GET':
@@ -473,7 +490,6 @@ def neighbors(request):
 
 
 def get_city_pic(request):
-
     city = request.GET.get('city')
 
     gp = Picture("AIzaSyAQi5ECDVGwZ6jpPShEjL1GbLZBvDlee8c")
@@ -482,3 +498,19 @@ def get_city_pic(request):
         return HttpResponse()
     image_data = open("bestat/" + res, "rb").read()
     return HttpResponse(image_data, content_type="image/png")
+
+
+class BlockScore:
+    def __init__(self, nid, name, score):
+        self.id = nid
+        self.name = name
+        self.score = score
+
+    def __lt__(self, other):
+        return self.score < other.score
+
+    def as_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+        }
