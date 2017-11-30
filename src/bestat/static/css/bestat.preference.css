@@ -11,14 +11,30 @@
     /*font-size: 80%;*/
 }
 
-#preferenceDiv input[type=range] {
+#preference input[type=range] {
     display: inline!important;
     width: 60%;
 }
 
-#preferenceDiv label {
+#preference label {
   width:90px;
   display: inline-block;
+}
+
+.sidebar-content p {
+  margin-top:20px;
+  font-size: medium;
+}
+
+#preference .btn {
+  width: 80px;
+  float: right;
+  margin: 30px 50px 0 0;
+  background-color: #999999;
+  opacity: 0.7;
+  font-size: medium;
+  font-weight: 700;
+  color: white;
 }
 
 .sidebar-setting {

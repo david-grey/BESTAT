@@ -25,83 +25,104 @@
         <!-- Nav tabs -->
         <div class="sidebar-tabs">
             <ul role="tablist">
-                <li><a href="#recommendationDiv" role="tab"><i class="fa fa-list-ol"></i></a></li>
-                <li><a href="#preferenceDiv" role="tab"><i class="fa fa-sliders"></i></a></li>
+                <li><a href="#recommendation" role="tab"><i class="fa fa-list-ol"></i></a></li>
+                <li><a href="#preference" role="tab"><i class="fa fa-sliders"></i></a></li>
+            </ul>
+
+            <ul role="tablist" id="category">
+                <li class="security"><a role="tab"><i class="fa fa-bomb"></i></a></li>
+                <li class="services"><a role="tab"><i class="fa fa-institution"></i></a></li>
+                <li class="convenience"><a role="tab"><i class="fa fa-shopping-cart"></i></a></li>
             </ul>
         </div>
 
         <!-- Tab panes -->
         <div class="sidebar-content">
-            <div class="sidebar-pane" id="recommendationDiv">
+            <div class="sidebar-pane" id="recommendation">
                 <h1 class="sidebar-header">
                     Recommendation
                 </h1>
-
+                {% if user.is_anonymous %}
+                    <div>
+                        <p>Log in to see recommendations.</p>
+                    </div>
+                {% else %}
+                {% endif %}
 
             </div>
 
-            <div class="sidebar-pane" id="preferenceDiv">
+            <div class="sidebar-pane" id="preference">
                 <h1 class="sidebar-header">Preference</h1>
-
-                <form method="post" action="">
-                    <div class="sidebar-setting">
-                        <h4>Live Convience</h4>
-                        <div class="range-slider">
-                            <label>Cafe</label>
-                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
-                        </div>
-                        <div class="range-slider">
-                            <label>Restaurant</label>
-                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
-                        </div>
-                        <div class="range-slider">
-                            <label>Grocery</label>
-                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
-                        </div>
-                        <div class="range-slider">
-                            <label>Store</label>
-                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
-                        </div>
-                        <div class="range-slider">
-                            <label>Bank</label>
-                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
-                        </div>
-                        <div class="range-slider">
-                            <label>Gym</label>
-                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
-                        </div>
-                        <hr>
-                    </div>
-
+                {% if user.is_anonymous %}
                     <div>
-                        <h4>Public Service</h4>
-                        <div class="range-slider">
-                            <label>Hospital</label>
-                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
-                        </div>
-                        <div class="range-slider">
-                            <label>School</label>
-                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
-                        </div>
-                        <div class="range-slider">
-                            <label>Church</label>
-                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
-                        </div>
-                        <hr>
+                        <p>Log in to set your own preference.</p>
                     </div>
+                {% else %}
+                    <form method="post" action="">
+                        <div class="sidebar-setting">
+                            <h4>Live Convience</h4>
+                            <div class="range-slider">
+                                <label>Cafe</label>
+                                <input class="range-slider__range" type="range" value="5" min="0" max="10" name="cafe">
+                            </div>
+                            <div class="range-slider">
+                                <label>Restaurant</label>
+                                <input class="range-slider__range" type="range" value="5" min="0" max="10"
+                                       name="restaurant">
+                            </div>
+                            <div class="range-slider">
+                                <label>Grocery</label>
+                                <input class="range-slider__range" type="range" value="5" min="0" max="10"
+                                       name="grocery_or_supermarket">
+                            </div>
+                            <div class="range-slider">
+                                <label>Store</label>
+                                <input class="range-slider__range" type="range" value="5" min="0" max="10" name="store">
+                            </div>
+                            <div class="range-slider">
+                                <label>Bank</label>
+                                <input class="range-slider__range" type="range" value="5" min="0" max="10" name="bank">
+                            </div>
+                            <div class="range-slider">
+                                <label>Gym</label>
+                                <input class="range-slider__range" type="range" value="5" min="0" max="10" name="gym">
+                            </div>
+                            <hr>
+                        </div>
 
-                    <div>
-                        <h4>Security</h4>
-                        <div class="range-slider">
-                            <label>Crime</label>
-                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
+                        <div>
+                            <h4>Public Service</h4>
+                            <div class="range-slider">
+                                <label>Hospital</label>
+                                <input class="range-slider__range" type="range" value="5" min="0" max="10"
+                                       name="hospital">
+                            </div>
+                            <div class="range-slider">
+                                <label>School</label>
+                                <input class="range-slider__range" type="range" value="5" min="0" max="10"
+                                       name="school">
+                            </div>
+                            <div class="range-slider">
+                                <label>Church</label>
+                                <input class="range-slider__range" type="range" value="5" min="0" max="10"
+                                       name="church">
+                            </div>
+                            <hr>
                         </div>
-                    </div>
 
-                    <div>
-                        <input type="submit" class="btn btn-default" value="Search"/>
-                    </div>
-                </form>
+                        <div>
+                            <h4>Security</h4>
+                            <div class="range-slider">
+                                <label>Crime</label>
+                                <input class="range-slider__range" type="range" value="5" min="0" max="10" name="crime">
+                            </div>
+                        </div>
+
+                        <div>
+                            <button type="submit" class="btn btn-default">Set</button>
+                        </div>
+                    </form>
+                {% endif %}
             </div>
         </div>
     </div>
