@@ -5,7 +5,8 @@
     {% load static %}
     <!-- meta character set -->
     <meta charset="UTF-8">
-    <meta name="google-site-verification" content="bsR0zX0H8d_rSuBHyv1dtoFFTgGtLHgdVkoO6GiKgDM"/>
+    <meta name="google-site-verification"
+          content="bsR0zX0H8d_rSuBHyv1dtoFFTgGtLHgdVkoO6GiKgDM"/>
     <meta name="B-verify" content="ff38adea09ecfa2f756c5abddc25a4436cff285a"/>
     <!-- Always force latest IE rendering engine or request Chrome Frame -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -56,7 +57,8 @@
 
                     <li><a href="#">City</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle"
+                           data-toggle="dropdown" role="button">
                             Top neighbors <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
@@ -69,11 +71,29 @@
                             <li><a href="#">另一个分离的链接</a></li>
                         </ul>
                     </li>
+                    {% if not user.is_anonymous %}
+                        <li class="dropdown"><a href="#" class="dropdown-toggle"
+                                                data-toggle="dropdown"
+                                                role="button">
+                            Setting <b class="caret"></b>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'bestat:edit_profile' %}">edit
+                                    profile</a></li>
+                                <li>
+                                    <a href="{% url 'bestat:change_password' %}">change
+                                        password</a></li>
+
+                            </ul>
+                        </li>
+                    {% endif %}
+
                 </ul>
 
                 {% if user.is_anonymous %}
                     <div class="navbar-form navbar-right ">
-                        <a class="btn btn-success" href="{% url 'bestat:signin' %}"
+                        <a class="btn btn-success"
+                           href="{% url 'bestat:signin' %}"
                            role="button">Sign
                             in</a>
                         <a class="btn btn-info" href="{% url 'bestat:signup' %}"

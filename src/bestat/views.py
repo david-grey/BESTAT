@@ -59,7 +59,7 @@ def signup(request):
         profile = Profile.objects.create(user=user,
                                          nick_name=params['nick_name'])
         profile.save()
-        
+
         pref = Preference.objects.create(user=user)
         pref.save()
 
@@ -490,3 +490,4 @@ def preference(request):
             return Http404
         else:
             form.save()
+

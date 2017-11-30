@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block body %}
+    <div class="container marketing">
+
+        <!-- Three columns of text below the carousel -->
+        <hr class="featurette-divider">
+        <div class="row featurette">{% if success %}
+            <div class="alert alert-success" role="alert">
+                <strong>Success!</strong> You successfully modify your profile.
+            </div>
+        {% endif %}
+            {% if errors|length > 0 %}
+                <div class="alert alert-danger" role="alert">
+                    {% for er in errors %}
+                        <p>{{ er }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="panel panel-default panel-profile">
+                        <div class="panel-heading"><h4>User Profile</h4></div>
+                        <div class="panel-body">
+
+
+                            <div class="col-md-6">
+                                <div align="center"><img alt="User Pic"
+                                                         src="{{ user.profile.img.url }}"
+                                                         class="img-circle img-responsive"
+                                                         width="100"
+                                                         height="100">
+
+
+                                    <!--Upload Image Js And Css-->
+                                </div>
+
+                                <br>
+
+                                <!-- /input-group -->
+                            </div>
+                            <div class="col-sm-6">
+                                <h2>{{ user.profile.nick_name }}</h2>
+                                <h5>{{ user.first_name }} {{ user.last_name }}</h5>
+                                <a href="{% url 'bestat:change_password' %}">
+                                    <button class="btn btn-danger">change
+                                        password
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="clearfix"></div>
+                            <hr>
+
+                            <form role="form" class="form" method="post"
+                                  action="{% url 'bestat:edit_profile' %}"
+                                  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="well well-profile">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        {% for field in form %}
+                                            <tr>
+                                                <td class="ui-dialog-title">{{ field.label }}</td>
+                                                <td>{{ field }}</td>
+                                            </tr>
+                                        {% endfor %}
+
+                                    </table>
+                                </div>
+                                <button type="submit"
+                                        class="btn btn-lg btn-warning" style="width:100%">
+                                    Modify
+                                </button>
+                            </form>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="featurette-divider">
+    </div>
+
+
+{% endblock %}
+
+
