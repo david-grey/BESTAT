@@ -25,8 +25,8 @@ $(window).resize(function () {//resize window
 $(document).ready(function () {
 
     /* set map div size */
-    $('#mapid').height($(window).height() - 15);
-    $('#mapid').width($(window).width() - 15);
+     $('#mapid').height($(window).height() - 15);
+     $('#mapid').width($(window).width() - 15);
 
     /* set city centre coordinate */
     var centre_coordinate = JSON.parse($("input[name='coordinate']").val());
@@ -129,6 +129,9 @@ $(document).ready(function () {
 
     sel.addTo(mymap);
     $('.fa').click(changeCategory);
+
+    /* add sidebar */
+    var sidebar = L.control.sidebar('sidebar').addTo(mymap);
 
     /* add legend */
     var legend = L.control({position: 'bottomleft'});

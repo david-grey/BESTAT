@@ -17,8 +17,94 @@
             crossorigin=""></script>
 
     <link rel="stylesheet" href="{% static "css/bestat.map.css" %}">
+    <link rel="stylesheet" href="{% static "css/bestat.preference.css" %}">
+    <link rel="stylesheet" href="{% static "css/leaflet-sidebar.css" %}">
 {% endblock %}
 {% block body %}
+    <div id="sidebar" class="sidebar collapsed">
+        <!-- Nav tabs -->
+        <div class="sidebar-tabs">
+            <ul role="tablist">
+                <li><a href="#recommendationDiv" role="tab"><i class="fa fa-list-ol"></i></a></li>
+                <li><a href="#preferenceDiv" role="tab"><i class="fa fa-sliders"></i></a></li>
+            </ul>
+        </div>
+
+        <!-- Tab panes -->
+        <div class="sidebar-content">
+            <div class="sidebar-pane" id="recommendationDiv">
+                <h1 class="sidebar-header">
+                    Recommendation
+                </h1>
+
+
+            </div>
+
+            <div class="sidebar-pane" id="preferenceDiv">
+                <h1 class="sidebar-header">Preference</h1>
+
+                <form method="post" action="">
+                    <div class="sidebar-setting">
+                        <h4>Live Convience</h4>
+                        <div class="range-slider">
+                            <label>Cafe</label>
+                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
+                        </div>
+                        <div class="range-slider">
+                            <label>Restaurant</label>
+                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
+                        </div>
+                        <div class="range-slider">
+                            <label>Grocery</label>
+                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
+                        </div>
+                        <div class="range-slider">
+                            <label>Store</label>
+                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
+                        </div>
+                        <div class="range-slider">
+                            <label>Bank</label>
+                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
+                        </div>
+                        <div class="range-slider">
+                            <label>Gym</label>
+                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
+                        </div>
+                        <hr>
+                    </div>
+
+                    <div>
+                        <h4>Public Service</h4>
+                        <div class="range-slider">
+                            <label>Hospital</label>
+                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
+                        </div>
+                        <div class="range-slider">
+                            <label>School</label>
+                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
+                        </div>
+                        <div class="range-slider">
+                            <label>Church</label>
+                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
+                        </div>
+                        <hr>
+                    </div>
+
+                    <div>
+                        <h4>Security</h4>
+                        <div class="range-slider">
+                            <label>Crime</label>
+                            <input class="range-slider__range" type="range" value="5" min="0" max="10">
+                        </div>
+                    </div>
+
+                    <div>
+                        <input type="submit" class="btn btn-default" value="Search"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <div id="mapid"></div>
 
@@ -27,7 +113,9 @@
     <div style="visibility: hidden;height: 0" id="google"></div>
 
     <script src="{% static 'js/bestat.map.js' %}"></script>
+    <script src="{% static 'js/bestat.preference.js' %}"></script>
     <script src="{% static 'js/leaflet.contextmenu.js' %}"></script>
+    <script src="{% static 'js/leaflet-sidebar.js' %}"></script>
     <script src="{% static 'js/bouncemarker.js' %}"></script>
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQi5ECDVGwZ6jpPShEjL1GbLZBvDlee8c&libraries=places"></script>

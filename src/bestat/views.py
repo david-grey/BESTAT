@@ -30,7 +30,6 @@ from api.picture import Picture
 @check_anonymous
 @require_GET
 def home(request):
-    test.delay("aaaa")
     return render(request, 'homepage.html')
 
 
@@ -415,6 +414,32 @@ def get_neighbor_detail(request, neighbor_id):
 
         return JsonResponse(context)
 
+def get_review_detail(request, neighbor_id):
+    if request.is_ajax():
+        neighbor = Neighbor.objects.get(regionid=neighbor_id)
+        ni = NeighborInfo.objects.get(neighbor=neighbor)
+
+        reviews = Review.objects.filter(block=ni)
+        context ={"excellent":1,"good": 1, "ok": 1, "bad": 1, "terrible": 1}
+        leng = len(reviews)
+        if len == 0:
+            return JsonResponse(context)
+
+        for r in reviews:
+            score = r.safety + r.public_service + r.convenience
+            if score > 12:
+                context["excellent"] += 1
+            elif score > 9:
+                context["good"] += 1
+            elif score > 6:
+                context["ok"] += 1
+            elif score > 3:
+                context["bad"] += 1
+            else:
+                context["terrible"] += 1
+        return JsonResponse(context)
+
+
 
 def get_reviews(request, neighbor_id):
     if request.is_ajax():
@@ -425,32 +450,13 @@ def get_reviews(request, neighbor_id):
 
         reviews_html = ""
         for review in reviews:
-            s = ('<div class="row"><div class="col-sm-3 review-title">'
-                 '<img src="https://thesocietypages.org/socimages/files/2009/05/nopic_192.gif" class="img-rounded" height="70px" width="70px">'
-                 '<div class="review-block-name"><a href="#"> %s </a></div>'
-                 '<div class="review-block-date"> %s </div></div>'
-                 '<div class="col-sm-9 review-content"><div class="review-block-rate">'
-                 '<div class="col-md-4">'
-                 '<label>Safety: </label>'
-                 '<select class="review_safety">'
-                 '%s'
-                 '</select></div>'
-                 '<div class="col-md-4">'
-                 '<label>Public Service: </label>'
-                 '<select class="review_public">'
-                 '%s'
-                 '</select></div>'
-                 '<div class="col-md-4">'
-                 '<label>Convenience: </label>'
-                 '<select class="review_convenience">'
-                 '%s'
-                 '</select></div></div><hr/>'
-                 '<div class="col-md-12 "> %s '
-                 '</div></div></div><hr/>') % (
-                    review.author.username,
-                    review.create_time.strftime('%b %d %Y'),
+            s = (
+                '<div class="row">    <div class="col-sm-2 review-title">        <img src="%s" class="img-circle" height="50px" width="50px">        <div class="review-block-name"><a href="#"> %s </a></div>        <div class="review-block-date"> %s</div>    </div>    <div class="col-sm-6 review-content">        <div class="col-md-12 "> %s</div>      </div>    <div class="review-block-rate col-sm-4">        <row class="col-md-12">            <div class="col-md-6">                <label>Safety: </label>            </div>            <div class="col-md-6">                <select class="review_safety">                    %s                </select>            </div>        </row>        <row class="col-md-12">            <div class="col-md-6">                <label>Public Services: </label>            </div>            <div class="col-md-6">                <select class="review_public">                    %s                </select>            </div>        </row>        <row class="col-md-12">            <div class="col-md-6">                <label>Convenience </label>            </div>            <div class="col-md-6">                <select class="review_convenience">                    %s                </select>            </div>        </row>    </div></div><hr/>') % (
+                    review.author.profile.img.url, review.author.username, review.create_time.strftime('%b %d %Y'),
+                    escape(review.text),
                     setStar(review.safety), setStar(review.public_service),
-                    setStar(review.convenience), escape(review.text))
+                    setStar(review.convenience))
+
 
             reviews_html += s
 

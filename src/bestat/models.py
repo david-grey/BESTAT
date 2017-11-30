@@ -138,11 +138,6 @@ class Review(models.Model):
     def create_at(self):
         return self.create_time.timestamp()
 
-    @staticmethod
-    def get_max_time():
-        return int((Review.objects.all().aggregate(Max('create_time'))[
-                        'create_time__max'] or datetime.datetime.now()).timestamp())
-
 
 # Auto-generated `LayerMapping` dictionary for Neighbor model
 neighbor_mapping = {
