@@ -60,6 +60,9 @@ def signup(request):
         profile = Profile.objects.create(user=user,
                                          nick_name=params['nick_name'])
         profile.save()
+        
+        pref = Preference.objects.create(user=user)
+        pref.save()
 
         token = default_token_generator.make_token(user)
 
