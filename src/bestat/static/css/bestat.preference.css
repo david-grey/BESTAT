@@ -2,10 +2,9 @@
   box-sizing: border-box;
 }
 
-/*body {*/
-  /*font-family: sans-serif;*/
-  /*padding: 60px 20px;*/
-/*}*/
+#recoBlocks div {
+  margin-top: 20px;
+}
 
 #sidebar {
     /*font-size: 80%;*/

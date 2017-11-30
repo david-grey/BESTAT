@@ -233,10 +233,27 @@ function loadNeighborLayer(city) {
                 onEachFeature: onEachFeature
             }).addTo(mymap);
 
-            // alert(data.recommendation);
+            loadRecommendation(data.recommendation);
         });
 }
 
+function loadRecommendation(blocks) {
+    var city = $("input[name='city']").val();
+    var div = $("div[id='recoBlocks']");
+    for (var i = 0; i < blocks.length; i++) {
+        loadBlockPicture(blocks[i], city, div);
+    }
+}
+
+function loadBlockPicture(neighbor, city, div) {
+    $.get('/bestat/get_picture?neighbor=' + neighbor.name + '&city=' + city)
+        .done(function (data) {
+            div.prepend("<div>\n" +
+                "<h4><a href='/bestat/detail/" + neighbor.id + "'>" + neighbor.name + "</a></h4>\n" +
+                "<img src='" + data.link + "' width='320px' height='180px'>\n" +
+                "</div>");
+        });
+}
 
 function goToDetail(e) {
     var layer = e.target;
