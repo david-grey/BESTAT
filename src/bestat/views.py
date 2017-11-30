@@ -1,6 +1,7 @@
 import datetime
 import json
 import random
+import queue
 from mimetypes import guess_type
 
 import numpy as np
@@ -267,9 +268,13 @@ def get_preference(request):
 
 def load_city(request, city):
     context = {}
+    map_data = {}
+    recommendation = []
     features = []
     neighbors = Neighbor.objects.filter(city=city)
     weights, crime_weight = get_preference(request)
+
+    que = queue.PriorityQueue()
 
     for neighbor in neighbors:
         properties = {}
@@ -287,8 +292,19 @@ def load_city(request, city):
         block['properties'] = properties
         features.append(block)
 
-    context['type'] = 'FeatureCollection'
-    context['features'] = features
+        # Priorityqueue
+        que.put(BlockScore(neighbor.regionid, neighbor.name, overall))
+        if que.qsize() > 3:
+            que.get()
+
+    map_data['type'] = 'FeatureCollection'
+    map_data['features'] = features
+
+    while not que.empty():
+        recommendation.append(que.get().as_dict())
+
+    context['map_data'] = map_data
+    context['recommendation'] = recommendation
 
     return JsonResponse(context)
 
@@ -418,3 +434,19 @@ def preference(request):
             print(form.errors)
 
         return JsonResponse(Preference.objects.get(user=request.user).as_dict())
+
+
+class BlockScore:
+    def __init__(self, nid, name, score):
+        self.id = nid
+        self.name = name
+        self.score = score
+
+    def __lt__(self, other):
+        return self.score < other.score
+
+    def as_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+        }

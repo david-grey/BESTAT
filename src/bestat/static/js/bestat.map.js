@@ -226,10 +226,12 @@ function loadNeighborLayer(city) {
         .done(function (data) {
             // geojsonFeature = [{"type": "FeatureCollection", "features": []}];
 
-            geojson = L.geoJson(data, {
+            geojson = L.geoJson(data.map_data, {
                 style: allStyle,
                 onEachFeature: onEachFeature
             }).addTo(mymap);
+
+            alert(data.recommendation);
         });
 }
 
