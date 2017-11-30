@@ -1,30 +1,29 @@
-from mimetypes import guess_type
-
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.contrib.auth.tokens import default_token_generator, \
-    PasswordResetTokenGenerator
-from django.core.mail import send_mail
-from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.template.loader import render_to_string
-from django.views.decorators.http import require_http_methods, require_GET, \
-    require_POST
-import numpy as np
-from django.urls import reverse
-from bestat.models import *
-from bestat.decorator import check_anonymous, login_required, anonymous_only
-from bestat.forms import *
-from bestat.utils import is_anonymous
-from django.http import JsonResponse, Http404
 import datetime
 import json
 import random
-from bestat.ranking import get_neighbor_score, default_weights, my_sigmoid
+from mimetypes import guess_type
+
+import numpy as np
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.tokens import default_token_generator, \
+    PasswordResetTokenGenerator
+from django.core.mail import send_mail
+from django.core import serializers
+from django.http import HttpResponse
+from django.http import JsonResponse, Http404
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils.html import escape
-from bestat.tasks import test, emailto
-from api.GooglePlaces import GooglePlaces, types, GooglePlacesError
+from django.views.decorators.http import require_http_methods, require_GET, \
+    require_POST
+
 from api.picture import Picture
+from bestat.decorator import check_anonymous, login_required, anonymous_only
+from bestat.forms import *
+from bestat.models import *
+from bestat.ranking import get_neighbor_score, default_weights, my_sigmoid
+from bestat.tasks import emailto
+from bestat.utils import is_anonymous
 
 
 @check_anonymous
@@ -410,10 +409,7 @@ def preference(request):
     pref = Preference(user=request.user)
 
     if request.method == 'GET':
-        form = PreferenceForm(instance=pref)
-        context = {'form': form}
-        return context
-        # todo
+        return JsonResponse(Preference.objects.get(user=request.user).as_dict())
     else:
         form = PreferenceForm(request.POST, instance=pref)
         if not form.is_valid():
