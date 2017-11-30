@@ -181,13 +181,6 @@ def edit_profile(request):
 
 
 @require_GET
-def get_photo(request, user_id):
-    user = User.objects.get(id=user_id)
-    content_type = guess_type(user.profile.img.name)
-    return HttpResponse(user.profile.img, content_type=content_type)
-
-
-@require_GET
 def get_picture(request):
     neighbor = request.GET['neighbor']
     city = request.GET['city']
@@ -251,69 +244,6 @@ def create_review(request):
     review.save()
 
     return render(request, 'detail.html')
-
-
-@require_http_methods(['GET', 'POST'])
-@anonymous_only("you've already login")
-def forget_password(request):
-    context = {}
-    if request.method == 'GET':
-        context['form'] = UsernameForm()
-        return render(request, 'forget_password.html', context)
-
-    else:
-        form = UsernameForm(request.POST)
-        if not form.is_valid():
-            context['form'] = form
-            render(request, 'forget_password.html', context)
-        username = form.cleaned_data['username']
-        user = User.objects.get(username=username)
-        generator = PasswordResetTokenGenerator()
-        token = generator.make_token(user)
-
-        email_body = '''
-           Welcome to bestat. Please click the link below to verify your email address and complete the registration proceess. http://%s%s
-           ''' % (request.get_host(),
-                  reverse('reset', args=(user.username, token)))
-        send_mail(subject="Verify your email address",
-                  message=email_body,
-                  from_email="ziqil1@andrew.cmu.edu",
-                  recipient_list=[user.email])
-        context[
-            'msg'] = 'Your password reset link has been send to your register email.'
-        return render(request, 'blank.html', context)
-
-
-@require_GET
-def reset_password_check(request, user_id, token):
-    generator = PasswordResetTokenGenerator()
-    try:
-        user = User.objects.get(username=user_id)
-        if generator.check_token(user, token):
-            login(request, user)
-            return render(request, 'reset_password.html',
-                          {'form': ResetPassword()})
-
-    except User.DoesNotExist:
-        return render(request, 'blank.html', {'msg': 'user not exist!'})
-
-
-@require_POST
-@login_required("you haven't login!")
-def reset_password(request):
-    context = {'errors': []}
-
-    form = ResetPassword(request.POST)
-    if not form.is_valid():
-        errors = [v.as_text() for k, v in form.errors.items()]
-        context['errors'].extend(errors)
-        context['form'] = ChangePasswordForm()
-        return render(request, 'change_password.html', context)
-    else:
-        password = form.cleaned_data['password']
-        request.user.set_password(password)
-        request.user.save()
-        return redirect('/')
 
 
 def map(request):
@@ -414,13 +344,14 @@ def get_neighbor_detail(request, neighbor_id):
 
         return JsonResponse(context)
 
+
 def get_review_detail(request, neighbor_id):
     if request.is_ajax():
         neighbor = Neighbor.objects.get(regionid=neighbor_id)
         ni = NeighborInfo.objects.get(neighbor=neighbor)
 
         reviews = Review.objects.filter(block=ni)
-        context ={"excellent":1,"good": 1, "ok": 1, "bad": 1, "terrible": 1}
+        context = {"excellent": 1, "good": 1, "ok": 1, "bad": 1, "terrible": 1}
         leng = len(reviews)
         if len == 0:
             return JsonResponse(context)
@@ -440,7 +371,6 @@ def get_review_detail(request, neighbor_id):
         return JsonResponse(context)
 
 
-
 def get_reviews(request, neighbor_id):
     if request.is_ajax():
         neighbor = Neighbor.objects.get(regionid=neighbor_id)
@@ -451,12 +381,12 @@ def get_reviews(request, neighbor_id):
         reviews_html = ""
         for review in reviews:
             s = (
-                '<div class="row">    <div class="col-sm-2 review-title">        <img src="%s" class="img-circle" height="50px" width="50px">        <div class="review-block-name"><a href="#"> %s </a></div>        <div class="review-block-date"> %s</div>    </div>    <div class="col-sm-6 review-content">        <div class="col-md-12 "> %s</div>      </div>    <div class="review-block-rate col-sm-4">        <row class="col-md-12">            <div class="col-md-6">                <label>Safety: </label>            </div>            <div class="col-md-6">                <select class="review_safety">                    %s                </select>            </div>        </row>        <row class="col-md-12">            <div class="col-md-6">                <label>Public Services: </label>            </div>            <div class="col-md-6">                <select class="review_public">                    %s                </select>            </div>        </row>        <row class="col-md-12">            <div class="col-md-6">                <label>Convenience </label>            </div>            <div class="col-md-6">                <select class="review_convenience">                    %s                </select>            </div>        </row>    </div></div><hr/>') % (
-                    review.author.profile.img.url, review.author.username, review.create_time.strftime('%b %d %Y'),
+                    '<div class="row">    <div class="col-sm-2 review-title">        <img src="%s" class="img-circle" height="50px" width="50px">        <div class="review-block-name"><a href="#"> %s </a></div>        <div class="review-block-date"> %s</div>    </div>    <div class="col-sm-6 review-content">        <div class="col-md-12 "> %s</div>      </div>    <div class="review-block-rate col-sm-4">        <row class="col-md-12">            <div class="col-md-6">                <label>Safety: </label>            </div>            <div class="col-md-6">                <select class="review_safety">                    %s                </select>            </div>        </row>        <row class="col-md-12">            <div class="col-md-6">                <label>Public Services: </label>            </div>            <div class="col-md-6">                <select class="review_public">                    %s                </select>            </div>        </row>        <row class="col-md-12">            <div class="col-md-6">                <label>Convenience </label>            </div>            <div class="col-md-6">                <select class="review_convenience">                    %s                </select>            </div>        </row>    </div></div><hr/>') % (
+                    review.author.profile.img.url, review.author.username,
+                    review.create_time.strftime('%b %d %Y'),
                     escape(review.text),
                     setStar(review.safety), setStar(review.public_service),
                     setStar(review.convenience))
-
 
             reviews_html += s
 
@@ -490,4 +420,3 @@ def preference(request):
             return Http404
         else:
             form.save()
-
