@@ -406,13 +406,15 @@ def setStar(star):
 
 @login_required("you haven't login!")
 def preference(request):
-    pref = Preference(user=request.user)
+    pref = Preference.objects.get(user=request.user)
 
     if request.method == 'GET':
-        return JsonResponse(Preference.objects.get(user=request.user).as_dict())
+        return JsonResponse(pref.as_dict())
     else:
         form = PreferenceForm(request.POST, instance=pref)
-        if not form.is_valid():
-            return Http404
-        else:
+        if form.is_valid():
             form.save()
+        else:
+            print(form.errors)
+
+        return JsonResponse(Preference.objects.get(user=request.user).as_dict())
