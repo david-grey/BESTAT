@@ -42,6 +42,12 @@ urlpatterns = [
     url(r'^preference/$', bestat.views.preference, name='preference'),
     url(r'^cities/$', bestat.views.cities, name='cities'),
     url(r'^neighbors/$', bestat.views.neighbors, name='neighbors'),
-    url(r'get_city_picture/$', bestat.views.get_city_pic, name="get_city_picture")
+    url(r'get_city_picture/$', bestat.views.get_city_pic, name="get_city_picture"),
+    url(r'^forget_password/?$', bestat.views.forget_password,
+        name='forget_password'),
+    url(r'^reset/username=(?P<user_id>[0-9a-zA-Z]+)&token=(?P<token>\S+)$',
+        bestat.views.reset_password_check, name='reset'),
+    url(r'^reset_password/$', bestat.views.reset_password,
+        name='reset_password')
 
 ]

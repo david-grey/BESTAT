@@ -12,7 +12,7 @@
 @desc:
 '''
 from django import forms
-from .models import User,Preference
+from .models import User, Preference
 
 
 class UserCreationForm(forms.Form):
@@ -225,29 +225,8 @@ class ChangePasswordForm(forms.Form):
         return cleaned_data
 
 
-class UsernameForm(forms.Form):
-    username = forms.CharField(
-        widget=forms.TextInput(
-            attrs={"class": "form-control",
-                   "placeholder": "Please enter your username",
-                   "id": "form-username"}),
-        error_messages={
-            'required': 'You must provide your username'
-        },
-        help_text="Enter your username to help us identify your account"
-    )
 
-    def clean_username(self):
-        # check if there is duplicate username
-        username = self.cleaned_data['username']
-        try:
-            User.objects.get(username=username)
-        except User.DoesNotExist:
-            raise forms.ValidationError('User non exist!')
-        return username
-
-
-class ResetPassword(forms.Form):
+class ResetPasswordForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(
             attrs={"class": "form-control", "placeholder": "New Password....",
@@ -269,7 +248,7 @@ class ResetPassword(forms.Form):
     )
 
     def clean(self):
-        cleaned_data = super(ResetPassword, self).clean()
+        cleaned_data = super(ResetPasswordForm, self).clean()
 
         # Confirms that the two password fields match
         password1 = cleaned_data.get('password')
@@ -280,8 +259,29 @@ class ResetPassword(forms.Form):
         # Generally return the cleaned data we got from our parent.
         return cleaned_data
 
+class ForgetPasswordForm(forms.Form):
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={"class": "form-control",
+                   "placeholder": "Please enter your username",
+                   "id": "form-username"}),
+        error_messages={
+            'required': 'You must provide your username'
+        },
+        help_text="Enter your username to help us identify your account"
+    )
+
+    def clean_username(self):
+        # check if there is duplicate username
+        username = self.cleaned_data['username']
+        try:
+            User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise forms.ValidationError('User non exist!')
+        return username
 
 class PreferenceForm(forms.ModelForm):
     class Meta:
         model = Preference
         fields = '__all__'
+

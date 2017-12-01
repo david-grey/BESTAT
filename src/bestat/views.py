@@ -448,7 +448,8 @@ def cities(request):
     context = {}
     citiall = City.objects.all()
     citi = []
-    income = {'Washington', 'Boston', 'San Jose', 'San Francisco', 'Honolulu', 'Seattle', 'Minneapolis', 'Denver',
+    income = {'Washington', 'Boston', 'San Jose', 'San Francisco', 'Honolulu',
+              'Seattle', 'Minneapolis', 'Denver',
               'Portland', 'Sarasota', 'Anchorage'}
     happy = set()
     if rank == "population":
@@ -498,6 +499,70 @@ def get_city_pic(request):
         return HttpResponse()
     image_data = open("bestat/" + res, "rb").read()
     return HttpResponse(image_data, content_type="image/png")
+
+
+@require_http_methods(['GET', 'POST'])
+@anonymous_only("you've already login")
+def forget_password(request):
+    context = {}
+    if request.method == 'GET':
+        print('flag11')
+        context['form'] = ForgetPasswordForm()
+        return render(request, 'forget_password.html', context)
+
+    else:
+        form = ForgetPasswordForm(request.POST)
+        if not form.is_valid():
+            context['form'] = form
+            render(request, 'forget_password.html', context)
+        username = form.cleaned_data['username']
+        user = User.objects.get(username=username)
+        generator = PasswordResetTokenGenerator()
+        token = generator.make_token(user)
+
+        email_body = '''
+        Please click the link below to reset your password. http://%s%s
+           ''' % (request.get_host(),
+                  reverse('bestat:reset', args=(user.username, token)))
+        send_mail(subject="Reset your password",
+                  message=email_body,
+                  from_email="ziqil1@andrew.cmu.edu",
+                  recipient_list=[user.email])
+        context[
+            'msg'] = 'Your password reset link has been send to your register' \
+                     ' email %s.' % user.email
+        return render(request, 'blank.html', context)
+
+
+@require_GET
+def reset_password_check(request, user_id, token):
+    generator = PasswordResetTokenGenerator()
+    try:
+        user = User.objects.get(username=user_id)
+        if generator.check_token(user, token):
+            login(request, user)
+            return render(request, 'reset_password.html',
+                          {'form': ResetPasswordForm()})
+
+    except User.DoesNotExist:
+        return render(request, 'blank.html', {'msg': 'user non exist!'})
+
+
+@require_POST
+def reset_password(request):
+    context = {'errors': []}
+
+    form = ResetPasswordForm(request.POST)
+    if not form.is_valid():
+        errors = [v.as_text() for k, v in form.errors.items()]
+        context['errors'].extend(errors)
+        context['form'] = ResetPasswordForm()
+        return render(request, 'reset_password.html', context)
+    else:
+        password = form.cleaned_data['password']
+        request.user.set_password(password)
+        request.user.save()
+        return redirect(reverse('bestat:signin'))
 
 
 class BlockScore:
