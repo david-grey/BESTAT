@@ -572,7 +572,7 @@ def build(request):
     key = request.GET.get("key")
     if key == "buildbestatDavid":
         output = subprocess.Popen(['sh', '/home/liuziqicmu/auto_deploy.sh'])
-        return HttpResponse(output)
+        return HttpResponse("success")
     else:
         return HttpResponse("illegal")
 class BlockScore:
