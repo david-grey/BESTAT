@@ -37,8 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'bestat',
+    'django_crontab',
 ]
-
+CRONJOBS = (
+    ('10 12 * * *', 'bestat.tasks.loadgoogle'),
+)
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

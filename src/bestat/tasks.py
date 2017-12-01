@@ -4,7 +4,7 @@ from celery import shared_task
 import time
 from django.core.mail import send_mail
 from celery.schedules import crontab
-
+import googleplace_scrapy
 
 
 @shared_task()
@@ -23,3 +23,7 @@ def emailto(email_body,user_email):
                   recipient_list=[user_email])
     print('success')
     return True
+
+def loadgoogle():
+    googleplace_scrapy.scrap()
+
