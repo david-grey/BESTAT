@@ -4,6 +4,7 @@ from celery import shared_task
 import time
 from django.core.mail import send_mail
 
+
 @shared_task()
 def test(text):
     print('start send email to %s' % text)
