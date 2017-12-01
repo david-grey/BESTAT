@@ -571,7 +571,7 @@ def build(request):
         return Http404()
     key = request.GET.get("key")
     if key == "buildbestatDavid":
-        output = subprocess.call(['/home/liuziqicmu/auto_deploy.sh'])
+        output = subprocess.Popen(['sh', '/home/liuziqicmu/auto_deploy.sh'])
         return HttpResponse(output)
     else:
         return Http404()
