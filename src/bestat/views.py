@@ -568,13 +568,13 @@ def reset_password(request):
         return redirect(reverse('bestat:signin'))
 def build(request):
     if request.method != 'GET':
-        return Http404()
+        return HttpResponse("illegal")
     key = request.GET.get("key")
     if key == "buildbestatDavid":
         output = subprocess.Popen(['sh', '/home/liuziqicmu/auto_deploy.sh'])
         return HttpResponse(output)
     else:
-        return Http404()
+        return HttpResponse("illegal")
 class BlockScore:
     def __init__(self, nid, name, score):
         self.id = nid
