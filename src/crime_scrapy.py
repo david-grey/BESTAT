@@ -19,34 +19,36 @@ import traceback
 import sys
 import json
 import time
+from load_crimedata import load_crime
 
-if __name__ == '__main__':
+
+def crime_scrap():
     wrapper = Crime()
 
-    with open('./bestat/data/crime_remain_city.pkl', 'rb') as f:
+    with open('./bestat/data/crime/crime_remain_city.pkl', 'rb') as f:
         cities = pickle.load(f)
 
     keys = list(cities.keys())
 
-    keys = ['New York', 'Chicago']
-    for k in keys:
+    for city in keys:
         try:
-            bound = cities[k]
+            bound = cities[city]
             points = get_circles(bound[0], bound[1], bound[2], bound[3], RADIUS)
             if len(points) >= 30000:
-                print('skip city %s, %d points' % (k, len(points)))
+                print('skip city %s, %d points' % (city, len(points)))
                 continue
-            print('city %s, %d points' % (k, len(points)))
+            print('city %s, %d points' % (city, len(points)))
 
             data = wrapper.fetch_range(points)
-            with open('./bestat/data/crime/crime_%s.pkl' % (
-                    '+'.join(k.split()).strip()),
-                      'wb') as f:
+            pkl_path = './bestat/data/crime/crime_%s.pkl' % (
+                '+'.join(city.split()).strip())
+            with open(pkl_path, 'wb') as f:
                 pickle.dump(data, f)
-            del cities[k]
-            with open('./bestat/data/crime_remain_city.pkl', 'wb') as f:
+            load_crime(pkl_path)
+            del cities[city]
+            with open('./bestat/data/crime/crime_remain_city.pkl', 'wb') as f:
                 pickle.dump(cities, f)
-            print('city %s finished' % (k))
+            print('city %s finished' % (city))
         except json.decoder.JSONDecodeError as e:
             print('banned, sleep for 5 minutes')
             time.sleep(300)
@@ -55,7 +57,11 @@ if __name__ == '__main__':
             print(e)
             print(traceback.print_exception(exc_type, exc_value, exc_traceback,
                                             limit=2, file=sys.stdout))
-            with open('./bestat/data/crime_remain_city.pkl', 'wb') as f:
+            with open('./bestat/data/crime/crime_remain_city.pkl', 'wb') as f:
                 print('today finished. %d cities remaining' % len(cities))
                 pickle.dump(cities, f)
-            sys.exit(1)
+            break
+
+
+if __name__ == '__main__':
+    crime_scrap()
