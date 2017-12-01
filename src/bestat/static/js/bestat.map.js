@@ -240,6 +240,7 @@ function loadNeighborLayer(city) {
 function loadRecommendation(blocks) {
     var city = $("input[name='city']").val();
     var div = $("div[id='recoBlocks']");
+    div.empty();
     for (var i = 0; i < blocks.length; i++) {
         loadBlockPicture(blocks[i], city, div);
     }
@@ -363,11 +364,6 @@ function liveStyle(feature) {
     default_style['fillColor'] = getColor(feature.geometry.properties.live_convenience);
     return default_style;
 }
-
-function test() {
-    alert('fuckyou');
-}
-
 
 function search_place(type, latlng) {
     clear_markers();
