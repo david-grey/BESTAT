@@ -21,7 +21,7 @@ import os
 
 class Picture(object):
     _url = "https://maps.googleapis.com/maps/api/streetview?size={}&location={}&heading=90&pitch=10&key={}"
-    _placeurl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=350&photoreference={}&key={}&maxheight=350"
+    _placeurl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth={}&photoreference={}&key={}&maxheight={}"
     _key = "AIzaSyAQi5ECDVGwZ6jpPShEjL1GbLZBvDlee8c"
     def __init__(self, key):
         self._key = key
@@ -45,9 +45,11 @@ class Picture(object):
             results = gp.text_search(query=loc)
             photo_place = results.places[0].photos
             if len(photo_place) != 0:
-                print("google place")
-                res = requests.get(self._placeurl.format(photo_place[0].photo_reference, self._key), stream=True)
-                pass
+                print(size.split("x"))
+                width = size.split("x")[0]
+                height = size.split("x")[1]
+                res = requests.get(self._placeurl.format(width, photo_place[0].photo_reference, self._key, height), stream=True)
+
             else:
                 raw = results.raw_response
                 coor = str(raw['results'][0]['geometry']['viewport']['northeast']['lat']) +"," +str(raw['results'][0]['geometry']['viewport']['northeast']['lng'])
@@ -60,7 +62,7 @@ class Picture(object):
             return "/static/img/region/" + loc.replace(" ","_") + ".png"
         except Exception as e:
             print(e)
-            return "/static/img/region/Shadyside_Pittsburgh.png"
+            return "/static/img/region/NA.png"
 
 
 

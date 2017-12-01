@@ -55,22 +55,30 @@
             <div class="collapse navbar-collapse" id="example-navbar-collapse">
                 <ul class="nav navbar-nav">
 
-                    <li><a href="#">City</a></li>
+
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle"
                            data-toggle="dropdown" role="button">
-                            Top neighbors <b class="caret"></b>
+                            Top Cities
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">jmeter</a></li>
-                            <li><a href="#">EJB</a></li>
-                            <li><a href="#">Jasper Report</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">分离的链接</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">另一个分离的链接</a></li>
+                            <li><a href="{% url 'bestat:cities' %}?rank=population">Metropolitan</a></li>
+                            <li><a href="{% url 'bestat:cities' %}?rank=income">Highest Income</a></li>
+                            <li><a href="{% url 'bestat:cities' %}?rank=random">Lucky draw</a></li>
                         </ul>
                     </li>
+{#                    <li class="dropdown">#}
+{#                        <a href="#" class="dropdown-toggle"#}
+{#                           data-toggle="dropdown" role="button">#}
+{#                            Top neighbors#}
+{#                        </a>#}
+{#                        <ul class="dropdown-menu">#}
+{#                            <li><a href="{% url 'bestat:neighbors' %}?rank=convenience">Convenience</a></li>#}
+{#                            <li><a href="{% url 'bestat:neighbors' %}?rank=safety">Safety</a></li>#}
+{#                            <li><a href="{% url 'bestat:neighbors' %}?rank=random">Lucky draw</a></li>#}
+{##}
+{#                        </ul>#}
+{#                    </li>#}
                     {% if not user.is_anonymous %}
                         <li class="dropdown"><a href="#" class="dropdown-toggle"
                                                 data-toggle="dropdown"
@@ -125,35 +133,35 @@
 {% block footer %}
 
 
-        <div class="row" style="margin-top: 100px">
-            <div class="col-md-12">
-                <footer class="footer-distributed">
-                    <div class="footer-right">
+    <div class="row" style="margin-top: 100px">
+        <div class="col-md-12">
+            <footer class="footer-distributed">
+                <div class="footer-right">
 
-                        <a href="#"><i class="fa fa-facebook"></i></a>
-                        <a href="#"><i class="fa fa-twitter"></i></a>
-                        <a href="#"><i class="fa fa-linkedin"></i></a>
-                        <a href="#"><i class="fa fa-github"></i></a>
+                    <a href="#"><i class="fa fa-facebook"></i></a>
+                    <a href="#"><i class="fa fa-twitter"></i></a>
+                    <a href="#"><i class="fa fa-linkedin"></i></a>
+                    <a href="#"><i class="fa fa-github"></i></a>
 
-                    </div>
+                </div>
 
-                    <div class="footer-left">
+                <div class="footer-left">
 
-                        <p class="footer-links">
-                            <a class="link-1" href="{% url 'bestat:home' %}">Home</a>
+                    <p class="footer-links">
+                        <a class="link-1" href="{% url 'bestat:home' %}">Home</a>
 
-                            <a href="#">Blog</a>
+                        <a href="#">Blog</a>
 
-                            <a href="#">About</a>
+                        <a href="#">About</a>
 
-                            <a href="#">Contact</a>
-                        </p>
+                        <a href="#">Contact</a>
+                    </p>
 
-                        <p>BestAt &copy; 2017</p>
-                    </div>
-                </footer>
-            </div>
+                    <p>BestAt &copy; 2017</p>
+                </div>
+            </footer>
         </div>
+    </div>
 
 
 

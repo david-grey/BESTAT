@@ -82,7 +82,7 @@ function loadReviewGraph(neighbor_id) {
 }
 
 function drawChart(arr) {
-    console.log("draw")
+    console.log("draw");
     let data = google.visualization.arrayToDataTable(arr);
 
     let options = {

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Bestat - Neighbors{% endblock %}
+{% block css %}
+
+    <link rel="stylesheet" href="{% static "css/bestat.city.css" %}">
+
+{% endblock %}
+{% block body %}
+
+    <div class="container">
+        <h1>Neighbors</h1>
+        <div class="row masonry">
+            {% for ni in nis %}
+                <div class="col-md-4 item">
+                    <a href="{% url 'bestat:detail' ni.neighbor.regionid  %}">
+                        <img src={% url 'bestat:get_picture' %}?city={{ ni.neighbor.city }}&neighbor={{ ni.neighbor.name }}" alt=""
+                             class="img-responsive"></a>
+                    <div class="city_name" style="position: absolute; bottom: 0; left: 10%;">
+                        <span class="name">{{  ni.neighbor.name }} </span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+
+{% endblock %}
+{% block js %}
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
+    <script src="http://desandro.github.io/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="{% static "js/bestat.cities.js" %}"></script>
+{% endblock %}
