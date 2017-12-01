@@ -3,7 +3,7 @@ import os
 from celery import Celery
 from django.conf import settings
 from celery.schedules import crontab
-from .. import googleplace_scrapy
+
 import django
 
 # set the default Django settings module for the 'celery' program.
@@ -25,12 +25,4 @@ def debug_task(self):
     print('Request: {0!r}'.format(self.request))
 
 
-@app.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
 
-    # Executes every  morning at 7:30 a.m.
-    sender.add_periodic_task(
-        crontab(hour=5, minute=30),
-        googleplace_scrapy.scrap()
-        
-    )
