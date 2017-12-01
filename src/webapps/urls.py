@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    url(r'^build/$', views.build),
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home),
     url(r'^bestat/', include('bestat.urls', namespace='bestat')),

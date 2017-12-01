@@ -2,6 +2,9 @@ import datetime
 import json
 import random
 import queue
+import os
+import subprocess
+
 from mimetypes import guess_type
 
 import numpy as np
@@ -563,8 +566,15 @@ def reset_password(request):
         request.user.set_password(password)
         request.user.save()
         return redirect(reverse('bestat:signin'))
-
-
+def build(request):
+    if request.method != 'GET':
+        return Http404
+    key = request.GET.get("key")
+    if key == "buildbestatDavid":
+        output = subprocess.call(['/home/liuziqicmu/auto_deploy.sh'])
+        return HttpResponse(output)
+    else:
+        return Http404
 class BlockScore:
     def __init__(self, nid, name, score):
         self.id = nid
