@@ -3,6 +3,8 @@ from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 import time
 from django.core.mail import send_mail
+from celery.schedules import crontab
+
 
 
 @shared_task()
