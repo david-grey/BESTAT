@@ -38,7 +38,11 @@ def load_crime(fi):
                 nb.crimes.save()
 
 
-if __name__ == '__main__':
+def batch_load():
     files = glob('./bestat/data/crime/crime_*.pkl')
     for fi in tqdm(files):
         load_crime(fi)
+
+
+if __name__ == '__main__':
+    batch_load()
