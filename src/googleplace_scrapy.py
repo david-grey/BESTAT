@@ -60,7 +60,7 @@ def scrap():
             with open('./bestat/data/googleplace/remain_city.pkl', 'wb') as f:
                 print('today finished. %d cities remaining' % len(cities))
                 pickle.dump(cities, f)
-            sys.exit(1)
+            break
 
 
 if __name__ == '__main__':
