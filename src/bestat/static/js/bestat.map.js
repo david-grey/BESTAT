@@ -12,7 +12,7 @@ var myIcon = new Map();
 var showPopup = 1;
 
 $(window).resize(function () {//resize window
-    $('#mapid').height($(window).height() - 150);
+    $('#mapid').height($(window).height() - 15);
     $('#mapid').width($(window).width() - 15);
 });
 
@@ -21,7 +21,7 @@ $(document).ready(function () {
     $('[data-toggle="popover"]').popover();
 
     /* set map div size */
-    $('#mapid').height($(window).height() - 150);
+    $('#mapid').height($(window).height() - 15);
     $('#mapid').width($(window).width() - 15);
 
     /* set city centre coordinate */
