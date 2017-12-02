@@ -100,7 +100,7 @@ function loadPicture(neighbor, city) {
 
     $.get('/bestat/get_picture?neighbor=' + neighbor + '&city=' + city)
         .done(function (data) {
-            let htmlimg = '<img class="center-block" src="' + data.link + '" height=\"350\" >';
+            let htmlimg = '<img class="center-block img-responsive" src="' + data.link + '" height=\"350\" >';
             console.log(htmlimg);
             document.getElementById('pic').innerHTML = htmlimg
         });
