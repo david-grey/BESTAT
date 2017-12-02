@@ -122,7 +122,7 @@ $(document).ready(function () {
     var sel = L.control({position: 'topright'});
     sel.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'category');
-        div.innerHTML = '<span>EXPLORE THIS AREA: </span><i data-toggle="tooltip" title="Security" class="fa fa-bomb fa-2x"></i><i data-toggle="tooltip" title="Public Services" class="fa fa-institution fa-2x"></i><i data-toggle="tooltip" title="Live Convenience" class="fa fa-shopping-cart fa-2x"></i>';
+        div.innerHTML = '<span>EXPLORE THIS AREA: </span><i data-toggle="tooltip" title="Security" class="fa fa-bomb fa-2x" ></i><i data-toggle="tooltip" title="Public Services" class="fa fa-institution fa-2x"></i><i data-toggle="tooltip" title="Live Convenience" class="fa fa-shopping-cart fa-2x"></i>';
         return div;
     }
 
