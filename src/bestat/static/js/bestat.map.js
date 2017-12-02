@@ -175,8 +175,7 @@ $(document).ready(function () {
     });
     swal({
         title: 'Right click can search nearby-place.',
-        html: $('<div>')
-            .text('Right click can search nearby-place.'),
+        html: $('<div>'),
         animation: true,
         customClass: 'animated tada',
         type: "success",
