@@ -41,5 +41,5 @@ nosetests.xml
 # PYTHON
 *.pkl
 *.pyc
-
+*.png
 
