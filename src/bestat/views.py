@@ -191,7 +191,6 @@ def get_picture(request):
     loc = neighbor + " " + city
     gp = Picture("AIzaSyAQi5ECDVGwZ6jpPShEjL1GbLZBvDlee8c")
     res = {"link": gp.find_picture(loc)}
-    print(res)
     if request.is_ajax():
 
         return JsonResponse(res)
@@ -257,7 +256,6 @@ def create_review(request):
         review.save()
         return JsonResponse({'status': 'ok'})
     else:
-        print(review_form.errors)
         return JsonResponse({'status': 'err', 'err': 'invalid review'})
 
 
@@ -267,14 +265,16 @@ def map(request):
 
 def get_preference(request):
     weights = default_weights.copy()
-    crime_weight = my_sigmoid(weights['crime'], (2, 8)) * 2
+    crime_weight = weights['crime']
     del weights['crime']
-    print(request.user.is_anonymous)
+
     if not is_anonymous(request):
+        crime_weight = request.user.preference.crime
         pref = request.user.preference
         for k in weights:
             weights[k] = getattr(pref, k, 5.)
 
+    crime_weight = my_sigmoid(crime_weight, (8, 2)) * 2
     mean = np.asarray(list(weights.values())).mean()
     for k in weights:
         weights[k] /= mean
@@ -520,7 +520,6 @@ def get_city_pic(request):
 def forget_password(request):
     context = {}
     if request.method == 'GET':
-        print('flag11')
         context['form'] = ForgetPasswordForm()
         return render(request, 'forget_password.html', context)
 
