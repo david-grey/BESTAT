@@ -9,12 +9,6 @@ var place_list = [];
 var default_radius = 1200;
 var places = ['school', 'restaurant', 'cafe', 'church', 'store', 'bank', 'gym', 'hospital'];
 var myIcon = new Map();
-var testicon = L.icon({
-    iconUrl: '/static/icon/cafe.png',
-    iconSize: [38, 38],
-    iconAnchor: [22, 22],
-    popupAnchor: [-3, -76]
-});
 var showPopup = 1;
 
 $(window).resize(function () {//resize window

@@ -72,7 +72,7 @@ def signup(request):
            Welcome to bestat. Please click the link below to verify your email address and complete the registration proceess. http://%s%s
            ''' % (request.get_host(),
                   reverse('bestat:confirm', args=(user.username, token)))
-        emailto.delay("Welcome to bestat",email_body, user.email)
+        emailto.delay("Welcome to bestat", email_body, user.email)
         context[
             'msg'] = 'Your confirmation link has been send to your register email.'
         return render(request, 'blank.html', context)
@@ -114,7 +114,8 @@ def signin(request):
                            ''' % (request.get_host(),
                                   reverse('bestat:confirm',
                                           args=(u.username, token)))
-                        emailto.delay("Verification email from bestat",email_body, u.email)
+                        emailto.delay("Verification email from bestat",
+                                      email_body, u.email)
                         errors = [
                             'User not activated. A new email has been sent to you.']
                 except User.DoesNotExist:
@@ -334,7 +335,8 @@ def get_city(request):
 
         cityob = cityob.filter(activate=1)[0]
     except:
-        return render(request, 'blank.html', {'msg': 'We are moving to this city soon!'})
+        return render(request, 'blank.html',
+                      {'msg': 'We are moving to this city soon!'})
     coordinate = json.loads(cityob.point.geojson)[
                      'coordinates'][::-1]
     return render(request, 'map.html', {"city": city, "coordinate": coordinate})
@@ -353,13 +355,16 @@ def get_all_city(request):
 
 
 def detail(request, neighbor_id):
-    neighbor = Neighbor.objects.get(regionid=neighbor_id)
-    if neighbor is None:
-        return render(request, 'blank.html',
-                      {'msg': 'This neighbor does not exist!'})
-    return render(request, 'detail.html',
-                  {'neighbor_id': neighbor_id, 'neighbor': neighbor.name,
-                   'city': neighbor.city})
+    try:
+        neighbor = Neighbor.objects.get(regionid=neighbor_id)
+        if neighbor is None:
+            return render(request, 'blank.html',
+                          {'msg': 'This neighbor does not exist!'})
+        return render(request, 'detail.html',
+                      {'neighbor_id': neighbor_id, 'neighbor': neighbor.name,
+                       'city': neighbor.city})
+    except Neighbor.DoesNotExist:
+        return render(request, 'blank.html', {'msg': 'Neighbor non exist!'})
 
 
 def get_neighbor_detail(request, neighbor_id):
