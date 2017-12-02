@@ -16,8 +16,8 @@ def test(text):
 
 
 @shared_task()
-def emailto(email_body,user_email):
-    send_mail(subject="Verify your email address",
+def emailto(subject, email_body,user_email):
+    send_mail(subject=subject,
                   message=email_body,
                   from_email="bestat.verify@gmail.com",
                   recipient_list=[user_email])

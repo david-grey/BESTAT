@@ -72,7 +72,7 @@ def signup(request):
            Welcome to bestat. Please click the link below to verify your email address and complete the registration proceess. http://%s%s
            ''' % (request.get_host(),
                   reverse('bestat:confirm', args=(user.username, token)))
-        emailto.delay(email_body, user.email)
+        emailto.delay("Welcome to bestat",email_body, user.email)
         context[
             'msg'] = 'Your confirmation link has been send to your register email.'
         return render(request, 'blank.html', context)
@@ -114,7 +114,7 @@ def signin(request):
                            ''' % (request.get_host(),
                                   reverse('bestat:confirm',
                                           args=(u.username, token)))
-                        emailto.delay(email_body, u.email)
+                        emailto.delay("Verification email from bestat",email_body, u.email)
                         errors = [
                             'User not activated. A new email has been sent to you.']
                 except User.DoesNotExist:
@@ -527,10 +527,7 @@ def forget_password(request):
         Please click the link below to reset your password. http://%s%s
            ''' % (request.get_host(),
                   reverse('bestat:reset', args=(user.username, token)))
-        send_mail(subject="Reset your password",
-                  message=email_body,
-                  from_email="ziqil1@andrew.cmu.edu",
-                  recipient_list=[user.email])
+        emailto.delay("Reset your password", email_body, user.email)
         context[
             'msg'] = 'Your password reset link has been send to your register' \
                      ' email %s.' % user.email
@@ -566,6 +563,8 @@ def reset_password(request):
         request.user.set_password(password)
         request.user.save()
         return redirect(reverse('bestat:signin'))
+
+
 def build(request):
     if request.method != 'GET':
         return HttpResponse("illegal")
@@ -575,6 +574,8 @@ def build(request):
         return HttpResponse("success")
     else:
         return HttpResponse("illegal")
+
+
 class BlockScore:
     def __init__(self, nid, name, score):
         self.id = nid
