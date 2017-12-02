@@ -67,18 +67,18 @@
                             <li><a href="{% url 'bestat:cities' %}?rank=random">Lucky draw</a></li>
                         </ul>
                     </li>
-{#                    <li class="dropdown">#}
-{#                        <a href="#" class="dropdown-toggle"#}
-{#                           data-toggle="dropdown" role="button">#}
-{#                            Top neighbors#}
-{#                        </a>#}
-{#                        <ul class="dropdown-menu">#}
-{#                            <li><a href="{% url 'bestat:neighbors' %}?rank=convenience">Convenience</a></li>#}
-{#                            <li><a href="{% url 'bestat:neighbors' %}?rank=safety">Safety</a></li>#}
-{#                            <li><a href="{% url 'bestat:neighbors' %}?rank=random">Lucky draw</a></li>#}
-{##}
-{#                        </ul>#}
-{#                    </li>#}
+                    {#                    <li class="dropdown">#}
+                    {#                        <a href="#" class="dropdown-toggle"#}
+                    {#                           data-toggle="dropdown" role="button">#}
+                    {#                            Top neighbors#}
+                    {#                        </a>#}
+                    {#                        <ul class="dropdown-menu">#}
+                    {#                            <li><a href="{% url 'bestat:neighbors' %}?rank=convenience">Convenience</a></li>#}
+                    {#                            <li><a href="{% url 'bestat:neighbors' %}?rank=safety">Safety</a></li>#}
+                    {#                            <li><a href="{% url 'bestat:neighbors' %}?rank=random">Lucky draw</a></li>#}
+                    {##}
+                    {#                        </ul>#}
+                    {#                    </li>#}
                     {% if not user.is_anonymous %}
                         <li class="dropdown"><a href="#" class="dropdown-toggle"
                                                 data-toggle="dropdown"
@@ -125,46 +125,39 @@
     </nav>
 </header>
 <body>
-
 {% block body %}
 
 
 {% endblock %}
+
+
 {% block footer %}
 
+    <footer class="footer-distributed">
+        <div class="footer-right">
 
-    <div class="row" style="margin-top: 100px">
-        <div class="col-md-12">
-            <footer class="footer-distributed">
-                <div class="footer-right">
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+            <a href="#"><i class="fa fa-github"></i></a>
 
-                    <a href="#"><i class="fa fa-facebook"></i></a>
-                    <a href="#"><i class="fa fa-twitter"></i></a>
-                    <a href="#"><i class="fa fa-linkedin"></i></a>
-                    <a href="#"><i class="fa fa-github"></i></a>
-
-                </div>
-
-                <div class="footer-left">
-
-                    <p class="footer-links">
-                        <a class="link-1" href="{% url 'bestat:home' %}">Home</a>
-
-                        <a href="#">Blog</a>
-
-                        <a href="#">About</a>
-
-                        <a href="#">Contact</a>
-                    </p>
-
-                    <p>BestAt &copy; 2017</p>
-                </div>
-            </footer>
         </div>
-    </div>
 
+        <div class="footer-left">
 
+            <p class="footer-links">
+                <a class="link-1" href="{% url 'bestat:home' %}">Home</a>
 
+                <a href="#">Blog</a>
+
+                <a href="#">About</a>
+
+                <a href="#">Contact</a>
+            </p>
+
+            <p>BestAt &copy; 2017</p>
+        </div>
+    </footer>
 
 {% endblock %}
 <!-- Essential jQuery Plugins

@@ -12,7 +12,7 @@
 @desc:
 '''
 from django import forms
-from .models import User, Preference
+from .models import User, Preference, Review, Neighbor
 
 
 class UserCreationForm(forms.Form):
@@ -287,4 +287,66 @@ class PreferenceForm(forms.ModelForm):
         fields = '__all__'
 
 
-# class ReviewForm(forms.Form):
+class ReviewForm(forms.Form):
+    text = forms.CharField(max_length=400)
+    neighbor_id = forms.CharField(max_length=100)
+    safety = forms.CharField(max_length=100)
+    convenience = forms.CharField(max_length=100)
+    public = forms.CharField(max_length=100)
+
+    def clean_text(self):
+        text = self.cleaned_data['text']
+
+        if len(text.strip()) == 0:
+            raise forms.ValidationError('text is empty')
+
+        return text
+
+    def clean_block(self):
+        neighbor_id = self.cleaned_data['neighbor_id']
+
+        try:
+            Neighbor.objects.get(regionid=neighbor_id)
+        except Neighbor.DoesNotExist:
+            raise forms.ValidationError('Block does not exist')
+
+        return neighbor_id
+
+    def clean_safety(self):
+        safety = self.cleaned_data['safety']
+
+        try:
+            safety = int(safety)
+
+            if safety > 5 or safety < 1:
+                raise forms.ValidationError('Score is not in scope')
+        except ValueError:
+            raise forms.ValidationError('Score is not numeric')
+
+        return safety
+
+    def clean_convenience(self):
+        convenience = self.cleaned_data['convenience']
+
+        try:
+            convenience = int(convenience)
+
+            if convenience > 5 or convenience < 1:
+                raise forms.ValidationError('Score is not in scope')
+        except ValueError:
+            raise forms.ValidationError('Score is not numeric')
+
+        return convenience
+
+    def clean_public_service(self):
+        public = self.cleaned_data['public']
+
+        try:
+            public = int(public)
+
+            if public > 5 or public < 1:
+                raise forms.ValidationError('Score is not in scope')
+        except ValueError:
+            raise forms.ValidationError('Score is not numeric')
+
+        return public

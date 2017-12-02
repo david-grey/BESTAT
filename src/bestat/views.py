@@ -236,22 +236,29 @@ def contact(request):
 @require_POST
 @login_required('to create review, you must login first')
 def create_review(request):
-    user = request.user
-    neighbor_id = request.POST['neighbor_id']
+    if request.method == 'GET' or not request.is_ajax():
+        return render(request, 'blank.html', {'msg': 'illegal request'})
 
-    review = Review.objects.create(
-        block=NeighborInfo.objects.get(
-            neighbor=Neighbor.objects.get(regionid=neighbor_id)),
-        author=user,
-        text=request.POST['text'],
-        safety=request.POST['safety'],
-        convenience=request.POST['convenience'],
-        public_service=request.POST['public'],
-        create_time=datetime.datetime.now()
-    )
-    review.save()
+    review_form = ReviewForm(request.POST)
 
-    return render(request, 'detail.html')
+    if review_form.is_valid():
+        neighbor_id = review_form.cleaned_data.get('neighbor_id')
+        review = Review.objects.create(
+            block=NeighborInfo.objects.get(
+                neighbor=Neighbor.objects.get(regionid=neighbor_id)),
+            author=request.user,
+            text=review_form.cleaned_data.get('text'),
+            safety=review_form.cleaned_data.get('safety'),
+            convenience=review_form.cleaned_data.get('convenience'),
+            public_service=review_form.cleaned_data.get('public'),
+            create_time=datetime.datetime.now()
+        )
+
+        review.save()
+        return JsonResponse({'status': 'ok'})
+    else:
+        print(review_form.errors)
+        return JsonResponse({'status': 'err', 'err': 'invalid review'})
 
 
 def map(request):
@@ -320,10 +327,14 @@ def load_city(request, city):
 @require_http_methods(['GET'])
 def get_city(request):
     city = request.GET.get('name', '')
+    cityob = City.objects.filter(name=city)
+    if len(cityob) == 0:
+        return render(request, 'blank.html', {'msg': 'It is not a valid city!'})
     try:
-        cityob = City.objects.filter(name=city)[0]
+
+        cityob = cityob.filter(activate=1)[0]
     except:
-        return render(request, 'blank.html', {'msg': 'City not exist!'})
+        return render(request, 'blank.html', {'msg': 'We are moving to this city soon!'})
     coordinate = json.loads(cityob.point.geojson)[
                      'coordinates'][::-1]
     return render(request, 'map.html', {"city": city, "coordinate": coordinate})
