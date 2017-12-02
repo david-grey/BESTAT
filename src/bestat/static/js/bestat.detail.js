@@ -82,7 +82,6 @@ function loadReviewGraph(neighbor_id) {
 }
 
 function drawChart(arr) {
-    console.log("draw");
     let data = google.visualization.arrayToDataTable(arr);
 
     let options = {
@@ -90,9 +89,7 @@ function drawChart(arr) {
         backgroundColor: {fill: 'transparent'},
         colors: ['#00649F', '#01AAC1', '#00DBE7', '#97ECC5', '#AEECE7']
     };
-    console.log("draw");
     let chart = new google.visualization.PieChart(document.getElementById('piechart'));
-    console.log("draw");
     chart.draw(data, options);
 }
 
