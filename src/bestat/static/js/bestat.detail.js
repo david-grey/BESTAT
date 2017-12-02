@@ -128,26 +128,24 @@ $(function () {
 function postReview() {
     if ($('#newReviewTxt').val().trim() === "") {
         alert("Please input review content.");
-    }
-    else {
-        $("#reviewForm").submit(function (e) {
-            var url = "/bestat/create_review"; // the script where you handle the form input.
-
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: $("#reviewForm").serialize(), // serializes the form's elements.
-                success: function (data) {
+        return false;
+    } else {
+        $.ajax({
+            type: "POST",
+            url: "/bestat/create_review",
+            data: $("#reviewForm").serialize(), // serializes the form's elements.
+            success: function (data) {
+                if (data.status == 'ok') {
                     $('#newReviewTxt').val("");
                     $('#safety').barrating('set', 1);
                     $('#convenience').barrating('set', 1);
                     $('#public').barrating('set', 1);
 
                     populateList();
+                } else {
+                    alert(data.err);
                 }
-            });
-
-            e.preventDefault(); // avoid to execute the actual submit of the form.
+            }
         });
     }
 }
