@@ -147,7 +147,6 @@ class Review(models.Model):
     create_time = models.DateTimeField(verbose_name='create time',
                                        auto_now_add=True)
 
-
     @property
     def create_at(self):
         return self.create_time.timestamp()

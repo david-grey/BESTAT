@@ -236,22 +236,29 @@ def contact(request):
 @require_POST
 @login_required('to create review, you must login first')
 def create_review(request):
-    user = request.user
-    neighbor_id = request.POST['neighbor_id']
+    if request.method == 'GET' or not request.is_ajax():
+        return render(request, 'blank.html', {'msg': 'illegal request'})
 
-    review = Review.objects.create(
-        block=NeighborInfo.objects.get(
-            neighbor=Neighbor.objects.get(regionid=neighbor_id)),
-        author=user,
-        text=request.POST['text'],
-        safety=request.POST['safety'],
-        convenience=request.POST['convenience'],
-        public_service=request.POST['public'],
-        create_time=datetime.datetime.now()
-    )
-    review.save()
+    review_form = ReviewForm(request.POST)
 
-    return render(request, 'detail.html')
+    if review_form.is_valid():
+        neighbor_id = review_form.cleaned_data.get('neighbor_id')
+        review = Review.objects.create(
+            block=NeighborInfo.objects.get(
+                neighbor=Neighbor.objects.get(regionid=neighbor_id)),
+            author=request.user,
+            text=review_form.cleaned_data.get('text'),
+            safety=review_form.cleaned_data.get('safety'),
+            convenience=review_form.cleaned_data.get('convenience'),
+            public_service=review_form.cleaned_data.get('public'),
+            create_time=datetime.datetime.now()
+        )
+
+        review.save()
+        return JsonResponse({'status': 'ok'})
+    else:
+        print(review_form.errors)
+        return JsonResponse({'status': 'err', 'err': 'invalid review'})
 
 
 def map(request):
