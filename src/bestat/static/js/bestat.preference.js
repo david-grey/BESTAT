@@ -19,6 +19,8 @@ var rangeSlider = function () {
 rangeSlider();
 
 $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+
     /* load preference */
     $.get('/bestat/preference/')
         .done(function (data) {
