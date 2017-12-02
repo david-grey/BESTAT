@@ -22,12 +22,19 @@ from load_googledata import load_data
 Quota = 150000
 
 
-def scrap():
+def scrap(target=None):
     global Quota
     wrapper = GooglePlaceWrap()
     with open('./bestat/data/googleplace/remain_city.pkl', 'rb') as f:
         cities = pickle.load(f)
-    keys = list(cities.keys())
+
+    if target is not None:
+        keys = target
+        for k in keys:
+            if k not in cities:
+                print("%s not legal." % k)
+    else:
+        keys = list(cities.keys())
     for city in keys:
         try:
             bound = cities[city]

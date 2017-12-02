@@ -15,6 +15,7 @@
 from bestat.utils import get_neighbor, clean_nb_data
 import pickle
 from tqdm import tqdm
+from bestat.models import City
 from glob import glob
 from nb_relation import update_adj_nb
 
@@ -27,6 +28,7 @@ def file2city_name(file_name):
 def load_data(pkl_name):
     city = file2city_name(pkl_name)
     clean_nb_data(city)
+
     print('loading data of city %s...' % city)
     with open('./bestat/data/googleplace/%s' % pkl_name, 'rb') as f:
         data = pickle.load(f)
@@ -40,6 +42,11 @@ def load_data(pkl_name):
             if nb and nb.city == city:
                 setattr(nb.info, key, getattr(nb.info, key) + 1)
                 nb.info.save()
+    try:
+        city_obj = City.objects.get(city=city)
+        city_obj.activate = 1
+    except City.DoesNotExist:
+        pass
 
 
 def batch_load():
@@ -49,7 +56,6 @@ def batch_load():
     for pkl in pkls:
         load_data(pkl)
         update_adj_nb(file2city_name(pkl))
-
 
 
 if __name__ == '__main__':
