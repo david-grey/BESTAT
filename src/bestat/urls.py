@@ -14,6 +14,8 @@
 
 from django.conf.urls import url, include
 import bestat.views
+from django.views.static import serve
+import webapps.settings as settings
 
 urlpatterns = [
     url(r'^$', bestat.views.home, name='home'),
@@ -51,3 +53,9 @@ urlpatterns = [
         name='reset_password')
 
 ]
+
+urlpatterns+= [
+        url(r'^media/(?P<path>.*)$', serve, {
+            'document_root': settings.MEDIA_ROOT
+        }),
+    ]
