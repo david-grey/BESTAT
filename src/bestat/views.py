@@ -320,10 +320,14 @@ def load_city(request, city):
 @require_http_methods(['GET'])
 def get_city(request):
     city = request.GET.get('name', '')
+    cityob = City.objects.filter(name=city)
+    if len(cityob) == 0:
+        return render(request, 'blank.html', {'msg': 'It is not a valid city!'})
     try:
-        cityob = City.objects.filter(name=city)[0]
+
+        cityob = cityob.filter(activate=1)[0]
     except:
-        return render(request, 'blank.html', {'msg': 'City not exist!'})
+        return render(request, 'blank.html', {'msg': 'We are moving to this city soon!'})
     coordinate = json.loads(cityob.point.geojson)[
                      'coordinates'][::-1]
     return render(request, 'map.html', {"city": city, "coordinate": coordinate})
