@@ -225,7 +225,6 @@ class ChangePasswordForm(forms.Form):
         return cleaned_data
 
 
-
 class ResetPasswordForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(
@@ -259,6 +258,7 @@ class ResetPasswordForm(forms.Form):
         # Generally return the cleaned data we got from our parent.
         return cleaned_data
 
+
 class ForgetPasswordForm(forms.Form):
     username = forms.CharField(
         widget=forms.TextInput(
@@ -280,8 +280,11 @@ class ForgetPasswordForm(forms.Form):
             raise forms.ValidationError('User non exist!')
         return username
 
+
 class PreferenceForm(forms.ModelForm):
     class Meta:
         model = Preference
         fields = '__all__'
 
+
+# class ReviewForm(forms.Form):
