@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="{% static "css/bestat.map.css" %}">
     <link rel="stylesheet" href="{% static "css/bestat.preference.css" %}">
     <link rel="stylesheet" href="{% static "css/leaflet-sidebar.css" %}">
-    {#    <link rel="stylesheet" href="{% static "css/showLoading.css" %}">#}
 {% endblock %}
 {% block body %}
     <div id="sidebar" class="sidebar collapsed">
@@ -162,7 +161,7 @@
 
 {% endblock %}
 {% block js %}
-{#    <script src="{% static "js/jquery-3.2.1.min.js" %}"></script>#}
+    {#    <script src="{% static "js/jquery-3.2.1.min.js" %}"></script>#}
     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
             integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
@@ -175,11 +174,12 @@
     <script src="{% static 'js/leaflet.contextmenu.js' %}"></script>
     <script src="{% static 'js/leaflet-sidebar.js' %}"></script>
     <script src="{% static 'js/bouncemarker.js' %}"></script>
+    <script src="{% static 'js/sweetalert2.all.js' %}"></script>
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQi5ECDVGwZ6jpPShEjL1GbLZBvDlee8c&libraries=places"></script>
 {% endblock %}
 
 {% block footer %}
-    <br>
+    <div></div>
 {% endblock %}
 

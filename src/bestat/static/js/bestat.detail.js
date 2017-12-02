@@ -82,7 +82,6 @@ function loadReviewGraph(neighbor_id) {
 }
 
 function drawChart(arr) {
-    console.log("draw");
     let data = google.visualization.arrayToDataTable(arr);
 
     let options = {
@@ -90,9 +89,7 @@ function drawChart(arr) {
         backgroundColor: {fill: 'transparent'},
         colors: ['#00649F', '#01AAC1', '#00DBE7', '#97ECC5', '#AEECE7']
     };
-    console.log("draw");
     let chart = new google.visualization.PieChart(document.getElementById('piechart'));
-    console.log("draw");
     chart.draw(data, options);
 }
 
@@ -100,7 +97,7 @@ function loadPicture(neighbor, city) {
 
     $.get('/bestat/get_picture?neighbor=' + neighbor + '&city=' + city)
         .done(function (data) {
-            let htmlimg = '<img class="center-block" src="' + data.link + '" height=\"350\" >';
+            let htmlimg = '<img class="center-block img-responsive" src="' + data.link + '" height=\"350\" >';
             console.log(htmlimg);
             document.getElementById('pic').innerHTML = htmlimg
         });
@@ -217,17 +214,6 @@ $(document).ready(function () {
     });
 });
 
-function initMap() {
-    var nb = {lat: -25.363, lng: 131.044};
-    var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 10,
-        center: nb
-    });
-    var marker = new google.maps.Marker({
-        position: nb,
-        map: map
-    });
-}
 
 
 
