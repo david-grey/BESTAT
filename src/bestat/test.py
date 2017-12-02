@@ -11,7 +11,7 @@ class TodoListTest(TestCase):
         response = client.get('/bestat/')
         self.assertEqual(response.status_code, 200)
 
-    def test_city_page(self):  # Tests that a GET request to map
-        client = Client()  # results in an HTTP 200 (OK) response.
-        response = client.get('/bestat/map?name=Pittsburgh')
-        self.assertEqual(response.status_code, 200)
+    # def test_city_page(self):  # Tests that a GET request to map
+    #     client = Client()  # results in an HTTP 200 (OK) response.
+    #     response = client.get('/bestat/map?name=Pittsburgh')
+    #     self.assertEqual(response.status_code, 200)
