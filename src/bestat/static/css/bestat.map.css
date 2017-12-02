@@ -2,6 +2,10 @@
     position: static !important;
 }
 
+body {
+    padding-bottom: 0 !important;
+}
+
 h4 {
     color: #333;
     font-weight: 600;
