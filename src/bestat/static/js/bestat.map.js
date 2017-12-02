@@ -173,9 +173,8 @@ $(document).ready(function () {
         }
     });
     swal({
-        title: 'Usage Guide',
-        html: $('<div>')
-            .text('Right click can search nearby-place.'),
+        title: 'Right click can search nearby-place.',
+        html: $('<div>'),
         animation: true,
         customClass: 'animated tada',
         type: "success",
