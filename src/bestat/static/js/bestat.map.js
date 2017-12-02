@@ -114,7 +114,8 @@ $(document).ready(function () {
     /* load neighbor layer */
     var city = $("input[name='city']").val();
     loadNeighborLayer(city);
-
+    /* popup */
+    popup = L.popup({closeButton: false, className: 'custom-popup'});
 
     /* add sidebar */
     var sidebar = L.control.sidebar('sidebar').addTo(mymap);
@@ -174,11 +175,12 @@ $(document).ready(function () {
     });
     swal({
         title: 'Right click can search nearby-place.',
-        html: $('<div>'),
+        html: $('<div>')
+            .text('Right click can search nearby-place.'),
         animation: true,
         customClass: 'animated tada',
         type: "success",
-        confirmButtonText:'Got it!'
+        confirmButtonText: 'Got it!'
     })
 });
 
