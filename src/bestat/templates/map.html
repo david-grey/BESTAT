@@ -28,8 +28,8 @@
             </ul>
 
             <ul role="tablist" id="category">
-                <li class="security"><a role="tab"><i
-                        class="fa fa-bomb"></i></a></li>
+                <li class="security"><a role="tab" ><i
+                        class="fa fa-bomb" data-toggle="popover" data-content="show Security score on map"></i></a></li>
                 <li class="services"><a role="tab"><i
                         class="fa fa-institution"></i></a></li>
                 <li class="convenience"><a role="tab"><i
@@ -169,6 +169,7 @@
     <script src="{% static 'js/leaflet.contextmenu.js' %}"></script>
     <script src="{% static 'js/leaflet-sidebar.js' %}"></script>
     <script src="{% static 'js/bouncemarker.js' %}"></script>
+    <script src="{% static 'js/sweetalert2.all.js' %}"></script>
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQi5ECDVGwZ6jpPShEjL1GbLZBvDlee8c&libraries=places"></script>
 {% endblock %}
