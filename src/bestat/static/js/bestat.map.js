@@ -18,14 +18,14 @@ var testicon = L.icon({
 var showPopup = 1;
 
 $(window).resize(function () {//resize window
-    $('#mapid').height($(window).height() - 15);
+    $('#mapid').height($(window).height() - 150);
     $('#mapid').width($(window).width() - 15);
 });
 
 $(document).ready(function () {
 
     /* set map div size */
-     $('#mapid').height($(window).height() - 15);
+     $('#mapid').height($(window).height() - 150);
      $('#mapid').width($(window).width() - 15);
 
     /* set city centre coordinate */
@@ -115,19 +115,7 @@ $(document).ready(function () {
     /* load neighbor layer */
     var city = $("input[name='city']").val();
     loadNeighborLayer(city);
-
-
-
-    /* add select */
-    var sel = L.control({position: 'topright'});
-    sel.onAdd = function (map) {
-        var div = L.DomUtil.create('div', 'category');
-        div.innerHTML = '<span>EXPLORE THIS AREA: </span><i data-toggle="tooltip" title="Security" class="fa fa-bomb fa-2x" ></i><i data-toggle="tooltip" title="Public Services" class="fa fa-institution fa-2x"></i><i data-toggle="tooltip" title="Live Convenience" class="fa fa-shopping-cart fa-2x"></i>';
-        return div;
-    }
-
-    sel.addTo(mymap);
-    $('.fa').click(changeCategory);
+    
 
     /* add sidebar */
     var sidebar = L.control.sidebar('sidebar').addTo(mymap);
