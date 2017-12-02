@@ -24,9 +24,11 @@ $(window).resize(function () {//resize window
 
 $(document).ready(function () {
 
+    $('[data-toggle="popover"]').popover();
+
     /* set map div size */
-     $('#mapid').height($(window).height() - 150);
-     $('#mapid').width($(window).width() - 15);
+    $('#mapid').height($(window).height() - 150);
+    $('#mapid').width($(window).width() - 15);
 
     /* set city centre coordinate */
     var centre_coordinate = JSON.parse($("input[name='coordinate']").val());
@@ -53,7 +55,8 @@ $(document).ready(function () {
         contextmenuItems: [{
             text: 'Find the places nearby:'
 
-        },'-', {text: 'Education',
+        }, '-', {
+            text: 'Education',
             callback: function (e) {
                 search_place('school', e.latlng)
             }
@@ -108,14 +111,10 @@ $(document).ready(function () {
         accessToken: 'pk.eyJ1IjoiZG9yYWRob3UiLCJhIjoiY2o4a2ZzOTZpMGNwODJ3cGZkbXQzOTFtMCJ9.6e0L2AOL8scVc4XTNao8qw'
     }).addTo(mymap);
 
-    /* popup */
-    popup = L.popup({closeButton: false, className: 'custom-popup'});
-    // mymap.on('click', onMapClick);
-
     /* load neighbor layer */
     var city = $("input[name='city']").val();
     loadNeighborLayer(city);
-    
+
 
     /* add sidebar */
     var sidebar = L.control.sidebar('sidebar').addTo(mymap);
@@ -149,14 +148,6 @@ $(document).ready(function () {
         return div;
     };
     zillow.addTo(mymap);
-    // var popup_menu = L.popup({closeButton: false, className: 'custom-popup'});
-    // mymap.on("contextmenu", function (e) {
-    //     console.log(e.latlng);
-    //     popup_menu
-    //         .setLatLng(e.latlng)
-    //         .setContent(menu[0])
-    //         .openOn(mymap);
-    // });
 
     $('#categorySlt').bind('change', changeCategory);
     $("ul#category").on("click", "li", function () {
@@ -181,6 +172,15 @@ $(document).ready(function () {
             }
         }
     });
+    swal({
+        title: 'Usage Guide',
+        html: $('<div>')
+            .text('Right click can search nearby-place.'),
+        animation: true,
+        customClass: 'animated tada',
+        type: "success",
+        confirmButtonText:'Got it!'
+    })
 });
 
 function changeCategory(e) {
@@ -209,12 +209,12 @@ function changeCategory(e) {
 
 
 function loadNeighborLayer(city) {
-    $('#mapid').waitMe({effect:'roundBounce',bg:'rgba(255,255,255,0.5)'});
+    $('#mapid').waitMe({effect: 'roundBounce', bg: 'rgba(255,255,255,0.5)'});
 
     $.get('/bestat/load_city/' + city)
         .done(function (data) {
             if (geojson != null) {
-                 geojson.clearLayers();
+                geojson.clearLayers();
             }
             // geojsonFeature = [{"type": "FeatureCollection", "features": []}];
             geojson = L.geoJson(data.map_data, {
