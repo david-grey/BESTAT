@@ -126,6 +126,11 @@ $(function () {
 });
 
 function postReview() {
+    if($("input[name='is_anonymous']").val().includes('True')) {
+        alert("Please log in to write reviews.");
+        return false;
+    }
+
     if ($('#newReviewTxt').val().trim() === "") {
         alert("Please input review content.");
         return false;
