@@ -10,29 +10,33 @@
           href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
           integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
           crossorigin=""/>
-    <script src="{% static "js/jquery-3.2.1.min.js" %}"></script>
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
-            integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
-            crossorigin=""></script>
 
+    <link rel="stylesheet" href="{% static "css/waitMe.css" %}">
     <link rel="stylesheet" href="{% static "css/bestat.map.css" %}">
     <link rel="stylesheet" href="{% static "css/bestat.preference.css" %}">
     <link rel="stylesheet" href="{% static "css/leaflet-sidebar.css" %}">
+    {#    <link rel="stylesheet" href="{% static "css/showLoading.css" %}">#}
 {% endblock %}
 {% block body %}
+    <p id="fuck"></p>
+    {#    <div id="activity_pane">#}
     <div id="sidebar" class="sidebar collapsed">
         <!-- Nav tabs -->
         <div class="sidebar-tabs">
             <ul role="tablist">
-                <li><a href="#recommendation" role="tab"><i class="fa fa-list-ol"></i></a></li>
-                <li><a href="#preference" role="tab"><i class="fa fa-sliders"></i></a></li>
+                <li><a href="#recommendation" role="tab"><i
+                        class="fa fa-list-ol"></i></a></li>
+                <li><a href="#preference" role="tab"><i
+                        class="fa fa-sliders"></i></a></li>
             </ul>
 
             <ul role="tablist" id="category">
-                <li class="security"><a role="tab"><i class="fa fa-bomb"></i></a></li>
-                <li class="services"><a role="tab"><i class="fa fa-institution"></i></a></li>
-                <li class="convenience"><a role="tab"><i class="fa fa-shopping-cart"></i></a></li>
+                <li class="security"><a role="tab"><i
+                        class="fa fa-bomb"></i></a></li>
+                <li class="services"><a role="tab"><i
+                        class="fa fa-institution"></i></a></li>
+                <li class="convenience"><a role="tab"><i
+                        class="fa fa-shopping-cart"></i></a></li>
             </ul>
         </div>
 
@@ -65,29 +69,35 @@
                             <h4>Live Convience</h4>
                             <div class="range-slider">
                                 <label>Cafe</label>
-                                <input class="range-slider__range" type="range" value="5" min="0" max="10" name="cafe">
+                                <input class="range-slider__range" type="range"
+                                       value="5" min="0" max="10" name="cafe">
                             </div>
                             <div class="range-slider">
                                 <label>Restaurant</label>
-                                <input class="range-slider__range" type="range" value="5" min="0" max="10"
+                                <input class="range-slider__range" type="range"
+                                       value="5" min="0" max="10"
                                        name="restaurant">
                             </div>
                             <div class="range-slider">
                                 <label>Grocery</label>
-                                <input class="range-slider__range" type="range" value="5" min="0" max="10"
+                                <input class="range-slider__range" type="range"
+                                       value="5" min="0" max="10"
                                        name="grocery_or_supermarket">
                             </div>
                             <div class="range-slider">
                                 <label>Store</label>
-                                <input class="range-slider__range" type="range" value="5" min="0" max="10" name="store">
+                                <input class="range-slider__range" type="range"
+                                       value="5" min="0" max="10" name="store">
                             </div>
                             <div class="range-slider">
                                 <label>Bank</label>
-                                <input class="range-slider__range" type="range" value="5" min="0" max="10" name="bank">
+                                <input class="range-slider__range" type="range"
+                                       value="5" min="0" max="10" name="bank">
                             </div>
                             <div class="range-slider">
                                 <label>Gym</label>
-                                <input class="range-slider__range" type="range" value="5" min="0" max="10" name="gym">
+                                <input class="range-slider__range" type="range"
+                                       value="5" min="0" max="10" name="gym">
                             </div>
                             <hr>
                         </div>
@@ -96,17 +106,20 @@
                             <h4>Public Service</h4>
                             <div class="range-slider">
                                 <label>Hospital</label>
-                                <input class="range-slider__range" type="range" value="5" min="0" max="10"
+                                <input class="range-slider__range" type="range"
+                                       value="5" min="0" max="10"
                                        name="hospital">
                             </div>
                             <div class="range-slider">
                                 <label>School</label>
-                                <input class="range-slider__range" type="range" value="5" min="0" max="10"
+                                <input class="range-slider__range" type="range"
+                                       value="5" min="0" max="10"
                                        name="school">
                             </div>
                             <div class="range-slider">
                                 <label>Church</label>
-                                <input class="range-slider__range" type="range" value="5" min="0" max="10"
+                                <input class="range-slider__range" type="range"
+                                       value="5" min="0" max="10"
                                        name="church">
                             </div>
                             <hr>
@@ -116,13 +129,18 @@
                             <h4>Security</h4>
                             <div class="range-slider">
                                 <label>Crime</label>
-                                <input class="range-slider__range" type="range" value="5" min="0" max="10" name="crime">
+                                <input class="range-slider__range" type="range"
+                                       value="5" min="0" max="10" name="crime">
                             </div>
                         </div>
 
                         <div id="btnDiv">
-                            <button id="saveBtn" type="button" class="btn btn-default">Save</button>
-                            <button id="resetBtn" type="button" class="btn btn-default">Reset</button>
+                            <button id="saveBtn" type="button"
+                                    class="btn btn-default">Save
+                            </button>
+                            <button id="resetBtn" type="button"
+                                    class="btn btn-default">Reset
+                            </button>
 
                         </div>
 
@@ -135,10 +153,23 @@
 
     <div id="mapid"></div>
 
+
+    {#    </div>#}
+
     <input type="hidden" name="city" value="{{ city }}">
     <input type="hidden" name="coordinate" value="{{ coordinate }}">
     <div style="visibility: hidden;height: 0" id="google"></div>
 
+{% endblock %}
+{% block js %}
+{#    <script src="{% static "js/jquery-3.2.1.min.js" %}"></script>#}
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
+            integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
+            crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@1.5.4/src/loadingoverlay.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@1.5.4/extras/loadingoverlay_progress/loadingoverlay_progress.min.js"></script>
+    <script src="{% static 'js/waitMe.js' %}"></script>
     <script src="{% static 'js/bestat.map.js' %}"></script>
     <script src="{% static 'js/bestat.preference.js' %}"></script>
     <script src="{% static 'js/leaflet.contextmenu.js' %}"></script>
@@ -147,4 +178,3 @@
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQi5ECDVGwZ6jpPShEjL1GbLZBvDlee8c&libraries=places"></script>
 {% endblock %}
-

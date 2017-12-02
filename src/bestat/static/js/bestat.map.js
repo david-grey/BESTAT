@@ -47,7 +47,6 @@ $(document).ready(function () {
         }))
     });
 
-
     mymap = L.map('mapid', {
         contextmenu: true,
         contextmenuWidth: 140,
@@ -222,6 +221,8 @@ function changeCategory(e) {
 
 
 function loadNeighborLayer(city) {
+    $('#mapid').waitMe({effect:'roundBounce',bg:'rgba(255,255,255,0.5)'});
+
     $.get('/bestat/load_city/' + city)
         .done(function (data) {
             if (geojson != null) {
@@ -234,7 +235,9 @@ function loadNeighborLayer(city) {
             }).addTo(mymap);
 
             loadRecommendation(data.recommendation);
+            $('#mapid').waitMe("hide");
         });
+
 }
 
 function loadRecommendation(blocks) {

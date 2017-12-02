@@ -29,6 +29,7 @@ $(document).ready(function () {
 
     /* set preference */
     $("#saveBtn").on("click", function () {
+
         var url = "/bestat/preference/"; // the script where you handle the form input.
         $.ajax({
             type: "POST",
@@ -37,6 +38,7 @@ $(document).ready(function () {
             success: function (data) {
                 var city = $("input[name='city']").val();
                 loadNeighborLayer(city);
+
             }
         });
     });
