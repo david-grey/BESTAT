@@ -14,3 +14,4 @@ implemnet the real time google place search-nearby feature, and some automation 
 
 #### Django model design(partially):
 design and implement most models in django
+
