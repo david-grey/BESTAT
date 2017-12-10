@@ -27,5 +27,22 @@ Recommendations
 ### Backend view (partially):
 Views related to map loading and review <br>
 Form verification <br>
-Unit test
+### Unit test
+
+## Wei Dai
+### Backend view (partially):
+Views related picture auto fetching <br>
+City pages 
+
+### Frontend neighborhood details
+Neighborhood details page<br>
+
+### Database and infrastructure
+Periodical tasks and asychronous tasks by Celery<br>
+The PostGIS database set up and neighborhood data loading
+
+### Deployment
+Set up Jenkins for automated testing and deployment<br>
+Deploy the project with Nginx + uwsgi
+
 
