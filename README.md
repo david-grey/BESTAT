@@ -4,7 +4,7 @@ Before you go to any new cities, the first question you want to ask is where sho
 
 To solve this problem, we propose to develop a web-based GIS application to assist people in site selection. When users click a point, we will be able to offer a living index by aggregating information from multiple APIs. The living index will be calculated based on the business, crimes, transportation, and the living index of different categories will also be demonstrated since different users might have different preferences.
 
-This website is implemented on [BESTAT.ML](bestat.ml)
+This website is implemented on [BESTAT.ML](http://bestat.ml)
 
 # Technology Stack
 
